@@ -6700,7 +6700,6 @@ function webViewerInitialized() {
         return '';
     }
     var saveFile = path.join(tmpDir, encrypt(file));
-    console.log(saveFile);
     if(fs.existsSync(saveFile)){
       PDFViewerApplication.open(saveFile);
     }else{
