@@ -6693,7 +6693,13 @@ function webViewerInitialized() {
     if(!fs.existsSync(tmpDir)){
       fs.mkdirSync(tmpDir);
     }
-    var saveFile = path.join(tmpDir, path.basename(file));
+    var encrypt = function (str, private_key){
+        if(str && str.toString){
+            return require('crypto').createHash('sha1').update(str.toString()+(private_key||'util')).digest('hex');
+        }
+        return '';
+    }
+    var saveFile = path.join(tmpDir, encrypt(file));
     console.log(saveFile);
     if(fs.existsSync(saveFile)){
       PDFViewerApplication.open(saveFile);
