@@ -1,4 +1,4 @@
-﻿
+
 
 .textLayer {
   position: absolute;
@@ -160,6 +160,7 @@
 * {
   padding: 0;
   margin: 0;
+  font: 14px/1.6 "Microsoft Yahei", "SimSun", "宋体", "Arial", "HELVETICA", "sans-serif", "Tahoma";
 }
 
 html {
@@ -172,15 +173,21 @@ body {
   height: 100%;
   background-color: #404040;
   background-image: url("images/texture.png");
+  padding: 0px;
+  margin: 0px;
+  border: 0;
+  
+  background-color: #fff;
+  color: #252525;
 }
 
-body,
+/*body,
 input,
 button,
 select {
   font: message-box;
   outline: none;
-}
+}*/
 
 .hidden {
   display: none !important;

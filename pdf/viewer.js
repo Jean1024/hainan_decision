@@ -1,4 +1,4 @@
-﻿/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 /* Copyright 2012 Mozilla Foundation
  *
@@ -36,7 +36,6 @@ var SCALE_SELECT_CONTAINER_PADDING = 8;
 var SCALE_SELECT_PADDING = 22;
 var PAGE_NUMBER_LOADING_INDICATOR = 'visiblePageIsLoading';
 var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
-
 
 PDFJS.imageResourcesPath = './images/';
   // PDFJS.workerSrc = '../build/pdf.worker.js';
@@ -6682,13 +6681,50 @@ function webViewerInitialized() {
   var queryString = document.location.search.substring(1);
   var params = PDFViewerApplication.parseQueryString(queryString);
   var file = 'file' in params ? params.file : DEFAULT_URL;
-
+  var is_native_download = false;
+  if(global.window.nwDispatcher && file.indexOf('http:') == 0){
+    is_native_download = true;
+    var os = require('os');
+    var tmpPath = os.tmpdir() || os.tmpDir || global.window.nwDispatcher.requireNwGui().App.dataPath;
+    console.log(tmpPath);
+    var fs = require('fs'),
+      path = require('path');
+    var tmpDir = path.join(tmpPath, '.pdf');
+    if(!fs.existsSync(tmpDir)){
+      fs.mkdirSync(tmpDir);
+    }
+    var saveFile = path.join(tmpDir, path.basename(file));
+    console.log(saveFile);
+    if(fs.existsSync(saveFile)){
+      PDFViewerApplication.open(saveFile);
+    }else{
+      var totalSize = 0, loadedSize = 0;
+      var req = require('http').get(file, function(res){
+        res.on('data', function(data){
+          loadedSize += data.length;
+          PDFViewerApplication.progress(loadedSize / totalSize);
+        });
+        var writestream = fs.createWriteStream(saveFile);
+        writestream.on('close', function() {
+          PDFViewerApplication.open(saveFile);
+        });
+        res.pipe(writestream);
+      }).on('response', function(res){
+        totalSize = parseFloat(res.headers['content-length']);
+      }).on('error', function(e){
+        alert('出现错误!');
+        require('nw.gui').Window.get().close();
+      });
+      req.end();
+    }
+  }
   var fileInput = document.createElement('input');
-  fileInput.id = 'fileInput';
-  fileInput.className = 'fileInput';
-  fileInput.setAttribute('type', 'file');
-  fileInput.oncontextmenu = noContextMenuHandler;
-  document.body.appendChild(fileInput);
+    fileInput.id = 'fileInput';
+    fileInput.className = 'fileInput';
+    fileInput.setAttribute('type', 'file');
+    fileInput.oncontextmenu = noContextMenuHandler;
+    document.body.appendChild(fileInput);
+  
 
   if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
     document.getElementById('openFile').setAttribute('hidden', 'true');
@@ -6873,28 +6909,30 @@ function webViewerInitialized() {
   document.getElementById('download').addEventListener('click',
     SecondaryToolbar.downloadClick.bind(SecondaryToolbar));
 
-  if (file && file.lastIndexOf('file:', 0) === 0) {
-    // file:-scheme. Load the contents in the main thread because QtWebKit
-    // cannot load file:-URLs in a Web Worker. file:-URLs are usually loaded
-    // very quickly, so there is no need to set up progress event listeners.
-    PDFViewerApplication.setTitleUsingUrl(file);
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      PDFViewerApplication.open(new Uint8Array(xhr.response), 0);
-    };
-    try {
-      xhr.open('GET', file);
-      xhr.responseType = 'arraybuffer';
-      xhr.send();
-    } catch (e) {
-      PDFViewerApplication.error(mozL10n.get('loading_error', null,
-        'An error occurred while loading the PDF.'), e);
+  if(!is_native_download){
+    if (file && file.lastIndexOf('file:', 0) === 0) {
+      // file:-scheme. Load the contents in the main thread because QtWebKit
+      // cannot load file:-URLs in a Web Worker. file:-URLs are usually loaded
+      // very quickly, so there is no need to set up progress event listeners.
+      PDFViewerApplication.setTitleUsingUrl(file);
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        PDFViewerApplication.open(new Uint8Array(xhr.response), 0);
+      };
+      try {
+        xhr.open('GET', file);
+        xhr.responseType = 'arraybuffer';
+        xhr.send();
+      } catch (e) {
+        PDFViewerApplication.error(mozL10n.get('loading_error', null,
+          'An error occurred while loading the PDF.'), e);
+      }
+      return;
     }
-    return;
-  }
 
-  if (file) {
-    PDFViewerApplication.open(file, 0);
+    if (file) {
+      PDFViewerApplication.open(file, 0);
+    }
   }
 }
 

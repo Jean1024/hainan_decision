@@ -1,4 +1,4 @@
-﻿/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+/* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 /* Copyright 2012 Mozilla Foundation
  *
@@ -21,6 +21,7 @@
 if (typeof PDFJS === 'undefined') {
   (typeof window !== 'undefined' ? window : this).PDFJS = {};
 }
+
 PDFJS.version = '1.1.26';
 PDFJS.build = '3821b2d';
 
@@ -2527,6 +2528,7 @@ var WorkerTransport = (function WorkerTransportClosure() {
         // Some versions of FF can't create a worker on localhost, see:
         // https://bugzilla.mozilla.org/show_bug.cgi?id=683280
         var worker = new Worker(workerSrc);
+        worker.test = 'test';
         var messageHandler = new MessageHandler('main', worker);
         this.messageHandler = messageHandler;
 
@@ -2554,7 +2556,6 @@ var WorkerTransport = (function WorkerTransportClosure() {
           testObj[0] = 0;
           messageHandler.send('test', testObj);
         }
-        messageHandler.send('send_request', requ);
         return;
       } catch (e) {
         info('The worker has been disabled.');
@@ -8012,6 +8013,7 @@ if (!PDFJS.workerSrc && typeof document !== 'undefined') {
     var scriptTagContainer = document.body ||
                              document.getElementsByTagName('head')[0];
     var pdfjsSrc = scriptTagContainer.lastChild.src;
+    console.log(pdfjsSrc, pdfjsSrc.replace(/\.js$/i, '.worker.js'));
     return pdfjsSrc && pdfjsSrc.replace(/\.js$/i, '.worker.js');
   })();
 }
