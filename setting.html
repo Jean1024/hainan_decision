@@ -1,0 +1,54 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0,user-scalable=no" />
+    	<meta name="format-detection" content="telephone=no" />
+    	<title></title>
+    	<link rel="stylesheet" type="text/css" href="./css/reset.css">
+    	<link rel="stylesheet" type="text/css" href="./css/p_setting.css">
+	</head>
+	<body>
+		<div id="main">
+			<div class="container">
+				<div class="view fl main">
+					<div class="nav_top">
+						设置
+					</div>
+					<ul class="setting_list">
+						<li id="btn_account"><span class="fl">我的账户</span><span class="fr"></span></li>
+						<li id="btn_cache" class="can_click"><span class="fl">清理缓存</span><span class="fr">正在计算...</span></li>
+						<li id="btn_feedback" class="can_click" data-to="feedback"><span class="fl">意见反馈</span></li>
+						<li id="btn_aboutus" class="can_click" data-to="aboutus"><span class="fl">关于我们</span><span class="fr"></span></li>
+						<li id="btn_version" class="can_click"><span class="fl">检测版本</span><span class="fr"></span></li>
+						<li id="btn_logout" class="can_click"><span class="fl">退出</span></li>
+					</ul>
+				</div>
+				<div class="view fl feedback">
+					<div class="nav_top" data-to="main">
+						意见反馈
+					</div>
+					<div class="form">
+						<form>
+							<textarea id="fb_content" placeholder="您对本应用的看法和意见"></textarea>
+							<input type="email" id="fb_email" placeholder="请输入邮箱"/>
+							<input type="tel" id="fb_tel" placeholder="请输入电话"/>
+							<input type="button" id="btn_submit" value="提交"/>
+						</form>
+					</div>
+				</div>
+				<div class="view fl aboutus">
+					<div class="nav_top" data-to="main">
+						关于我们
+					</div>
+					<div class="content">
+						<center><img src="./img/hainan/aboutus.jpg"/></center>
+						<p>海南省气象局于1988年5月成立，属省政府建制，代表省政府主管全省气象行业工作，为基础性、科技型的社会公益性正厅级事业单位，担负我省保障国民经济建设和人民生命财产安全的气象服务工作。2010年9月，根据中央机构编制委员会办公室《关于海南省气象工作管理体制调整的批复》（中央编办复字〔2010〕281号）精神，海南省气象局实行中国气象局和海南省人民政府双重领导、以中国气象局领导为主的管理体制，海南省气象系统各级管理机构仍实行上级气象主管机构与本级人民政府双重领导，以气象主管机构领导为主的管理体制。现有内设机构11个、正处级直属事业单位9个、地级市气象局2个、县级气象局(台、站)18个和农业气象试验站5个。</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="./js/jquery-1.8.2.js"></script>
+		<script type="text/javascript" src="./js/util.js"></script>
+		<script type="text/javascript" src="./js/p_setting.js"></script>
+	</body>
+</html>
