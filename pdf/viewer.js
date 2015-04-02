@@ -26,7 +26,7 @@
            IGNORE_CURRENT_POSITION_ON_ZOOM: true */
 
 'use strict';
-
+var is_native = global.window.nwDispatcher;
 var DEFAULT_URL = 'compressed.tracemonkey-pldi-09.pdf';
 var DEFAULT_SCALE_DELTA = 1.1;
 var MIN_SCALE = 0.25;
@@ -109,9 +109,9 @@ function getFileName(url) {
   var end = Math.min(
     anchor > 0 ? anchor : url.length,
     query > 0 ? query : url.length);
+  console.log(url.substring(url.lastIndexOf('/', end) + 1, end));
   return url.substring(url.lastIndexOf('/', end) + 1, end);
 }
-
 /**
  * Returns scale factor for the canvas. It makes sense for the HiDPI displays.
  * @return {Object} The object with horizontal (sx) and vertical (sy)
@@ -5761,13 +5761,17 @@ var PDFViewerApplication = {
 
 
   setTitleUsingUrl: function pdfViewSetTitleUsingUrl(url) {
-    this.url = url;
-    try {
-      this.setTitle(decodeURIComponent(getFileName(url)) || url);
-    } catch (e) {
-      // decodeURIComponent may throw URIError,
-      // fall back to using the unprocessed url in that case
-      this.setTitle(url);
+    if(title_query){
+      this.setTitle(title_query);
+    }else{
+      this.url = url;
+      try {
+        this.setTitle(decodeURIComponent(getFileName(url)) || url);
+      } catch (e) {
+        // decodeURIComponent may throw URIError,
+        // fall back to using the unprocessed url in that case
+        this.setTitle(url);
+      }
     }
   },
 
@@ -5806,7 +5810,6 @@ var PDFViewerApplication = {
       Preferences.reload();
     }
     this.close();
-
     var parameters = {password: password};
     if (typeof file === 'string') { // URL
       this.setTitleUsingUrl(file);
@@ -5880,7 +5883,7 @@ var PDFViewerApplication = {
     }
 
     var url = this.url.split('#')[0];
-    var filename = getPDFFileNameFromURL(url);
+    var filename = title_query || getPDFFileNameFromURL(url); //优先使用全局title
     var downloadManager = new DownloadManager();
     downloadManager.onerror = function (err) {
       // This error won't really be helpful because it's likely the
@@ -6677,16 +6680,17 @@ function webViewerLoad(evt) {
   PDFViewerApplication.initialize().then(webViewerInitialized);
 }
 
+var title_query;
 function webViewerInitialized() {
   var queryString = document.location.search.substring(1);
-  var params = PDFViewerApplication.parseQueryString(queryString);
+  var params = PDFViewerApplication.parseQueryString(queryString);console.log(params);
+  title_query = params.title;
   var file = 'file' in params ? params.file : DEFAULT_URL;
   var is_native_download = false;
-  if(global.window.nwDispatcher && file.indexOf('http:') == 0){
+  if(is_native && file.indexOf('http:') == 0){
     is_native_download = true;
     var os = require('os');
     var tmpPath = os.tmpdir() || os.tmpDir || global.window.nwDispatcher.requireNwGui().App.dataPath;
-    console.log(tmpPath);
     var fs = require('fs'),
       path = require('path');
     var tmpDir = path.join(tmpPath, '.pdf');
@@ -6699,7 +6703,8 @@ function webViewerInitialized() {
         }
         return '';
     }
-    var saveFile = path.join(tmpDir, encrypt(file));
+    tmpDir = tmpDir.replace(/\\/g, '/'); //保证路径和url一致
+    var saveFile = tmpDir + '/'+ encrypt(file)+path.extname(file);
     if(fs.existsSync(saveFile)){
       PDFViewerApplication.open(saveFile);
     }else{
