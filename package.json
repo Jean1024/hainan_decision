@@ -5,6 +5,7 @@
   "main": "login/index.html",
   "chromium-args": "--disable-web-security",
   "window": {
+    "title": "海南决策客户端1",
     "frame": true,
     "position": "center",
     "width": 320,
