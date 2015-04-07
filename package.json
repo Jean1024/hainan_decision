@@ -2,7 +2,7 @@
   "name": "GraphTool",
   "version": "v0.3.9",
   "description": "海南决策客户端",
-  "main": "login/index.html",
+  "main": "c/index.html",
   "chromium-args": "--disable-web-security",
   "window": {
     "title": "海南决策客户端1",
