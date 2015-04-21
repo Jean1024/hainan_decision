@@ -19,3 +19,5 @@ rm -rf $TARGET_PATH/center/setting.html
 
 #3. change.js
 node ./change.js $TARGET_PATH
+
+cp -R $PROJECT_PATH/libs/node-webkit-v0.11.2-win-x64/* $TARGET_PATH

@@ -13,6 +13,6 @@
     "toolbar": true,
     "as_desktop": true,
     "show": false,
-    "resizable": true
+    "resizable": false
   }
 }
