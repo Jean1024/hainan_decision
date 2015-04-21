@@ -61,11 +61,14 @@ function _repalce_content(dir){
 	_replace(path.join(dir, 'center/index.gts'), function(content){
 		return content.replace(/index\.html/g, 'index.gt');
 	});
+	_replace(path.join(dir, 'j/p_index.gts'), function(content){
+		return content.replace(/item\.html/g, 'item.gt');
+	});
 	_replace(path.join(dir, 'j/util.gts'), function(content){
 		return content.replace(/\.html/g, '.gt');
 	});
 	_replace(path.join(dir, 'j/p_item.gts'), function(content){
-		return content.replace(/\.html/g, '.gt');
+		return content.replace(/view\.html/g, 'view.gt');
 	});
 	_replace(path.join(dir, 'pdf/pdf.gts'), function(content){
 		return content.replace(/\.js/g, '.gts');
