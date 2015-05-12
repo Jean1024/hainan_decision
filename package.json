@@ -1,11 +1,12 @@
 ﻿{
   "name": "GraphTool",
-  "version": "v0.3.0",
+  "version": "v0.5.0",
   "description": "海南决策客户端",
   "main": "center/index.html",
   "chromium-args": "--disable-web-security",
   "window": {
-    "title": "海南决策客户端1",
+    "title": "海南决策客户端",
+    "icon": "./center/img/logo.png",
     "frame": true,
     "position": "center",
     "width": 320,

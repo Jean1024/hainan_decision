@@ -74,7 +74,7 @@ function _repalce_content(dir){
 		return content.replace(/\.js/g, '.gts');
 	});
 	_replace(path.join(dir, 'j/p_geomap.gts'), function(content){
-		return content.replace(/\/js\//g, '/j/').replace(/\.js(?!on)/g, '.gt');//防止替换json
+		return content.replace(/\.js(?!on)/g, '.gts').replace(/\/js\//g, '/j/');//防止替换json
 	});
 	_replace(path.join(dir, 'j/esl.gts'), function(content){
 		return content.replace(/\.js/g, '.gts');
