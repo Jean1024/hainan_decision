@@ -46,7 +46,7 @@ function changeSuffix(dir){
 					});
 				}else if('.json' == ext){
 					_replace(newPathName, function(content){
-						return content.replace(/"toolbar":\s*true/, '"toolbar": false');
+						return content.replace(/"toolbar":\s*true/, '"toolbar": false');//.replace(/\.js"/g, '.gts"');
 					});
 				}
 			}
@@ -80,7 +80,7 @@ function _repalce_content(dir){
 		return content.replace(/\.js/g, '.gts');
 	});
 	_replace(path.join(dir, 'index.gt'), function(content){
-		return content.replace(/\.html/g, '.gt');
+		return content.replace(/\.html/g, '.gt').replace(/<!--util_update-->/, '<script type="text/javascript" src="./util_update.js"></script>');
 	});
 	_replace(path.join(dir, 'setting.gt'), function(content){
 		return content.replace(/\.html/g, '.gt');

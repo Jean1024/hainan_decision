@@ -95,4 +95,7 @@
 			});
 		}
 	}
+	$('#btn_version').off('click').on('click', function(){
+		
+	});
 }();
