@@ -17,9 +17,12 @@
     "position": "center",
     "width": 320,
     "height": 600,
+    "min_width": 320,
+    "min_height": 600,
+    "max_width": 600,
+    "max_height": 800,
     "toolbar": true,
     "as_desktop": true,
-    "show": false,
-    "resizable": false
+    "show": false
   }
 }
