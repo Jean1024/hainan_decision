@@ -26,10 +26,13 @@ node $SHELLPATH/change.js $SOURCE_PATH
 #4. 64 or 32
 rm -rf $SOURCE_64
 rm -rf $SOURCE_32
-mkdir -p $SOURCE_64
-mkdir -p $SOURCE_32
+mkdir -p $SOURCE_64/bin
+mkdir -p $SOURCE_32/bin
 
 cp -R $SOURCE_PATH/* $SOURCE_64/
 cp -R $SOURCE_PATH/* $SOURCE_32/
-cp -R $PROJECT_PATH/libs/node-webkit-v0.11.2-win-x64/* $SOURCE_64
-cp -R $PROJECT_PATH/libs/node-webkit-v0.12.0-win-x32/* $SOURCE_32
+
+cp $PROJECT_PATH/libs/*.exe $SOURCE_64/
+cp $PROJECT_PATH/libs/*.exe $SOURCE_32/
+cp -R $PROJECT_PATH/libs/node-webkit-v0.11.2-win-x64/* $SOURCE_64/bin
+cp -R $PROJECT_PATH/libs/node-webkit-v0.12.0-win-x32/* $SOURCE_32/bin
