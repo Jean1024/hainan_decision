@@ -37,16 +37,22 @@
 				chunks.push(chunk);
 			}).on('end', function(){
 				var buffer = Buffer.concat(chunks);
-				var data = encrypt(buffer);
+				if(!is_noencrypt){
+					var data = encrypt(buffer);
+				}else{
+					var data = buffer.toString();
+				}
 				
-				// console.log(data);
+				console.log(data.toString());
 				if(!data){
 					callback && callback(new Error('no data'));
 				}else{
 					try{
 						var data_obj = JSON.parse(data);
+						console.log(data_obj);
 						callback && callback(null, data_obj);
 					}catch(e){
+						console.log(e);
 						return callback && callback(null, data);
 					}
 					
@@ -55,6 +61,7 @@
 		}).on('error', function(e){
 			callback && callback(e);
 		});
+		console.log(data_send);
 		req.write(data_send);
 		req.end();
 	}

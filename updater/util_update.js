@@ -47,7 +47,7 @@
 			check();
 			newVersionCheckIntervalId = setInterval(check, 1000*60*10);
 		} else {
-			$update_version.show().html('copying app');
+			$update_version.show().html('正在更新文件...');
 			upd.install(copyPath, newAppInstalled);
 
 			function newAppInstalled(err) {

@@ -41,6 +41,7 @@
      * @private
      */
     function gotManifest(err, req, data){
+      console.log(err, req, data);
       if(err) {
         return cb(err);
       }
@@ -52,6 +53,7 @@
       try{
         data = JSON.parse(data);
       } catch(e){
+        // consle.log(e);
         return cb(e)
       }
 
@@ -379,7 +381,9 @@
               deleteApp(appDeleted);
             }, 100);
           } else {
-            return cb(err);
+            ncp(self.getAppPath(), to, appCopied);;
+            return;
+            // return cb(err);
           }
         }
         else {

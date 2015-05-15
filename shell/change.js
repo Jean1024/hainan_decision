@@ -65,7 +65,7 @@ function _repalce_content(dir){
 		return content.replace(/item\.html/g, 'item.gt');
 	});
 	_replace(path.join(dir, 'j/util.gts'), function(content){
-		return content.replace(/\.html/g, '.gt');
+		return content.replace(/\.html(?!\()/g, '.gt');
 	});
 	_replace(path.join(dir, 'j/p_item.gts'), function(content){
 		return content.replace(/view\.html/g, 'view.gt');
@@ -80,16 +80,16 @@ function _repalce_content(dir){
 		return content.replace(/\.js/g, '.gts');
 	});
 	_replace(path.join(dir, 'index.gt'), function(content){
-		return content.replace(/\.html/g, '.gt').replace(/<!--util_update-->/, '<script type="text/javascript" src="./util_update.js"></script>');
+		return content.replace(/\.html(?!\()/g, '.gt').replace(/<!--util_update-->/, '<script type="text/javascript" src="./util_update.js"></script>');
 	});
 	_replace(path.join(dir, 'setting.gt'), function(content){
-		return content.replace(/\.html/g, '.gt');
+		return content.replace(/\.html(?!\()/g, '.gt');
 	});
 	_replace(path.join(dir, 'center/p_setting.gts'), function(content){
-		return content.replace(/\.html/g, '.gt');
+		return content.replace(/\.html(?!\()/g, '.gt');
 	});
 	_replace(path.join(dir, 'j/p_setting.gts'), function(content){
-		return content.replace(/\.html/g, '.gt');
+		return content.replace(/\.html(?!\()/g, '.gt');
 	});
 }
 

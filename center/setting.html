@@ -16,12 +16,46 @@
 					</div>
 					<ul class="setting_list">
 						<li id="btn_account"><span class="fl">我的账户</span><span class="fr"></span></li>
+						<li id="btn_city" class="can_click" data-to="city"><span class="fl">切换城市</span><span class="fr"></span></li>
 						<li id="btn_cache" class="can_click"><span class="fl">清理缓存</span><span class="fr">正在计算...</span></li>
 						<li id="btn_feedback" class="can_click" data-to="feedback"><span class="fl">意见反馈</span></li>
 						<li id="btn_aboutus" class="can_click" data-to="aboutus"><span class="fl">关于我们</span><span class="fr"></span></li>
-						<li id="btn_version" class="can_click" data-to="aboutus"><span class="fl">检测版本</span><span class="fr"></span></li>
+						<!-- <li id="btn_version" class="can_click" data-to="aboutus"><span class="fl">检测版本</span><span class="fr"></span></li> -->
 						<li id="btn_logout" class="can_click"><span class="fl">退出</span></li>
 					</ul>
+				</div>
+				<style>
+				.city .form{
+					width: 96%;
+					margin: 0 auto;
+				}
+				.city input {
+					width: 100%;
+					padding: 3px;
+					border-radius: 3px;
+					border: 1px solid #23a2e9;
+					margin: 5px 0;
+				}
+				.city li{
+					border-bottom: 1px solid #23a2e9;
+					padding: 3px;
+				}
+				#span_current_city{
+					font-weight: bold;
+					padding-left: 10px;
+					font-size: 20px;
+				}
+				</style>
+				<div class="view fl city">
+					<div class="nav_top" data-to="main">
+						切换城市
+					</div>
+					<div class="form">
+						<div>当前<span id="span_current_city"></span></div>
+						<input type="text" id="text_city" placeholder="请输入要添加的城市"/>
+						<ul id="ul_city_list">
+						</ul>
+					</div>
 				</div>
 				<div class="view fl feedback">
 					<div class="nav_top" data-to="main">
@@ -50,7 +84,6 @@
 		<script type="text/javascript" src="./js/jquery-1.8.2.js"></script>
 		<script type="text/javascript" src="./js/util.js"></script>
 		<script type="text/javascript" src="./center/req.js"></script>
-		<script type="text/javascript" src="./center/update.js"></script>
 		<script type="text/javascript" src="./center/p_setting.js"></script>
 		<script type="text/javascript" src="./js/p_setting.js"></script>
 	</body>
