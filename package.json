@@ -1,9 +1,15 @@
 ﻿{
-  "name": "GraphTool",
-  "version": "v0.5.0",
+  "name": "test",
+  "version": "v0.6.0",
   "description": "海南决策客户端",
-  "main": "center/index.html",
+  "main": "center/index.gt",
   "chromium-args": "--disable-web-security",
+  "manifestUrl": "http://gitlab.tianqi.cn/zhangkai/HNDecison_PC_download/raw/master/package.json",
+  "packages": {
+    "win": {
+      "url": "http://gitlab.tianqi.cn/zhangkai/HNDecison_PC_download/raw/master/download/win64/hn_0.6.0.zip"
+    }
+  },
   "window": {
     "title": "海南决策客户端",
     "icon": "./center/img/logo.png",
