@@ -41,7 +41,6 @@
      * @private
      */
     function gotManifest(err, req, data){
-      console.log(err, req, data);
       if(err) {
         return cb(err);
       }

@@ -35,7 +35,7 @@
 		$body.addClass('auto');
 		afterLogin();
 	}
-	var win = require('nw.gui').Window.get();
+	var win = nwDispatcher.requireNwGui().Window.get();
 	// win.showDevTools();
 	win.show();
 	var $logining = $('.logining');

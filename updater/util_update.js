@@ -6,13 +6,12 @@
 	var ext = this.global.require.extensions;
 	ext['.gts'] = ext['.js'];
 
-	var gui = require('nw.gui');
+	var gui = nwDispatcher.requireNwGui();
 	var copyPath, execPath;
 	if (gui.App.argv.length) {
 		copyPath = gui.App.argv[0];
 		execPath = gui.App.argv[1];
 	}
-	console.log(copyPath, execPath);
 
 	//download new version of app in tmp
 	//unpack

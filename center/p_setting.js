@@ -6,7 +6,7 @@
     var tmpPath = os.tmpdir() || os.tmpDir || global.window.nwDispatcher.requireNwGui().App.dataPath;
     tmpPath = path.join(tmpPath, '.pdf');
     var os_info = os.platform() + ','+os.type();
-    var manifest = require('nw.gui').App.manifest;
+    var manifest = nwDispatcher.requireNwGui().App.manifest;
     var soft_info = manifest.name+','+manifest.version;
 	var _command_old = U.command;
 	var userInfo = {};
