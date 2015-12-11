@@ -17,7 +17,7 @@ function changeSuffix(dir){
 	files.forEach(function(file){
 		var pathname = path.join(dir, file),
 			stat = fs.lstatSync(pathname);
-		
+
 		if(stat.isDirectory()){
 			if(file == 'css' || file == 'js'){
 				if(file == 'css'){
@@ -82,7 +82,7 @@ function _repalce_content(dir){
 	_replace(path.join(dir, 'index.gt'), function(content){
 		return content.replace(/\.html(?!\()/g, '.gt').replace(/<!--util_update-->/, '<script type="text/javascript" src="./util_update.js"></script>');
 	});
-	_replace(path.join(dir, 'setting.gt'), function(content){
+	_replace(path.join(dir, 'center/setting.gt'), function(content){
 		return content.replace(/\.html(?!\()/g, '.gt');
 	});
 	_replace(path.join(dir, 'center/p_setting.gts'), function(content){

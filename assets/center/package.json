@@ -1,0 +1,27 @@
+{
+  "name": "HNDecision",
+  "version": "v0.6.0",
+  "description": "海南决策客户端",
+  "main": "index.html",
+  "chromium-args": "--disable-web-security",
+  "manifestUrl": "http://gitlab.tianqi.cn/zhangkai/HNDecison_PC_download/raw/master/package.json",
+  "packages": {
+    "win": {
+      "url": "http://gitlab.tianqi.cn/zhangkai/HNDecison_PC_download/raw/master/download/win64/hn_0.6.0.zip"
+    }
+  },
+  "window": {
+    "title": "海南决策客户端",
+    "icon": "./center/img/logo.png",
+    "frame": true,
+    "position": "center",
+    "width": 320,
+    "height": 600,
+    "min_width": 320,
+    "min_height": 600,
+    "max_width": 600,
+    "max_height": 800,
+    "toolbar": true,
+    "as_desktop": true
+  }
+}
