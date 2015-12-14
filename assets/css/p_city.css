@@ -1,0 +1,145 @@
+.container{
+	background: #1266A4;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	color: white;
+}
+.top_title{
+	text-align: center;
+	height: 36px;
+	line-height: 36px;
+	background-color: #2148A8;
+	position: relative;
+}
+.btn_back{
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	left: 5px;
+	top: 3px;
+	background: url(../img/btn_back.png) center center no-repeat;
+	background-size: contain;
+}
+.info{
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: auto;
+	top: 0;
+	bottom: 0;
+	height: auto;
+	overflow: auto;
+	z-index: 1001;
+	background: #1266A4;
+	display: none;
+}
+.weather_icon{
+	width: 60px;
+	height: 60px;
+}
+.sk{
+	border-bottom: 1px solid #A2A4A5;
+	padding: 10px 0;
+}
+.sk .fl{
+	width: 40%;
+	text-align: center;
+}
+.sk .right{
+	line-height: 27px;
+}
+
+.hours_yb{
+	padding: 10px 0;
+	width: 100%;
+	overflow: auto;
+	height: 122px;
+}
+.hours_yb li{
+	float: left;
+	width: 100px;
+	text-align: center;
+}
+.date{
+	height: 60px;
+	line-height: 60px;
+	width: 20%;
+	text-align: center;
+	position: relative;
+}
+.days_yb li{
+	overflow: visible;
+}
+.date:after,
+.date:before{
+	content: '';
+	position: absolute;
+	right: -1px;
+}
+.date:before{
+	width: 5px;
+	height: 5px;
+	border-radius: 5px;
+	background-color: white;
+	top: 50%;
+	right: -3px;
+	margin-top: -4px;
+}
+.date:after{
+	top: 50%;
+	height: 100%;
+	border-right: 1px solid white;
+}
+._yb_info{
+	margin-left: 20px;
+	width: 230px;
+	border-bottom: 1px solid #A2A4A5;
+}
+._yb_info img{
+	vertical-align: middle;
+}
+._yb_info span{
+	display: inline-block;
+	width: 25%;
+	line-height: 60px;
+	text-align: center;
+}
+.show_comp{
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: auto;
+	padding: 10px;
+	top: 50px;
+	height: auto;
+	bottom: 0;
+	background-color: white;
+	color: #000;
+}
+.city_list{
+	position: absolute;
+	left: 10px;
+	width: 340px;
+	height: 80%;
+	overflow: auto;
+	background-color: white;
+	display: none;
+}
+.city_list li{
+	border-bottom: 1px dotted #cccccc;
+	padding: 5px 0;
+}
+#text_search{
+	width: 290px;
+}
+.hot_city{
+	margin-top: 20px;
+}
+.hot_city li{
+	float: left;
+	width: 33.33%;
+	text-align: center;
+	line-height: 30px;
+	height: 30px;
+}

@@ -3142,7 +3142,7 @@ g_HandleSystemReboot();
 </SessionVar>
 <SessionVar>
 <Name>%ProductVer%</Name>
-<Value>v0.9.1</Value>
+<Value>v0.9.2</Value>
 <Type>1</Type>
 </SessionVar>
 <SessionVar>
@@ -3190,7 +3190,7 @@ g_HandleSystemReboot();
 <PostBuildProg/>
 <PostBuildCmdLine/>
 <PostBuildWait>0</PostBuildWait>
-<Filename>HNDecision_64_v0.9.1.exe</Filename>
+<Filename>HNDecision_64_v0.9.2.exe</Filename>
 <OutputFolder>E:\build_setup\hn_pc\</OutputFolder>
 <SegmentSizeMode>0</SegmentSizeMode>
 <CustomSegSize>100</CustomSegSize>

@@ -1,3 +1,5 @@
+// var win = nwDispatcher.requireNwGui().Window.get();
+// win.showDevTools();
 (function(global){
 	var Store = Util.Store;
 	var $container;
@@ -141,9 +143,6 @@ $(function(){
 	var Nav = U.Nav;
 	var getJson = U.getJson;
 	var Loading = U.Loading;
-
-	var win = nwDispatcher.requireNwGui().Window.get();
-	win.showDevTools();
 
 	/*初始化播放器*/
 	var initPlayer = function(items_arr,renderFn,tuli){

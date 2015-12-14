@@ -20,7 +20,31 @@
 			os.isPC = true;
 		}
 	}();
+	/*时间格式化*/
+	Date.prototype.format = function(format,is_not_second){
+		format || (format = 'yyyy-MM-dd hh:mm:ss');
+		var o = {
+			"M{2}" : this.getMonth()+1, //month
+			"d{2}" : this.getDate(),    //day
+			"h{2}" : this.getHours(),   //hour
+			"m{2}" : this.getMinutes(), //minute
+			"q{2}" : Math.floor((this.getMonth()+3)/3),  //quarter
+		}
+		if(!is_not_second){
+			o["s{2}"] = this.getSeconds(); //second
+			o["S{2}"] = this.getMilliseconds() //millisecond
+		}
+		if(/(y{4}|y{2})/.test(format)){
+			format = format.replace(RegExp.$1,(this.getFullYear()+"").substr(4 - RegExp.$1.length));
+		}
+		for(var k in o){
+			if(new RegExp("("+ k +")").test(format)){
+				format = format.replace(RegExp.$1,RegExp.$1.length==1 ? o[k] :("00"+ o[k]).substr((""+ o[k]).length));
+			}
+		}
 
+		return format;
+	}
 	!function(){
 		var _injectedObject = window.injectedObject;
 		var is_android = typeof _injectedObject != 'undefined';
@@ -524,9 +548,11 @@
 			function _isIndex(url){
 				return /\/($|index\.\w+$)/.test(url);
 			}
+			function _isCity(url){
+				return /\/(city\.\w+$)/.test(url);
+			}
 			function _open(url){
 				if(_win_sub){
-
 					_win_sub.window.location.href = url;
 				}else{
 					_win_sub = WindowGui.open(url, {
@@ -549,14 +575,27 @@
 				var _href = location.href;
 				if(_isIndex(_href)){
 					if(_href != url){
-						_open(url);
+						if (_isCity(url)) {
+							location.href = url;
+						} else {
+							_open(url);
+						}
 					}else{
 						win_current.focus();
 					}
 				}else{
-					if(_isIndex(url)){
+					if (_isCity(_href)) {
+						if (_isIndex(url)) {
+							location.href = url;
+						} else {
+							_open(url);
+						}
+					}else if(_isIndex(url) || _isCity(url)){
 						opener.focus();
 						win_current.close();
+						if (_isIndex(url) && _isCity(opener.location.href) || (_isCity(url) && _isIndex(opener.location.href))) {
+							opener.location.href = url;
+						}
 					}else{
 						location.href = url;
 					}
@@ -580,6 +619,7 @@
 							'<div class="nav_left_c">'+
 								'<ul>'+
 									'<li class="on">首页</li>'+
+									'<li data-type="change_city">切换城市</li>'+
 								'</ul>'+
 								'<div class="bg"></div>'+
 							'</div>'+
@@ -621,6 +661,7 @@
 				e.stopPropagation();
 				var $this = $(this);
 				$doc.trigger('before_nav_click',$this);
+				$this.data('type');
 				$li.removeClass('on');
 				$this.addClass('on');
 				// var $li_small = $this.parent().parent();
@@ -639,35 +680,39 @@
 					if(!id && !type){
 						toUrl = './index.html';
 					}else{
-						Store.set('columnId',id);
-						if(!sid){
-							var $s_sort = $this.next();
-							if($s_sort.is('.s')){
-								if($prev_sub_sort && !$prev_sub_sort.is($s_sort)){
-									$prev_sub_sort.hide();
-								}
+						if ('change_city' == type) {
+							toUrl = './city.html';
+						} else {
+							Store.set('columnId',id);
+							if(!sid){
+								var $s_sort = $this.next();
+								if($s_sort.is('.s')){
+									if($prev_sub_sort && !$prev_sub_sort.is($s_sort)){
+										$prev_sub_sort.hide();
+									}
 
-								$prev_sub_sort = $s_sort.toggle(function(){
-									scroll_nav.refresh();
-									scroll_nav.scrollToElement($s_sort.prev().get(0));
-								});
-								return;
+									$prev_sub_sort = $s_sort.toggle(function(){
+										scroll_nav.refresh();
+										scroll_nav.scrollToElement($s_sort.prev().get(0));
+									});
+									return;
+								}
+								// if($s_sort.is('.s')){
+								// 	sid = $s_sort.data('sid');
+								// }
 							}
-							// if($s_sort.is('.s')){
-							// 	sid = $s_sort.data('sid');
-							// }
-						}
-						Store.set('twoId',sid);
-						Store.rm('threeId');
-						toUrl = "./item.html";
-						if('json_map' == type){
-							toUrl = "./geomap.html"
-						}else if('tf_track' == type){
-							if(U.OS.isAndroid){
-		                		toUrl = "wisp://typhoon.wi";
-		                	}else{
-		                		toUrl = "./typhoon.html";
-		                	}
+							Store.set('twoId',sid);
+							Store.rm('threeId');
+							toUrl = "./item.html";
+							if('json_map' == type){
+								toUrl = "./geomap.html"
+							}else if('tf_track' == type){
+								if(U.OS.isAndroid){
+			                		toUrl = "wisp://typhoon.wi";
+			                	}else{
+			                		toUrl = "./typhoon.html";
+			                	}
+							}
 						}
 					}
 				}

@@ -120,36 +120,6 @@
 			});
 			$span_current_city.text(city);
 		});
-		$('#text_city').on('keyup', function(){
-			var keyword = $(this).val();
-			(function(flag){
-				require_old('http://app.weather.com.cn/area/search', {
-					"condition": {
-						"keyWord": keyword
-					},
-					"pagination": {
-						"start": 0,
-						"limit": 15
-					}
-				}, function(err, data){
-					if(flag == keypress_flag){
-						var html = '没有找到合适的结果！';
-						if(data){
-							data = data.data;
-							if(data){
-								var records = data.records;
-								if(records && records.length > 0){
-									html = '';
-									$.each(records, function(i, v){
-										html += '<li data-id="'+v.id+'" data-district="'+v.districtZh+'" data-city="'+v.nameZh+'" data-prov="'+v.provZh+'" data-level="'+v.level+'" data-nation="'+v.nationZh+'">'+v.nameZh+'</li>';
-									});
-								}
-							}
-						}
-						$ul_city_list.html(html);
-					}
-				});
-			})((keypress_flag = new Date()));
-		})
+		
 	}();
 }();
