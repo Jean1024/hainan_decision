@@ -1,11 +1,165 @@
+(function(global){
+	var Store = Util.Store;
+	var $container;
+	var progressWidth;
+	$(function(){
+		$container = $('.container');
+		progressWidth = $container.width() - 55;
+	})
+	var delay = 1000;
+	var isShowMenu = Store.get('play');
+
+	var isShowedNotice = isShowMenu;//是否已经显示过提示
+	var Player = function(_totalNum,callback,tuli){
+		var self = this;
+		self.cIndex = -1;
+		self.tIndex = _totalNum;
+		var width = progressWidth / _totalNum - 5;
+		self.pWidth = width;
+		var $html = '<div class="fix_layer bottom_layer nav_animate">';
+					if(tuli){
+						$html += '<div class="tuli_layer"><img src="'+tuli+'"/></div>';
+					}
+					$html +='<span class="btn_player">';
+					if(!isShowedNotice){
+						isShowedNotice = true;
+						$html += '<div class="notice" id="n_play"><i>点击这里播放</i><div><div></div></div></div>';
+					}
+					$html += '</span>';
+						$html +='<div class="progress">';
+						$html += '<div class="handle" style="left:'+(width*_totalNum)+'px"><i></i></div>';
+						for(var i = 0;i<_totalNum;i++){
+							$html += '<span data-index='+i+' style="width:'+width+'px" class="on"></span>'
+						}
+			$html +=			'</div>'+
+							'</div>';
+		$html = $($html).appendTo($container);
+		self.playerTT;
+		var $btn_play = $html.find('.btn_player').click(function(){
+			Store.set('play',true);
+			var $this = $(this);
+			$('#n_play').hide();
+			if($this.hasClass('pause')){
+				self.stop();
+				$this.removeClass('pause');
+			}else{
+				$this.addClass('pause');
+				self.play(0);
+			}
+		});
+		var $btns = self.progressBtns = $html.find('.progress span').click(function(){
+			self.stop();
+			self.play($(this).data('index'),true);
+		});
+		var $handle = self.handle = $html.find('.progress .handle');
+		self.playerHTML = $html;
+		self.callback = callback || function(toIndex,fn){fn()};
+	}
+	var prop = Player.prototype;
+	prop.play = function(index,isFromProgress){
+		var self = this;
+		var callback = self.callback;
+		var cIndex = self.cIndex;
+		var tIndex = self.tIndex;
+		var toIndex = index != null? index:cIndex+1<tIndex?cIndex+1:-1;
+		if(toIndex < 0){
+			self.stop();
+			// callback(0);
+		}else{
+			var $span = self.progressBtns.removeClass('on');
+			self.playerHTML.find('.progress .time').show();
+			$span.filter(':lt('+toIndex+'),:eq('+toIndex+')').addClass('on');
+			self.handle.css({left: self.pWidth * (toIndex+1) + 2});
+			self.cIndex = toIndex;
+			callback(toIndex,function(){
+				if(!isFromProgress){//当点击进度条上的按钮时不继续播放
+					self.playerTT = setTimeout(function(){;
+						self.play();
+					},delay);
+				}
+			});
+		}
+	}
+	prop.stop = function(){
+		var self = this;
+		self.cIndex = -1;
+		// self.playerHTML.find('.progress .time').hide();
+		// self.progressBtns.removeClass('on');
+		self.playerHTML.find('.btn_player').removeClass('pause');
+		// self.handle.css({left: 0});
+		clearTimeout(this.playerTT);
+	}
+	prop.hide = function(){
+		this.stop();
+		this.playerHTML.remove();
+	}
+	var relativeWidth;//时间提示参考最外层容器的宽度
+	prop.showText = function(text){
+		var self = this;
+		var $html = self.playerHTML;
+		var $time = $html.find('.progress .time');
+		if($time.length == 0){
+			$time = $('<div class="time"><i></i><div></div></div>').appendTo($html.find('.progress'));
+		}
+		if(text){
+			try{
+				$time.find('i').text(text);
+				var toItem = $html.find('span.on').last();
+
+				var toItemW = toItem.width();
+				var timeW = $time.width();
+				var toItemLeft = toItem.position().left + toItemW - timeW/2;
+				var toLeft = toItemLeft;// - (timeW - toItemW)/2;
+				var sorrowLeft = timeW / 2 - 10;
+				if(!relativeWidth){
+					relativeWidth = $html.find('.progress').width()+10;
+				}
+				if(toLeft + timeW > relativeWidth){
+					var fixedLeft = relativeWidth - timeW;
+					sorrowLeft += toLeft - fixedLeft;
+					toLeft = fixedLeft;
+				}else if(toLeft < 0){
+					sorrowLeft += toLeft;
+					toLeft = 0;
+				}
+
+				$time.find('div').css({
+					left: sorrowLeft
+				});
+				$time.css({
+					left:  toLeft
+				}).show();
+			}catch(e){}
+		}else{
+			$time.hide();
+		}
+	}
+	global.Player = Player;
+})(this);
 $(function(){
 	var U = Util;
 	var Nav = U.Nav;
 	var getJson = U.getJson;
 	var Loading = U.Loading;
 
-	// var win = nwDispatcher.requireNwGui().Window.get();
-	// win.showDevTools();
+	var win = nwDispatcher.requireNwGui().Window.get();
+	win.showDevTools();
+
+	/*初始化播放器*/
+	var initPlayer = function(items_arr,renderFn,tuli){
+		var len = items_arr.length;
+		var fn = function(toIndex,nextFn){
+			var text = renderFn(toIndex,nextFn);
+			player && player.showText(text||'');
+		}
+		if(len > 1){
+			$('.bottom_layer').remove();
+			player = new Player(len,fn,tuli);
+		}
+		// renderFn(items_arr.length-1);//初始化第一个数据
+		fn(items_arr.length-1);
+	}
+
 	var REG_URL = /(.*)\/(\d+)$/;
 	var _temp_list_url;//暂时存储内容所属的分类列表地址
 	var _temp_content_url;//暂时存储内容地址
@@ -409,6 +563,16 @@ $(function(){
 		var $td = $p.parent().html(html).find('tr:first td');
 		$td.removeAttr('class').eq(index).attr('class', 'on '+(is_desc?'desc': 'asc'));
 	});
+	var renderImg = function(img_items, $html){
+		return function(toIndex, nextFn){
+			Loading.show();
+			$html.html($('<img>').on('load',function(){
+				Loading.hide();
+				nextFn && nextFn();
+			}).attr('src', img_items[toIndex]['i']));
+			return img_items[toIndex]['n'];
+		}
+	}
 	function initContent(data_url,is_use_temp_list_url,is_use_temp_content_url){
 		var no_cache = this.no_cache;
 		Loading.show();
@@ -429,6 +593,15 @@ $(function(){
 			var data = data_url;
 			clearContent();
 			var type = data.type;
+			if('multipleimg' == type) {
+				var $html = $('<div class="multipleimg"></div>');
+				$content.html($html);
+				var imgs = data.imgs.slice();
+				imgs.reverse();
+				var fn_next = renderImg(imgs, $html);
+				initPlayer(imgs, fn_next);
+				return;
+			}
 			if('tw' == type){//图文资讯
 				var c_title = data.c1;
 				var html = '<div class="c_content '+type+'">';
