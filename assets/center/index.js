@@ -20,10 +20,7 @@
 		$username = $('#username'),
 		$pwd = $('#pwd');
 	var login_info = Store.get('login_info');
-	if(login_info){
-		$body.addClass('auto');
-		afterLogin();
-	}
+
 	var win = nwDispatcher.requireNwGui().Window.get();
 	// win.showDevTools();
 	win.show();
@@ -37,9 +34,9 @@
 		if(!pwd){
 			return alert('密码不能为空！');
 		}
-		if(login_info){
-			afterLogin();
-		}else{
+		// if(login_info){
+		// 	afterLogin();
+		// }else{
 			$logining.show();
 			var date_show = new Date()
 			login(username, pwd, function(e, data){
@@ -51,7 +48,8 @@
 						Store.set('channels', data.channels);
 						Store.set('login_info', {
 							name: data.username,
-							uid: data.uid
+							uid: data.uid,
+							pwd: pwd
 						});
 
 						setTimeout(function(){
@@ -60,13 +58,21 @@
 						}, Math.max(1000, new Date() - date_show));
 						return;
 					}else{
+						$pwd.val('').focus();
 						alert('用户名不存在或密码错误！');
 					}
 				}
 				$logining.hide();
 			});
-		}
+		// }
 	});
+	if(login_info && login_info.name && login_info.pwd){
+		// $body.addClass('auto');
+		// afterLogin();
+		$username.val(login_info.name);
+		$pwd.val(login_info.pwd);
+		$btn_login.click();
+	}
 	$(document).on('keypress', function(e){
 		if(e.keyCode == 13){
 			$btn_login.click();
