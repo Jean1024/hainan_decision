@@ -139,7 +139,7 @@ define("GeoMap", ["zrender", "zrender/tool/util"],
 					}
 					seft.refresh();
 				});
-				
+
 			}
 			seft.refresh = function(callback) {
 				seft.zr.refresh(callback);
@@ -332,7 +332,7 @@ define("GeoMap", ["zrender", "zrender/tool/util"],
 				seft.offset = obj.offset;
 				for (i = 0, len = shapes.length; i < len; i++) {
 					shape = shapes[i];
-					//geomap.log(shape.type);	
+					//geomap.log(shape.type);
 					if (shape.type == 'Feature') {
 						seft.pushApath(shape.geometry, shape, obj);
 					} else if (shape.type == 'GeometryCollection') {
@@ -407,7 +407,7 @@ define("GeoMap", ["zrender", "zrender/tool/util"],
 						shapeObj.style.x -= parseInt(shapeObj.style.width)/2;
 						shapeObj.style.y -= parseInt(shapeObj.style.height)/2;
 					}catch(e){}
-					
+
 					if (shape.properties.prov_name !== undefined) {
 						shapeObj.pshapeId = shape.properties.prov_name;
 					}

@@ -1,11 +1,13 @@
 !function(){
+	// var win = nwDispatcher.requireNwGui().Window.get();
+	// win.showDevTools();
 	try{
 		var Loading = Util.Loading;
 		var map;
 		var cache = {};
 		/*得到xml并缓存数据*/
 		var loadXML = function(xmlURl,callback){
-			
+
 			var xmlDoc = cache[xmlURl];
 			if(xmlDoc){
 				callback(xmlDoc,xmlURl);
@@ -16,7 +18,7 @@
 					callback(html,xmlURl);
 				},'text');
 			}
-			
+
 		}
 		var currentYear = new Date().getFullYear();
 		var NUM_SHOW_TYPHOON_NUM = 2;
@@ -49,7 +51,7 @@
 					}else{
 						$loadedTyphoon = $c;
 					}
-					
+
 					loadTyphoonNum++;
 					if(loadTyphoonNum == NUM_SHOW_TYPHOON_NUM){
 						Loading.hide();
@@ -95,17 +97,24 @@
 				totalNum = typhoonList.length;
 				// initTyphoon(0);
 				var isHaveActive = false;
+				var now = new Date().getTime()
 				for(var i = totalNum - 1;i>0;i--){
-					if(typhoonList.eq(i).attr('isActive') == '1'){
-						isHaveActive = true;
-						loadTyphoonDetail(i);
+					var _item = typhoonList.eq(i);
+					if(_item.attr('isActive') == '1'){
+						var dtCode = _item.attr('dtCode');
+						var dtTime = new Date(dtCode.substr(0, 4)+'/'+dtCode.substr(4, 2)+'/'+dtCode.substr(6, 2)+' '+dtCode.substr(8, 2)+':'+dtCode.substr(10, 2)+':00');
+						dtTime.setDate(dtTime.getDate() + 3);
+						if (dtTime.getTime() > now) { //只显示更新时间小于当前时间3天的数据
+							isHaveActive = true;
+							loadTyphoonDetail(i);
+						}
 					}
 				}
 				// if(!isHaveActive){
 				// 	loadTyphoonDetail(0);
 				// }
 			});
-			
+
 			var currentTyphoonIndex = -1;
 			var loadTyphoonDetail = (function(){
 				var conf_navigation = {
@@ -182,7 +191,7 @@
 			    	if(isLegal(pressure)){
 						html += '<br/>中心气压：'+pressure+'(百帕)';
 					}
-			    	
+
 			    	var move_speed = sPoint.attr('FutureWindSpeed');
 			    	if(isLegal(move_speed)){
 						html += '<br/>移动速度：'+move_speed+'(公里/小时)';
@@ -207,7 +216,7 @@
 			    		$(_this['_div_wind_radiu10']).show();
 			    	});
 			    	var labelPane = map.getPanes().labelPane;
-			    	
+
 			    	_this._initWindRadiu(labelPane, sPoint, 7);
 			    	_this._initWindRadiu(labelPane, sPoint, 10);
 		            labelPane.appendChild(div);
@@ -272,7 +281,7 @@
 				    	}
 			    	}
 			    }
-			    _prop.draw = function(){ 
+			    _prop.draw = function(){
 			    	var _this = this;
 			    	var map = _this._map;
 		            var pixel = map.pointToOverlayPixel(_this._point);
@@ -336,7 +345,7 @@
 				function formatNum(num){
 					return num < 10?'0'+num:num;
 				}
-				
+
 				// #4CEEDF
 				// #90F46D
 				// #FFF203
@@ -366,9 +375,9 @@
 					return {strokeColor: color, strokeWeight:2, strokeOpacity:0.5,strokeStyle: type?'solid':'dashed'};//画折线样式
 				}
 				var typhoonIcon = new BMap.Icon("./img/typhoon/move.png", new BMap.Size(28, 28));
-				
-				
-				
+
+
+
 				function drawPoints(points,incpoints,loadpoints,title,isReplay){
 					var lastShiKuangPointTime;
 					function getBDPoint(index){
@@ -411,7 +420,7 @@
 	        		lastShiKuangPointTime = new Date(year+'/'+month+'/'+day+' '+hour+':00:00').getTime();
 	        		initMap(getBDPoint(_lastSKPointIndex));
 	        		// console.log(lastShiKuangPointTime);
-					
+
 					var firstPoint = getBDPoint(0);
 					if(!typhoonMark){
 						typhoonMark = new BMap.Marker(firstPoint,{icon:typhoonIcon});
@@ -490,7 +499,7 @@
 					// typhoon_index = typhoonList.length - 1 - typhoon_index;
 					var $info = typhoonList.eq(typhoon_index);
 					var title = $info.data('title');
-					
+
 					var detailPath = getXmlPath($info.data('year'),$info.attr('typhoonNo')+'.xml');
 					// console.log(detailPath+" is loading!");
 					Loading.show();
@@ -510,7 +519,7 @@
 					});
 				}
 			})();
-			
+
 
 			/*回放按钮*/
 			$('.btn_reset').click(function(){
@@ -533,7 +542,7 @@
 			});
 			var $typhoon_list_container = $typhoon_list_ul.parent();
 			var year = 0;
-			
+
 			// var $info = $map_container.find('.info');
 			// var $info_title = $info.find('div:first span');
 			// var $info_list = $info.find('ul');
@@ -570,7 +579,7 @@
 					map.addEventListener('zoomend',function(){
 						lastPointForCenter && map.setCenter(lastPointForCenter);
 					});
-				}			
+				}
 				map.centerAndZoom(centerPoint, map.getZoom());
 			}
 

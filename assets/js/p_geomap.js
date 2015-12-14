@@ -1,4 +1,6 @@
 /*简单播放器*/
+// var win = nwDispatcher.requireNwGui().Window.get();
+// 	win.showDevTools();
 (function(global){
 	var Store = Util.Store;
 	var $container;
@@ -9,7 +11,7 @@
 	})
 	var delay = 1000;
 	var isShowMenu = Store.get('play');
-	
+
 	var isShowedNotice = isShowMenu;//是否已经显示过提示
 	var Player = function(_totalNum,callback,tuli){
 		var self = this;
@@ -47,7 +49,7 @@
 				$this.addClass('pause');
 				self.play(0);
 			}
-		});	
+		});
 		var $btns = self.progressBtns = $html.find('.progress span').click(function(){
 			self.stop();
 			self.play($(this).data('index'),true);
@@ -78,9 +80,9 @@
 						self.play();
 					},delay);
 				}
-			});			
+			});
 		}
-	}	
+	}
 	prop.stop = function(){
 		var self = this;
 		self.cIndex = -1;
@@ -210,7 +212,7 @@ $(function(){
 	    	resetMap();
 	    	callback && callback();
 	    }
-	    
+
 		var _oldOffset = $operator.position();
 		var _width_operator = $operator.width();
 		/*
@@ -229,7 +231,7 @@ $(function(){
 		var _isMoving = false;
 	    resetBackground = (function(){
 	    	var size_data = {};
-	    	// {"xin_jiang":{"w":6795.146734439438,"h":6795.146734439438,"l":-2943.6683086741596,"t":-2313.423411248769},"xi_zang":{"w":7514.949667826937,"h":7514.949667826937,"l":-3437.010625680976,"t":-2282.952603870369},"nei_meng_gu":{"w":5407.087123025369,"h":5407.087123025369,"l":-2972.080837513267,"t":-1923.6518929381639},"qing_hai":{"w":11442.163179916313,"h":11442.163179916313,"l":-5850.088658885705,"t":-3742.5109006826665},"si_chuan":{"w":13964.808503776176,"h":13964.808503776176,"l":-7688.000268766632,"t":-4188.131668772007},"hei_long_jiang":{"w":11224.883449631669,"h":11224.883449631669,"l":-7491.722569076891,"t":-4322.662727645879},"gan_su":{"w":9535.077656184056,"h":9535.077656184056,"l":-5014.878594542354,"t":-3166.0362925671516},"yun_nan":{"w":18097.197241475402,"h":18097.197241475402,"l":-9978.604576643103,"t":-4990.316255093868},"guang_xi":{"w":20622.688231791995,"h":20622.688231791995,"l":-12073.87918237744,"t":-5660.03314149632},"hu_nan":{"w":28605.407949790766,"h":28605.407949790766,"l":-17352.08192028186,"t":-8381.510129927321},"shan_xi_1":{"w":27285.497304299108,"h":27285.497304299108,"l":-16104.190204453153,"t":-8942.209249404843},"guang_dong":{"w":20887.498854734014,"h":20887.498854734014,"l":-12758.429427520468,"t":-5663.573604358297},"ji_lin":{"w":16270.872851014052,"h":16270.872851014052,"l":-10901.628198035492,"t":-6062.31792987546},"he_bei":{"w":24294.979582294272,"h":24294.979582294272,"l":-15292.781764339157,"t":-8480.87001246883},"hu_bei":{"w":20385.35133721309,"h":20385.35133721309,"l":-12330.607572091798,"t":-6412.658601974756},"gui_zhou":{"w":26470.458505272807,"h":26470.458505272807,"l":-15383.358092618064,"t":-7750.257527128227},"shan_dong":{"w":19706.02002503129,"h":19706.02002503129,"l":-12531.708044146091,"t":-6234.461031},"jiang_xi":{"w":32245.881050889508,"h":32245.881050889508,"l":-20325.398179561427,"t":-9427.326851468753},"he_nan":{"w":24979.021681649956,"h":24979.021681649956,"l":-15346.248545743018,"t":-8148.604874765647},"liao_ning":{"w":22449.605236627594,"h":22449.605236627594,"l":-14721.877221534123,"t":-8122.3541780683845},"shan_xi_2":{"w":36193.97427264489,"h":36193.97427264489,"l":-22205.100842872693,"t":-12369.163280469946},"an_hui":{"w":32843.08990539602,"h":32843.08990539602,"l":-20900.156086049603,"t":-10388.169549735574},"fu_jian":{"w":31670.003250777085,"h":31670.003250777085,"l":-20303.913691866925,"t":-9108.697047887994},"zhe_jiang":{"w":31670.003250777085,"h":31670.003250777085,"l":-20645.435157154723,"t":-9648.295678498123},"jiang_su":{"w":27711.393599999996,"h":27711.393599999996,"l":-17837.74112,"t":-8956.286399999999},"chong_qing":{"w":31670.64671461666,"h":31670.64671461666,"l":-18665.027185176194,"t":-9832.910520541283},"ning_xia":{"w":46672.4321815678,"h":46672.4321815678,"l":-27284.846038684973,"t":-16101.109946703406},"hai_nan":{"w":59118.06007509407,"h":59118.06007509407,"l":-35810.09511889875,"t":-15422.102628285409},"tai_wan":{"w":80614.70262722389,"h":80614.70262722389,"l":-53351.89015308237,"t":-22542.514480761285},"bei_jing":{"w":77109.3687855557,"h":77109.3687855557,"l":-49269.20197872894,"t":-28197.808063319466},"tian_jin":{"w":118240.6045664877,"h":118240.6045664877,"l":-76315.1542137605,"t":-42703.368353182326},"shang_hai":{"w":147792.347586992,"h":147792.347586992,"l":-98448.44344363356,"t":-47670.62434815601},"xiang_gang":{"w":197062.69152971,"h":197062.69152971,"l":-124383.64323641009,"t":-55317.66940581563},"ao_men":{"w":2365350.364188193,"h":2365350.364188193,"l":-1489792.3566009288,"t":-663534.1502276256}} 
+	    	// {"xin_jiang":{"w":6795.146734439438,"h":6795.146734439438,"l":-2943.6683086741596,"t":-2313.423411248769},"xi_zang":{"w":7514.949667826937,"h":7514.949667826937,"l":-3437.010625680976,"t":-2282.952603870369},"nei_meng_gu":{"w":5407.087123025369,"h":5407.087123025369,"l":-2972.080837513267,"t":-1923.6518929381639},"qing_hai":{"w":11442.163179916313,"h":11442.163179916313,"l":-5850.088658885705,"t":-3742.5109006826665},"si_chuan":{"w":13964.808503776176,"h":13964.808503776176,"l":-7688.000268766632,"t":-4188.131668772007},"hei_long_jiang":{"w":11224.883449631669,"h":11224.883449631669,"l":-7491.722569076891,"t":-4322.662727645879},"gan_su":{"w":9535.077656184056,"h":9535.077656184056,"l":-5014.878594542354,"t":-3166.0362925671516},"yun_nan":{"w":18097.197241475402,"h":18097.197241475402,"l":-9978.604576643103,"t":-4990.316255093868},"guang_xi":{"w":20622.688231791995,"h":20622.688231791995,"l":-12073.87918237744,"t":-5660.03314149632},"hu_nan":{"w":28605.407949790766,"h":28605.407949790766,"l":-17352.08192028186,"t":-8381.510129927321},"shan_xi_1":{"w":27285.497304299108,"h":27285.497304299108,"l":-16104.190204453153,"t":-8942.209249404843},"guang_dong":{"w":20887.498854734014,"h":20887.498854734014,"l":-12758.429427520468,"t":-5663.573604358297},"ji_lin":{"w":16270.872851014052,"h":16270.872851014052,"l":-10901.628198035492,"t":-6062.31792987546},"he_bei":{"w":24294.979582294272,"h":24294.979582294272,"l":-15292.781764339157,"t":-8480.87001246883},"hu_bei":{"w":20385.35133721309,"h":20385.35133721309,"l":-12330.607572091798,"t":-6412.658601974756},"gui_zhou":{"w":26470.458505272807,"h":26470.458505272807,"l":-15383.358092618064,"t":-7750.257527128227},"shan_dong":{"w":19706.02002503129,"h":19706.02002503129,"l":-12531.708044146091,"t":-6234.461031},"jiang_xi":{"w":32245.881050889508,"h":32245.881050889508,"l":-20325.398179561427,"t":-9427.326851468753},"he_nan":{"w":24979.021681649956,"h":24979.021681649956,"l":-15346.248545743018,"t":-8148.604874765647},"liao_ning":{"w":22449.605236627594,"h":22449.605236627594,"l":-14721.877221534123,"t":-8122.3541780683845},"shan_xi_2":{"w":36193.97427264489,"h":36193.97427264489,"l":-22205.100842872693,"t":-12369.163280469946},"an_hui":{"w":32843.08990539602,"h":32843.08990539602,"l":-20900.156086049603,"t":-10388.169549735574},"fu_jian":{"w":31670.003250777085,"h":31670.003250777085,"l":-20303.913691866925,"t":-9108.697047887994},"zhe_jiang":{"w":31670.003250777085,"h":31670.003250777085,"l":-20645.435157154723,"t":-9648.295678498123},"jiang_su":{"w":27711.393599999996,"h":27711.393599999996,"l":-17837.74112,"t":-8956.286399999999},"chong_qing":{"w":31670.64671461666,"h":31670.64671461666,"l":-18665.027185176194,"t":-9832.910520541283},"ning_xia":{"w":46672.4321815678,"h":46672.4321815678,"l":-27284.846038684973,"t":-16101.109946703406},"hai_nan":{"w":59118.06007509407,"h":59118.06007509407,"l":-35810.09511889875,"t":-15422.102628285409},"tai_wan":{"w":80614.70262722389,"h":80614.70262722389,"l":-53351.89015308237,"t":-22542.514480761285},"bei_jing":{"w":77109.3687855557,"h":77109.3687855557,"l":-49269.20197872894,"t":-28197.808063319466},"tian_jin":{"w":118240.6045664877,"h":118240.6045664877,"l":-76315.1542137605,"t":-42703.368353182326},"shang_hai":{"w":147792.347586992,"h":147792.347586992,"l":-98448.44344363356,"t":-47670.62434815601},"xiang_gang":{"w":197062.69152971,"h":197062.69152971,"l":-124383.64323641009,"t":-55317.66940581563},"ao_men":{"w":2365350.364188193,"h":2365350.364188193,"l":-1489792.3566009288,"t":-663534.1502276256}}
 	    	var d = size_data.china = {
 	    		"w": 2526,
 	    		"h": 2526,
@@ -279,13 +281,17 @@ $(function(){
 		    	}
 	    	}
 	    	// method.r();
-	    	
+
 	    	return method;
 	    })();
 	    var SUPPORTS_TOUCH = 'ontouchstart' in window;
 	    if(!SUPPORTS_TOUCH){ //是pc的话绑定缩放功能
 	    	var zoom_step = 1.2;
+			$operator.on('mousewheel', function(e){
+				e.stopImmediatePropagation();
+			})
 	    	$map_container.on('mousewheel', function(e){
+				e.stopImmediatePropagation();
 	    		var e_o = e.originalEvent;
 	    		var pinchZoom = e_o.wheelDelta > 0? zoom_step: 1/zoom_step;
 	    		$operator.css({
@@ -311,7 +317,7 @@ $(function(){
 					_newHeight = _oldHeight * MIN_WIDTH / _oldWidth;
 					_newWidth = MIN_WIDTH;
 				}
-				
+
 				var _oldLeft = _oldOffset.left,
 					_oldTop = _oldOffset.top,
 					_origin = data_pinch.origin,
@@ -397,7 +403,7 @@ $(function(){
 						_height = data_pinch.size.height;
 					var _xM = data_pinch.middle.x,
 						_yM = data_pinch.middle.y;
-					
+
 					// 拖拽时边界不可超过中心点
 					if(_xM < _newLeft || _xM > _newLeft + _width || _yM < _newTop || _yM > _newTop + _height){
 						return;
@@ -412,10 +418,10 @@ $(function(){
 					_isMoving = false;
 					resetOrigin();
 				}
-			}	
+			}
 			if(phase == 'end'){
 				_is_operate = false;
-			}			
+			}
 		};
 		/*https://github.com/mattbryson/TouchSwipe-Jquery-Plugin*/
 		$map_container.swipe({
@@ -427,7 +433,7 @@ $(function(){
 			fallbackToMouseEvents: true,
 			tap: function(event, target){/*在$map_container tap事件取代了click事件*/
 				var $target = $(target);
-				if($target.attr("id") == 'btn_back_china' || 
+				if($target.attr("id") == 'btn_back_china' ||
 					$target.is('.layer_weather') || $target.closest('.layer_weather').length > 0 ||
 					$target.is('.data_time') || $target.closest('.data_time').length > 0
 				){
@@ -435,8 +441,8 @@ $(function(){
 				}
 			}
 		});
-		
-		
+
+
 		data_pinch.middle = {
 			x: $map_container.width() / 2,
 			y: $map_container.height() / 2
@@ -518,7 +524,7 @@ $(function(){
 			}
 			if(len > 1){
 				player = new Player(len,fn,tuli);
-			}			
+			}
 			// renderFn(items_arr.length-1);//初始化第一个数据
 			fn(items_arr.length-1);
 		}
@@ -561,7 +567,7 @@ $(function(){
 				}else if(val >= 50){
 					return 'rgba(158 ,0,1,1)';
 				}
-				
+
 			},
 			'bianwen': function(val){
 				val = parseFloat(val);
@@ -606,7 +612,7 @@ $(function(){
 					}else if(speed >8){
 						imgName = '8_';
 					}
-					
+
 					properties.rotation = -properties.rotation;//画图为逆时针画，而风数据里为顺时针
 					properties.image = './img/geomap/wind_icon/'+imgName+'.gif';
 					properties.width = 11;
@@ -645,13 +651,36 @@ $(function(){
 				return data;
 			}
 		}
+		var tt_geo_bg;
+		$doc.on('map_resize',function(){
+			clearTimeout(tt_geo_bg);
+			_afterInitGm();
+		});
+		function _refreshBg() {
+			var left_up = gm.makePoint([107.95,20.62]),
+				right_down = gm.makePoint([111.876809,17.576628]);
+
+			if ($operator.find('.bg_img').length == 0) {
+				$operator.append('<img class="bg_img" src="./img/geomap/hainan.jpg">');
+			}
+
+			$operator.find('.bg_img').css({
+				left: left_up[0],
+				top: left_up[1],
+				width: right_down[0] - left_up[0],
+				height: right_down[1] - left_up[1]
+			});
+		}
+		function _afterInitGm() {
+			tt_geo_bg = setTimeout(_refreshBg, 400)
+		}
 		/*解析json类型数据*/
 		var parseJson = (function(){
-			require.config({
+			require_web.config({
 		        paths:{
 		            zrender:'./js/zrender' ,
 					GeoMap:'./js/GeoMap' ,
-					"zrender/tool/util":'./js/zrender' 
+					"zrender/tool/util":'./js/zrender'
 		        }
 		    });
 			var data,items,no_cache;
@@ -667,8 +696,15 @@ $(function(){
 						data.config.weatherStyle.onclick = fnObj[click];
 					}
 				}catch(e){}
-				var conf = $.extend(true,{ 
-					container: 'operator'
+				var conf = $.extend(true,{
+					container: 'operator',
+					mapStyle: {
+						clickable: false,
+						style: {
+							strokeColor: 'rgba(0,0,0,0)',
+							color: 'rgba(0,0,0,0)'
+						}
+					}
 				},data.config);
 				var GeoMap;
 				var geomap_config = DEFAULT_CONFIG.geomap || {};
@@ -711,6 +747,7 @@ $(function(){
 						}
 						if(!isInitMap){
 							gm = GeoMap.init(conf);
+							_afterInitGm();
 							fn_run();
 							isInitMap = true;
 						}else{
@@ -727,7 +764,7 @@ $(function(){
 							gm.render();
 							isInitMap && gm.refreshWeather();
 							isInitMap && $doc.trigger('resizePinch',true);//手动重置缩放
-							resetBackground.r(global_jsonid);
+							resetBackground.r(global_jsonid);console.log('china');
 							gm.zr.on("click",function(e){
 				 				//菜单打开时不可操作
 				 				if(isShowNav){
@@ -752,6 +789,7 @@ $(function(){
 						}
 						if(!isInitMap){
 							gm = GeoMap.init(conf);
+							_afterInitGm();
 							fn_run();
 							isInitMap = true;
 						}else{
@@ -775,12 +813,12 @@ $(function(){
 							}
 				 			gm.loadWeather(pointData,global_jsonid);
 							gm.refresh();
-							
+
 							/*暂时用此方案修复播放时前一个时效的数据重影*/
 							// if(++fnNum >= 2){
 								isInitMap && $doc.trigger('resizePinch',true);//手动重置缩放
 							// }
-							
+
 							if(!isRresized){
 								resetBackground.r(global_jsonid);
 							}
@@ -792,14 +830,14 @@ $(function(){
 						});
 					}
 					if(!isInitMap){
-						require(['GeoMap'],function(_GeoMap) {
+						require_web(['GeoMap'],function(_GeoMap) {
 							GeoMap = _GeoMap;
 							if(_province_id){
 								initProvince(_province_id,geomap_config.is_can_back,fn);
 							}else{
 								initChina(fn);
 							}
-						});						
+						});
 					}else{
 						conf.showName = !!global_jsonid; //强制对地区名进行处理，点击进各省时显示地区名
 						gm.updateCfg(conf);
@@ -911,7 +949,8 @@ $(function(){
 						if(src){
 							var html = '<img src="'+Parse.weatherIcon(fa?'12:00':'23:00',fa||fb)+'"/>';
 						}
-						$div.append(html).click(function(){
+						$div.append(html).click(function(e){
+							e.stopPropagation();
 							currentData = data;
 							showForecast();
 						});
@@ -948,7 +987,7 @@ $(function(){
 	                    labels_top.push(week+'<img src="'+Parse.weatherIcon('12:00',fa)+'"/>');
 	                    labels_bottom.push('<img src="'+Parse.weatherIcon('23:00',fb)+'"/>'+date.substring(5));
                     }
-                    
+
                    html += '<li>'+
 							'<div class="yb_top">'+date+' '+week+'</div>'+
 							'<div class="clear yb_c">'+
@@ -1090,6 +1129,7 @@ $(function(){
 					clearTimeout(resizeTT);
 
 					resizeTT = setTimeout(function(){
+						_refreshBg();
 						$layer_weather.each(function(i,v){
 							var $v = $(v);
 							var pos = gm.makePoint($v.data('geo'));
@@ -1183,7 +1223,7 @@ $(function(){
 				player.hide();
 				player = null;
 			}
-			
+
 			var type = data.type;
 			var items = data.items || data.imgs;
 			var renderFn;
@@ -1243,7 +1283,7 @@ $(function(){
 			}
 		});
 	}();
-	
+
 	/*初始化头部及左侧导航*/
 	Nav.Top.init(function($html){
 		$('.container').prepend($html);

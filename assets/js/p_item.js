@@ -153,11 +153,15 @@ $(function(){
 						(desc? '<p class="desc">'+desc+'</p>':'');
 			if(data && data.l.length > 0){
 				if (type == 'alarm') {
-					html += '<div class="c_content _alarm">'
-					html += '<table><tr><td width="30%" data-nosort="true">城市名</td><td data-nosort="true">预警信息</td></tr>';
+					html += '<div class="c_content _alarm">';
+					var title = '城市名';
+					if (data.l.length == 1 && !data.l[0].name) {
+						title = '海区名称';
+					}
+					html += '<table><tr><td width="30%" data-nosort="true">'+title+'</td><td data-nosort="true">预警信息</td></tr>';
 					$.each(data.l, function(i, v) {
 						html += '<tr>';
-						html += '<td>'+(v.name||'海上预警')+'</td>';
+						html += '<td>'+(v.name||'海南省海区')+'</td>';
 						html += '<td class="_alarm_list">';
 						$.each(v.list, function(_i, _item) {
 							var key = _set(_item);

@@ -7,7 +7,7 @@
  */
 
 var define;
-var require;
+var require_web;
 
 (function ( global ) {
     // "mod"开头的变量或函数为内部模块管理函数
@@ -1412,5 +1412,5 @@ var require;
 
     // 暴露全局对象
     global.define = define;
-    global.require = require;
+    global.require_web = require;
 })( this );

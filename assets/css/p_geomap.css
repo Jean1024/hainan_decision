@@ -377,3 +377,7 @@
 	-webkit-animation-iteration-count: infinite;
 	-webkit-animation-timing-function:linear;
 }
+.bg_img{
+	position: absolute;
+	z-index: -1;
+}

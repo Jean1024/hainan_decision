@@ -1,6 +1,6 @@
 {
   "name": "HNDecision",
-  "version": "v0.9.0",
+  "version": "v0.9.1",
   "description": "海南省决策气象服务",
   "main": "center/index.html",
   "chromium-args": "--disable-web-security",

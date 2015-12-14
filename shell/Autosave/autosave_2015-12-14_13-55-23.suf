@@ -8,7 +8,7 @@
 <FldRef>1</FldRef>
 <FullName/>
 <FileName>*.*</FileName>
-<Source>F:\source\node_projects\HaiNanDecision_PC\target\64</Source>
+<Source>F:\source\node_projects\HaiNanDecision_PC\target\32</Source>
 <Ext>*</Ext>
 <RTSource>Archive</RTSource>
 <Desc/>
@@ -3039,7 +3039,7 @@ g_HandleSystemReboot();
 <ProjFileEmail/>
 <ProjFileCreatedVer>9.1.0.0</ProjFileCreatedVer>
 <ProjFileSavedVer>9.1.0.0</ProjFileSavedVer>
-<BaseFolderArchive>F:\source\node_projects\HaiNanDecision_PC\target\64</BaseFolderArchive>
+<BaseFolderArchive>F:\source\node_projects\HaiNanDecision_PC\target\32</BaseFolderArchive>
 <BaseFolderExternal/>
 <UseSkinFile>0</UseSkinFile>
 <SkinFilename/>
@@ -3060,9 +3060,9 @@ g_HandleSystemReboot();
 <Args/>
 <Script>result = System.Is64BitOS();
 -- An if statement that compares two numbers
-if (false == result) then
+if (result) then
 	-- Do something here
-	result = Dialog.Message("Notice", "检测到您的系统是不是64位，请使用相应安装包，本次安装将退出！", MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
+	result = Dialog.Message("Notice", "检测到您的系统是不是32位，请使用相应安装包，本次安装将退出！", MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
 	Application.Exit(0);
 end
 </Script>
@@ -3190,7 +3190,7 @@ g_HandleSystemReboot();
 <PostBuildProg/>
 <PostBuildCmdLine/>
 <PostBuildWait>0</PostBuildWait>
-<Filename>HNDecision_64_v0.9.1.exe</Filename>
+<Filename>HNDecision_32_v0.9.1.exe</Filename>
 <OutputFolder>E:\build_setup\hn_pc\</OutputFolder>
 <SegmentSizeMode>0</SegmentSizeMode>
 <CustomSegSize>100</CustomSegSize>
