@@ -618,8 +618,8 @@
 			var $nav = $('<div class="nav_left nav_animate">'+
 							'<div class="nav_left_c">'+
 								'<ul>'+
-									'<li class="on">首页</li>'+
-									'<li data-type="change_city">切换城市</li>'+
+									'<li class="on" data-id="-1">首页</li>'+
+									'<li data-type="change_city" data-id="-2">切换城市</li>'+
 								'</ul>'+
 								'<div class="bg"></div>'+
 							'</div>'+
@@ -677,41 +677,40 @@
 					var sid = $this.data('sid');
 					// var columnstyle = $this.data('style');
 					var type = $this.data('type');
-					if(!id && !type){
-						toUrl = './index.html';
-					}else{
-						if ('change_city' == type) {
-							toUrl = './city.html';
-						} else {
-							Store.set('columnId',id);
-							if(!sid){
-								var $s_sort = $this.next();
-								if($s_sort.is('.s')){
-									if($prev_sub_sort && !$prev_sub_sort.is($s_sort)){
-										$prev_sub_sort.hide();
-									}
-
-									$prev_sub_sort = $s_sort.toggle(function(){
-										scroll_nav.refresh();
-										scroll_nav.scrollToElement($s_sort.prev().get(0));
-									});
-									return;
+					if ('-1' == id || '-2' == id) {
+						toUrl = '-1' == id? './index.html': './city.html';
+						Store.rm('columnId');
+						Store.rm('twoId');
+						Store.rm('threeId');
+					} else {
+						Store.set('columnId',id);
+						if(!sid){
+							var $s_sort = $this.next();
+							if($s_sort.is('.s')){
+								if($prev_sub_sort && !$prev_sub_sort.is($s_sort)){
+									$prev_sub_sort.hide();
 								}
-								// if($s_sort.is('.s')){
-								// 	sid = $s_sort.data('sid');
-								// }
+
+								$prev_sub_sort = $s_sort.toggle(function(){
+									scroll_nav.refresh();
+									scroll_nav.scrollToElement($s_sort.prev().get(0));
+								});
+								return;
 							}
-							Store.set('twoId',sid);
-							Store.rm('threeId');
-							toUrl = "./item.html";
-							if('json_map' == type){
-								toUrl = "./geomap.html"
-							}else if('tf_track' == type){
-								if(U.OS.isAndroid){
-			                		toUrl = "wisp://typhoon.wi";
-			                	}else{
-			                		toUrl = "./typhoon.html";
-			                	}
+							// if($s_sort.is('.s')){
+							// 	sid = $s_sort.data('sid');
+							// }
+						}
+						Store.set('twoId',sid);
+						Store.rm('threeId');
+						toUrl = "./item.html";
+						if('json_map' == type){
+							toUrl = "./geomap.html"
+						}else if('tf_track' == type){
+							if(U.OS.isAndroid){
+								toUrl = "wisp://typhoon.wi";
+							}else{
+								toUrl = "./typhoon.html";
 							}
 						}
 					}
