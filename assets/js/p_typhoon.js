@@ -1,31 +1,66 @@
 !function(){
-	// var win = nwDispatcher.requireNwGui().Window.get();
-	// win.showDevTools();
 	try{
 		var Loading = Util.Loading;
 		var map;
-		var cache = {};
-		/*得到xml并缓存数据*/
-		var loadXML = function(xmlURl,callback){
 
-			var xmlDoc = cache[xmlURl];
-			if(xmlDoc){
-				callback(xmlDoc,xmlURl);
-			}else{
-				$.get(xmlURl,function(html){
-					html = html.replace('<?xml version="1.0" encoding="utf-8"?>','');
-					cache[xmlURl] = html;
-					callback(html,xmlURl);
-				},'text');
+		var _reqCache = (function() {
+			var _cache = {};
+			var uniqueUrl;
+			var fn = function(url, option, cb) {
+				if (typeof option == 'function') {
+					cb = option;
+					option = null;
+				}
+				option = $.extend(true, {
+					type: 'json',
+					unique: true,
+					loading: true,
+					dealError: true,//是否自动处理错误
+				}, option);
+
+				if (option.unique) {
+					uniqueUrl = url;
+				}
+				var val = _cache[url];
+				if (val) {
+					var def = $.Deferred();
+					def.resolve([val]); // 兼容$.when使用Deferred
+					cb && cb(null, val);
+					return def;
+				} else {
+					var is_json = option.type == 'json';
+					return $[is_json? 'getJSON': 'get'](url, function(data) {
+						if (is_json && typeof data == 'string') {
+							try {
+								data = $.parseJSON(data);
+							} catch(e){}
+						}
+						_cache[url] = data;
+						if (uniqueUrl == url) {
+							Loading.hide();
+							cb && cb(null, data);
+						} else {
+							console.log(uniqueUrl, url);
+						}
+					}).error(function(req, status, error) {
+						Loading.hide();
+						if (option.dealError) {
+							alert('数据请求出现错误！');
+						}
+						cb && cb(error);
+					});
+				}
 			}
+			fn.text = function(url, cb) {
+				return fn(url, {
+					type: 'text'
+				}, cb);
+			}
+			return fn;
+		})();
 
-		}
-		var currentYear = new Date().getFullYear();
-		var NUM_SHOW_TYPHOON_NUM = 2;
-		function getXmlPath(year,name){
-			return 'http://typhoon.weather.com.cn/data/typhoondata/'+year+"/"+name;
-			// return '../test/data/typhoon/'+name;
-		}
+		var URL_TYPHOON = 'http://typhoon.nmc.cn/weatherservice/typhoon/jsons/';
+		var URL_LIST = URL_TYPHOON + 'list_default';
 		/*统一提示窗口*/
 		var infoWin = function(message,option){
 			this.infoWindow = new BMap.InfoWindow(message,$.extend({enableAutoPan:false,enableMessage:false},option));  // 创建信息窗口对象
@@ -33,86 +68,122 @@
 		infoWin.prototype.show = function(point){
 			map.openInfoWindow(this.infoWindow,point); //开启信息窗口
 		}
-
+		function _formatData(str) {
+			if (typeof str == 'string') {
+				var m = /^[^(]+\(+([^)]+)\)+/.exec(str);
+				if (m) {
+					var data = m[1];
+					try {
+						return $.parseJSON(data);
+					} catch(e){}
+				}
+			}
+		}
 		$(function(){
 			var $map_container = $('#map_container');
 			var $title = $map_container.find('.title');
-			var totalNum = 0;
-			var typhoonList;
-			var loadTyphoons = (function(){
-				var _cb;
-				var loadTyphoonNum = 0;
-				var $loadedTyphoon;
-				var loadCallback = function(typhoonInfo,path){
-					// console.log(path,'is loaded');
-					var $c = $(typhoonInfo).children();
-					if($loadedTyphoon){
-						$loadedTyphoon = $loadedTyphoon.add($c);
-					}else{
-						$loadedTyphoon = $c;
-					}
-
-					loadTyphoonNum++;
-					if(loadTyphoonNum == NUM_SHOW_TYPHOON_NUM){
-						Loading.hide();
-						$loadedTyphoon.sort(function(a,b){
-							return $(a).attr('typhoonNo').localeCompare($(b).attr('typhoonNo'));
+			var is_debug = false;
+			var cache_typhoon = {};
+			function loadTyphoons(cb, is_active){
+				function _getList(list){
+					if(is_active){
+						list = list.filter(function(v){
+							if(is_debug || v.is_active){
+								return v;
+							}
 						});
-						_cb && _cb($loadedTyphoon);
-					}
-				}
-
-				return function(callback){
-					Loading.show();
-					_cb = callback;
-					for(var i = 0;i<NUM_SHOW_TYPHOON_NUM;i++){
-						var path = getXmlPath(currentYear-i,'list.xml');
-						// console.log(path,'is loading');
-						loadXML(path,loadCallback);
-					}
-				}
-			})();
-			loadTyphoons(function($loadedTyphoon){
-				typhoonList = $loadedTyphoon;
-				/*初始化台风列表*/
-				for(var i = typhoonList.length-1;i>=0;i--){
-					var $elem = typhoonList.eq(i);
-					var text = title = $elem.attr('nameCN');
-					var m = /^(\d{2})(\d{2})$/.exec($elem.attr('typhoonNo'));
-
-					if(m){
-						var _y = m[1];
-						if(_y != year){
-							text = '<div>20'+_y+'</div>'+text;
-							year = _y;
+						if (is_debug) {
+							list = list.slice(-6);
 						}
-						$elem.data('year','20'+year);
-						var en = '(第'+m[2]+'号台风'+$elem.attr('nameEN')+')';
-						text += en;
-						title += en;
 					}
-					$elem.data('title',title);
-					$typhoon_list_ul.append($('<li>').html(text));
+					cb(list);
 				}
-				totalNum = typhoonList.length;
-				// initTyphoon(0);
-				var isHaveActive = false;
+				var val_cache = cache_typhoon[URL_LIST];
+				if(val_cache){
+					_getList(val_cache);
+				}else{
+					_reqCache.text(URL_LIST, function(err, result){
+						// [2301121,"MELOR","茉莉",1527,"1527",null,"名字来源于：马来西亚 意为：一种花","stop"]
+						result = _formatData(result);
+						var typhoonList = [];
+						if (result) {
+							typhoonList = result.typhoonList;
+						}
+						
+						var list = [];
+						$.each(typhoonList, function(i, v) {
+							list.push({
+								is_active: v[7] != 'stop',
+								index: v[3],
+								code: v[0],
+								cnName: v[2],
+								enName: v[1],
+								nameDesc: v[6]
+							});
+						});
+						var cache = {};
+						$.each(list, function(i, v){
+							var index = v.index;
+							var val = cache[index];
+							if(val){
+								val.push(v);
+							}else{
+								cache[index] = [v];
+							}
+						});
+						var list_new = [];
+						for(var i in cache){
+							var val = cache[i];
+							if(val.length > 1){
+								val.sort(function(a, b){
+									return a.index - b.index;
+								});
+								var flag_active = false;
+								var code_list = [];
+								$.each(val, function(i_val, v_val){
+									if(v_val.is_active){
+										flag_active = true;
+									}
+									code_list.push(v_val.code);
+								});
+								val[0].is_active = flag_active;
+								val[0].code_list = code_list;
+								list_new.push(val[0]);
+							}else{
+								list_new.push(val[0]);
+							}
+						}
+
+						list_new.sort(function(a, b){
+							return a.index - b.index;
+						});
+						cache_typhoon[URL_LIST] = list_new;
+						_getList(list_new);
+					});
+				}
+			}
+
+			var typhoonList;
+
+			loadTyphoons(function(list) {
+				typhoonList = list;
+				var activeTyphoon;
 				var now = new Date().getTime()
-				for(var i = totalNum - 1;i>0;i--){
-					var _item = typhoonList.eq(i);
-					if(_item.attr('isActive') == '1'){
-						var dtCode = _item.attr('dtCode');
-						var dtTime = new Date(dtCode.substr(0, 4)+'/'+dtCode.substr(4, 2)+'/'+dtCode.substr(6, 2)+' '+dtCode.substr(8, 2)+':'+dtCode.substr(10, 2)+':00');
-						dtTime.setDate(dtTime.getDate() + 3);
-						if (dtTime.getTime() > now) { //只显示更新时间小于当前时间3天的数据
-							isHaveActive = true;
-							loadTyphoonDetail(i);
-						}
+				var totalNum = typhoonList.length;
+				for(var i = totalNum-1; i>=0;i--){
+					var typhoon = typhoonList[i];
+					typhoon.i = i;
+
+					var text = title = typhoon.cnName + '(第'+typhoon.index+'号台风'+typhoon.enName+')';
+					$typhoon_list_ul.append($('<li>').html(text));
+
+					if (!activeTyphoon && typhoon.is_active) {
+						activeTyphoon = typhoon;
 					}
 				}
-				// if(!isHaveActive){
-				// 	loadTyphoonDetail(0);
-				// }
+				if (activeTyphoon) {
+					loadTyphoonDetail(activeTyphoon.i);
+				}
 			});
 
 			var currentTyphoonIndex = -1;
@@ -148,10 +219,10 @@
 			    var _prop = SOverlay.prototype = new BMap.Overlay();
 
 			    _prop._initWindRadiu = function(labelPane, sPoint, level){
-			    	var EN = sPoint.attr('EN'+level+'Radii'),
-		    			ES = sPoint.attr('ES'+level+'Radii'),
-		    			WS = sPoint.attr('WS'+level+'Radii'),
-		    			WN = sPoint.attr('WN'+level+'Radii');
+		    		var EN = sPoint['r'+level+'_en'],
+		    			ES = sPoint['r'+level+'_es'],
+		    			WS = sPoint['r'+level+'_ws'],
+		    			WN = sPoint['r'+level+'_wn'];
 		    		if(!isDefaultWind(EN) && !isDefaultWind(ES) && !isDefaultWind(WS) && !isDefaultWind(WN)){
 			            var div_wind_radiu = $('<div class="wind_radiu level'+level+'">'+
 											        '<div class="radiu radiu_en"></div>'+
@@ -183,30 +254,30 @@
 			    	var point = _this._point;
 			    	var sPoint = _this.sPoint;
 			    	var html = '<p>'+(title||'')+'<br/>'+point.time;
-			    	var max_wind_speed = sPoint.attr('CenterWindSpeed');
+			    	var max_wind_speed = sPoint.wind;
 			    	if(isLegal(max_wind_speed)){
 						html += '<br/>最大风速：'+max_wind_speed+'(米/秒)';
 					}
-					var pressure = sPoint.attr('CenterPressure');
+					var pressure = sPoint.yq;
 			    	if(isLegal(pressure)){
 						html += '<br/>中心气压：'+pressure+'(百帕)';
 					}
 
-			    	var move_speed = sPoint.attr('FutureWindSpeed');
+			    	var move_speed = sPoint.move_speed;
 			    	if(isLegal(move_speed)){
 						html += '<br/>移动速度：'+move_speed+'(公里/小时)';
 					}
-			    	var en7 = sPoint.attr('EN7Radii');
+			    	var en7 = sPoint.r7_en;
 					if(isLegal(en7)){
 						html += '<br/>7级风圈半径：'+en7+'(公里)';
 					}
-					var en10 = sPoint.attr('EN10Radii');
+					var en10 = sPoint.r10_en;
 					if(isLegal(en10)){
 						html += '<br/>10级风圈半径：'+en10+'(公里)';
 					}
 					html += '</p>';
 					var infoWindow = new infoWin(html);
-					var $div = $('<div></div>').addClass('c c_'+(sPoint.attr('type')||'yb'));
+					var $div = $('<div></div>').addClass('c c_'+(_getWindLevel(sPoint.level)));
 					$div.html('<div><span></span></div>');
 			    	var div = $div.get(0);
 			    	$div.on(supportTouch? 'touchstart':'click', function(){
@@ -299,7 +370,7 @@
 			    }
 				function addClickPoint(points, point, title){
 					var index = point._index;
-					var sPoint = points.eq(index);
+					var sPoint = points[index];
 					// var circle = new BMap.Circle(point,2000);
 
 					// var myIcon = new BMap.Icon('img/a.png', new BMap.Size(10, 10),{imageOffset: new BMap.Size(3, 3)});
@@ -310,9 +381,9 @@
 					// 	infoWindow.show(point);
 					// });
 					map.addOverlay(new SOverlay(point, sPoint, title));              // 将标注添加到地图中
-					if(!sPoint.attr('type')){
-						var lng = sPoint.attr('jd'),
-							lat = sPoint.attr('wd');
+					if(sPoint.isForcast){
+						var lng = sPoint.lng,
+							lat = sPoint.lat;
 						var label = new BMap.Label(point.time.replace('中国预报', ''), {
 							position: new BMap.Point(point.lng, point.lat),
 							offset: new BMap.Size(10, -10)
@@ -332,18 +403,50 @@
 						map.addOverlay(label);
 					}
 				}
-				var parseDetail = function(html){
-					var $html = $(html);
-					var $c = $html.children();
-					return {
-						points: $c.find('PathPoint'),
-						incpoints: $c.find('IncPoint'),
-						loadpoints: $c.find('LoadPoint'),
-						cname: $html.attr('cnName')
-					}
-				}
 				function formatNum(num){
 					return num < 10?'0'+num:num;
+				}
+				
+				var LEVEL = [{
+					val: [10.8, 17.1],
+					code: 'TD',
+					name: '热带低压',
+					color: 'rgba(110,196,186, 0.8)'
+				}, {
+					val: [17.2, 24.4],
+					code: 'TS',
+					name: '热带风暴',
+					color: 'rgba(239,234,58, 0.8)'
+				}, {
+					val: [24.5, 32.6],
+					code: 'STS',
+					name: '强热带风暴',
+					color: 'rgba(239,124,27, 0.8)'
+				}, {
+					val: [32.7, 41.4],
+					code: 'TY',
+					name: '台风',
+					color: 'rgba(231,31,30, 0.8)'
+				}, {
+					val: [41.5, 50.9],
+					code: 'STY',
+					name: '强台风',
+					color: 'rgba(230,38,135, 0.8)'
+				}, {
+					val: [51.0, 99],
+					code: 'SuperTY',
+					name: '超强台风',
+					color: 'rgba(126,64,149, 0.8)'
+				}];
+				function _getWindLevel(wind_level) {
+					var level = 1;
+					for (var i = 1, j = LEVEL.length; i <= j; i++) {
+						if (LEVEL[i - 1].code == wind_level) {
+							level = i;
+							break;
+						}
+					}
+					return level;
 				}
 
 				// #4CEEDF
@@ -352,10 +455,10 @@
 				// #FF7E00
 				// #F71A08
 				// #940EE9
-				function getLineOpt(points,index){
-					var point = points.eq(index);
-					var type = point.attr('type');
-					var color = type?"#732C37":'blue';
+				function getLineOpt(is_forcast){
+					// var point = points.eq(index);
+					// var type = point.attr('type');
+					var color = is_forcast?'blue':"#732C37";
 
 					// if(type == 1){
 					// 	color = '#4CEEDF';
@@ -372,58 +475,37 @@
 					// }else{
 					// 	color = 'blue';
 					// }
-					return {strokeColor: color, strokeWeight:2, strokeOpacity:0.5,strokeStyle: type?'solid':'dashed'};//画折线样式
+					return {strokeColor: color, strokeWeight:2, strokeOpacity:0.5,strokeStyle: is_forcast?'dashed':'solid'};//画折线样式
 				}
 				var typhoonIcon = new BMap.Icon("./img/typhoon/move.png", new BMap.Size(28, 28));
 
-
-
-				function drawPoints(points,incpoints,loadpoints,title,isReplay){
-					var lastShiKuangPointTime;
-					function getBDPoint(index){
-					    var point = points.eq(index);
-					    var bdPoint = new BMap.Point(point.attr('x'), point.attr('y'));
-					    var type = point.attr('type');
-					    bdPoint.time = point.attr('year')+'年'+point.attr('month')+'月'+point.attr('day')+'日'+point.attr('time')+'时';
-					    if(!type){
-					    	if(lastShiKuangPointTime){
-					    		var date = new Date(lastShiKuangPointTime);
-					    		date.setHours(date.getHours()+parseInt(point.attr('limitation')));
-					    		var year = formatNum(date.getFullYear());
-					    		var month = formatNum(date.getMonth()+1);
-					    		var day = formatNum(date.getDate());
-					    		var hour = formatNum(date.getHours());
-					    		bdPoint.time = [year,month,day].join('/')+' '+hour+'时 中国预报';
-					    	}
+				function drawPoints(points, isReplay) {
+					function getBDPoint(index) {
+						var point = points[index];
+					    var bdPoint = new BMap.Point(point.lng, point.lat);
+					    bdPoint.time = new Date(point.time).format('yyyy年MM月dd日hh时');
+					    var aging = point.aging;
+					    var isForcast = !!aging;
+					    bdPoint.isForcast = isForcast;
+					    if (isForcast) {
+					    	var time = new Date(point.time);
+					    	time.setHours(time.getHours() + Number(aging));
+					    	bdPoint.time = time.format('yyyy/MM/dd hh时 中国预报');
 					    }
 					    bdPoint._index = index;
 					    return bdPoint
 					}
-					var _lastSKPointIndex = 0;
+					var lastShiKuangPointTime;
 					var numOfPoints = points.length;
-					if(!isReplay){
-						for(var i = numOfPoints-1;i>0;i--){
-							var point = points.eq(i);
-							// console.log(title,i,point.attr('type'));
-							if(point.attr('type')){
 
-								_lastSKPointIndex = i;
-								break;
-							}
-						}
-					}
-					var _lastPoint = points.eq(_lastSKPointIndex);
-					var year = _lastPoint.attr('year');
-	        		var month = _lastPoint.attr('month');
-	        		var day = _lastPoint.attr('day');
-	        		var hour = _lastPoint.attr('time');
-	        		lastShiKuangPointTime = new Date(year+'/'+month+'/'+day+' '+hour+':00:00').getTime();
-	        		initMap(getBDPoint(_lastSKPointIndex));
-	        		// console.log(lastShiKuangPointTime);
+					var _lastSKPointIndex = numOfPoints - 1;
+					var _lastPoint = points[_lastSKPointIndex];
+					lastShiKuangPointTime = _lastPoint[1];
 
+					initMap(getBDPoint(_lastSKPointIndex));
 					var firstPoint = getBDPoint(0);
 					if(!typhoonMark){
-						typhoonMark = new BMap.Marker(firstPoint,{icon:typhoonIcon});
+						typhoonMark = new BMap.Marker(firstPoint, {icon: typhoonIcon});
 						typhoonMark.setTop(true);
 						map.addOverlay(typhoonMark);
 						setTimeout(function(){
@@ -431,7 +513,6 @@
 							$('img[src="./img/typhoon/move.png"]').addClass('rotate').parent().parent().append('<span class="typhoon_name">'+title+'</span>');
 						}, 200);
 					}
-					// new infoWin(firstPoint.time).show();
 					var currentIndex = 0;
 					if(isReplay){
 						var runDelay = Math.min(5000/numOfPoints,500);
@@ -441,83 +522,120 @@
 					function run(){
 						var one = getBDPoint(currentIndex);
 					    var two = getBDPoint(currentIndex+1);
-					    var polyline = new BMap.Polyline([one,two], getLineOpt(points,currentIndex+1));
+					    var polyline = new BMap.Polyline([one,two], getLineOpt(two.isForcast));
 					    map.addOverlay(polyline);
-					    addClickPoint(points,one, title);
-					    var _lastPoint = points.eq(currentIndex+1);
+					    addClickPoint(points, one, title);
+					    var _lastPoint = points[currentIndex+1];
 
-				        if(_lastPoint.length > 0){
-				        	if(_lastPoint.attr('type')){
-				        		lastPointForCenter = two;
-				        		if(isReplay){
-				        			initMap(two);
-				        		}
-				        		typhoonMark.setPosition(two);
-				        	}
-				        }
+				        
 				        if(currentIndex++ < numOfPoints-2){
 				        	runTT = setTimeout(run,runDelay);
 				        }else{
-				        	addClickPoint(points,two);
-				        	var pathArr = [];
-				        	incpoints.each(function(){
-				        		var $this = $(this);
-				        		pathArr.push(new BMap.Point($this.attr('x'), $this.attr('y')));
-				        	});
-				        	var polygon = new BMap.Polygon(pathArr, {strokeWeight: 1,strokeColor:'#7B9AE3',fillColor:'#7B9AE3',strokeOpacity:0.7,fillOpacity:0.7});
-					        // pathOverlay.push(polygon);
-					        map.addOverlay(polygon);
-
+				        	addClickPoint(points,two, title);
 					        $('.wind_radiu').hide().last().show();
 				        }
 					}
 					if(isReplay){
-						runTT = setTimeout(run,1000);
+						runTT = setTimeout(run, 1000);
 					}else{
-						runTT = setTimeout(run,0);
+						runTT = setTimeout(run, 0);
 					}
-					loadpoints.each(function(){
-						var $this = $(this);
-						var myIcon = new BMap.Icon('img/typhoon/1.png', new BMap.Size(14, 14));
-						var posPoint = new BMap.Point($this.attr('x'), $this.attr('y'));
-						var carMk = new BMap.Marker(posPoint,{icon: myIcon,title: $this.attr('cityName')});
-						map.addOverlay(carMk);
-
-						var info = $this.attr('inf');
-						if(info){
-							new infoWin('<br/>'+info).show(posPoint);
-						}
-					});
 				}
 				var $t_title = $('.t_title');
 				var _current_title;
-				return function(typhoon_index,isReplay){
+
+				var cache_typhoon = {};
+				return function(typhoon_index, isReplay) {
 					if(!isReplay && currentTyphoonIndex == typhoon_index){
 						return;
 					}
 					currentTyphoonIndex = typhoon_index;
-					// typhoon_index = typhoonList.length - 1 - typhoon_index;
-					var $info = typhoonList.eq(typhoon_index);
-					var title = $info.data('title');
-
-					var detailPath = getXmlPath($info.data('year'),$info.attr('typhoonNo')+'.xml');
-					// console.log(detailPath+" is loading!");
-					Loading.show();
-					loadXML(detailPath,function(html){
+					var typhoon = typhoonList[typhoon_index];
+					function cb(points) {
 						Loading.hide();
-						var points = parseDetail(html);
-						var cname = points.cname;
-						// 修正没有中文名的情况
-						if(title.indexOf('(') == 0){
-							title = cname + title;
-							$info.data('title',title);
-						}
-						title = title.replace('(', '('+$info.data('year')+'年');
-						$t_title.append('<li>'+title+'</li>');
-						// console.log(detailPath+" is loaded!",points);
-						drawPoints(points.points,points.incpoints,points.loadpoints,title,isReplay);
-					});
+
+						// var cname = data[2];
+
+						drawPoints(points);
+					}
+					var code = typhoon.code;
+					var key = 'typhoon_'+code;
+					var val_cache = cache_typhoon[key];
+					if (val_cache) {
+						cb(val_cache);
+					} else {
+						Loading.show();
+						_reqCache.text(URL_TYPHOON + 'view_' + code, function(err, data) {
+							if (!err) {
+								data = _formatData(data).typhoon;
+								var points = data[8];
+								var items = [];
+								$.each(points, function(i, v) {
+									var time = new Date(v[2]);
+									time.setHours(time.getHours() + 8);
+									var obj = {
+										time: time,
+										lat: v[5],
+										lng: v[4],
+										level: v[3],
+										wind: v[7],
+										yq: v[6],
+										move_speed: v[9],
+										move_dir: v[8]
+									};
+									var wind_radius = v[10];
+									var wr_7 = wind_radius[0];
+									if (wr_7) {
+										obj.r7_en = wr_7[1];
+										obj.r7_es = wr_7[2];
+										obj.r7_ws = wr_7[3];
+										obj.r7_wn = wr_7[4];
+									}
+									var wr_10 = wind_radius[1];
+									if (wr_10) {
+										obj.r10_en = wr_10[1];
+										obj.r10_es = wr_10[2];
+										obj.r10_ws = wr_10[3];
+										obj.r10_wn = wr_10[4];
+									}
+									var wr_12 = wind_radius[2];
+									if (wr_12) {
+										obj.r12_en = wr_12[1];
+										obj.r12_es = wr_12[2];
+										obj.r12_ws = wr_12[3];
+										obj.r12_wn = wr_12[4];
+									}
+
+									// _init(obj.lng, obj.lat);
+									var forecast = [];
+									var babj_forecast = v[11];
+									if (babj_forecast && (babj_forecast = babj_forecast.BABJ)) {
+										$.each(babj_forecast, function(i_f, v_f) {
+											var time = v_f[1];
+											time = new Date(time.substr(0, 4)+'/'+time.substr(4, 2)+'/'+time.substr(6, 2)+' '+time.substr(8, 2)+':'+time.substr(10, 2));
+											time.setHours(time.getHours() + 8);
+											forecast.push({
+												aging: v_f[0],//预报时效
+												time: time.getTime(),
+												lat: v_f[3],
+												lng: v_f[2],
+												level: v_f[7],
+												wind: v_f[5],
+												qy: v_f[4]
+											});
+										});
+									}
+									obj.forecast = forecast;
+									items.push(obj);
+								});
+								items = items.concat(items[items.length - 1].forecast);
+								cache_typhoon[key] = items;
+								cb(items);
+							}
+						});
+					}
 				}
+				
 			})();
 
 

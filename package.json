@@ -1,7 +1,7 @@
 ﻿{
   "name": "HNDecision",
   "version": "v0.8.0",
-  "description": "海南决策客户端",
+  "description": "海南省决策气象服务",
   "main": "center/index.html",
   "chromium-args": "--disable-web-security",
   "manifestUrl": "http://gitlab.tianqi.cn/zhangkai/HNDecison_PC_download/raw/master/package.json",
@@ -11,7 +11,7 @@
     }
   },
   "window": {
-    "title": "海南决策客户端",
+    "title": "海南省决策气象服务",
     "icon": "./center/img/logo.png",
     "frame": true,
     "position": "center",

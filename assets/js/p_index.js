@@ -49,9 +49,12 @@ $(function(){
 			initForcast(result['shikuang']);
 			// initAlarm(result['warning']);
 			//101310212
-			getJson('http://59.50.130.88:8888/decision-admin/alarm/cityAlarm/' + geoinfo.id, function(data) {
-				initAlarm(data);
+			U.getHost(function(host) {
+				getJson(host+'/decision-admin/alarm/cityAlarm/' + geoinfo.id, function(data) {
+					initAlarm(data);
+				})
 			})
+			
 			initAir(result['air']);
 			initForcast7d(result['15yb']);
 			Loading.hide();
@@ -87,7 +90,8 @@ $(function(){
 		$('.weather_icon').attr('src',Parse.weatherIcon(l7,l5)).show();
 		$('.shidu').text('相对湿度：'+l2+'%');
 		$('.wind').html(Parse.windDirec(l4)+' '+Parse.windLevel(l3,true));
-		$('.time').text(l7);
+		// $('.time').text(l7);
+		$('.time').text(data.l13.substr(0, 16));
 		$('.weather_info').show();
 		callback && callback();
 	}

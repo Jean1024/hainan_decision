@@ -1,14 +1,16 @@
 !function(){
 	var Store = Util.Store;
 	function login(username, pwd, callback){
-		request.post('http://59.50.130.88:8888/decision-api/api/Json', {
-			"command": "6001",
-		    "object": {
-				"username": username,
-				"password": pwd
-		    },
-			"token": ""
-		}, callback);
+		Util.getHost(function(host) {
+			request.post(host+'/decision-api/api/Json', {
+				"command": "6001",
+			    "object": {
+					"username": username,
+					"password": pwd
+			    },
+				"token": ""
+			}, callback);
+		});
 	}
 	function afterLogin(){
 		$body.addClass('auto');

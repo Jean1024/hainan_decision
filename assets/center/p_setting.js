@@ -65,16 +65,18 @@
 		},
 		'feedback': function(p, callback){
 			p.uid = userInfo.uid;
-			request.get('http://59.50.130.88:8888/decision-admin/feedback/send', p, function(e, data){
-				var return_data = {};
-				if(e){
-					return_data.e = e;
-				}else{
-					if(!data || !data.success){
-						return_data.e = new Error('出现错误, 请联系管理员！');
+			U.getHost(function(host) {
+				request.get(hsot + '/decision-admin/feedback/send', p, function(e, data){
+					var return_data = {};
+					if(e){
+						return_data.e = e;
+					}else{
+						if(!data || !data.success){
+							return_data.e = new Error('出现错误, 请联系管理员！');
+						}
 					}
-				}
-				callback && callback(return_data);
+					callback && callback(return_data);
+				});
 			});
 		}
 	};

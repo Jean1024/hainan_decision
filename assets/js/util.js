@@ -1269,3 +1269,25 @@
 		}
 	}
 }(Util.My = {});
+
+(function() {
+	var host_1 = 'http://59.50.130.88:8888/';
+	var hsot_2 = 'http://hnjc.tianqi.cn:8080/';
+
+	var host_current;
+	Util.getHost = function(cb) {
+		if (host_current) {
+			cb && cb (host_current);
+		} else {
+			Util.getJson('http://hnjc.tianqi.cn:8080/hnversion/getversion', function(data) {
+				if (data) {
+					host_current = data.result == 1? host_1: hsot_2;
+				} else {
+					host_current = host_1;
+				}
+
+				cb && cb(host_current);
+			});
+		}
+	}
+})();
