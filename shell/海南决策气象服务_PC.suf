@@ -6,9 +6,9 @@
 <ArchiveFiles>
 <FileData>
 <FldRef>1</FldRef>
-<FullName/>
+<FullName>F:\source\node_projects\HaiNanDecision_PC\target\32\*.*</FullName>
 <FileName>*.*</FileName>
-<Source>F:\source\node_projects\HaiNanDecision_PC\target\64</Source>
+<Source>F:\source\node_projects\HaiNanDecision_PC\target\32</Source>
 <Ext>*</Ext>
 <RTSource>Archive</RTSource>
 <Desc/>
@@ -188,7 +188,9 @@
 <Name>On Preload</Name>
 <Args/>
 <Script>-- These actions are performed before the screen is shown.
-</Script>
+if (String.CompareNoCase(SessionVar.Get("%COMMAND_TYPE%"), "UPGRADE")) then
+	Screen.Next();
+end</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -451,7 +453,21 @@ Otherwise, click Next to continue.
 <Event>
 <Name>On Preload</Name>
 <Args/>
-<Script>-- These actions are performed before the screen is shown.
+<Script>Reg_path = SessionVar.Expand("%Reg_path%");
+Reg_val_name = SessionVar.Expand("%Reg_val_name%");
+
+
+result_base_path = Registry.GetValue(HKEY_LOCAL_MACHINE, Reg_path, Reg_val_name, true);
+
+-- result = Dialog.Message("Notice", result_base_path, MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
+
+if (result_base_path ~= "") then
+	SessionVar.Set("%AppFolder%", result_base_path);
+
+	Screen.Next();
+end
+
+-- These actions are performed before the screen is shown.
 
 -- calculate the amount of space required for the installation
 _SpaceRequired = SetupData.CalculateRequiredSpace();
@@ -491,6 +507,15 @@ if(g_IsValidPath(strInstallFolderPath)) then
 
 	-- if there's enough space on the selected drive, proceed to the next screen
 	if(_SpaceAvailable &gt;= _SpaceRequired) then
+	
+		Reg_path = SessionVar.Expand("%Reg_path%");
+		Reg_val_name = SessionVar.Expand("%Reg_val_name%");
+
+		Registry.CreateKey(HKEY_LOCAL_MACHINE, Reg_path);
+		
+		_appfolder = SessionVar.Expand("%AppFolder%");
+
+		Registry.SetValue(HKEY_LOCAL_MACHINE, Reg_path, Reg_val_name, _appfolder, REG_SZ);
 		-- there's enough space on the drive...so
 		-- proceed to the next screen
 		Screen.Next();
@@ -733,377 +758,6 @@ end
 </Languages>
 </Screen>
 <Screen>
-<Type>115</Type>
-<Name>Select Shortcut Folder</Name>
-<BannerStyle>2</BannerStyle>
-<TemplateName>Select Shortcut Folder</TemplateName>
-<OverrideProjTheme>0</OverrideProjTheme>
-<StyleData>
-<CstClrs>0</CstClrs>
-<TBBG format="hex">ffffff</TBBG>
-<BDYBG format="hex">ece9d8</BDYBG>
-<FTBG format="hex">ece9d8</FTBG>
-<TBTXT format="hex">000000</TBTXT>
-<BDYTXT format="hex">000000</BDYTXT>
-<CBG format="hex">ffffff</CBG>
-<C3DFACE format="hex">ece9d8</C3DFACE>
-<C3DHLT format="hex">ece9d8</C3DHLT>
-<C3DLIT format="hex">ffffff</C3DLIT>
-<C3DSH format="hex">aca899</C3DSH>
-<CBTNTXT format="hex">000000</CBTNTXT>
-<CTEXT format="hex">000000</CTEXT>
-<CDISTXT format="hex">aca899</CDISTXT>
-<CPRGRS format="hex">316ac5</CPRGRS>
-<C3DSHDK format="hex">716f64</C3DSHDK>
-<TBIMG>Default_Top_Banner.jpg</TBIMG>
-<SBIMG>Default_Side_Banner.jpg</SBIMG>
-<BDIMG/>
-<BDFILL>0</BDFILL>
-<HDSEP>1</HDSEP>
-<FTSEP>1</FTSEP>
-<CstFnts>0</CstFnts>
-<Fonts>
-<FontData>
-<FontName>Arial</FontName>
-<CharacterSet>0</CharacterSet>
-<Height>-13</Height>
-<Weight>700</Weight>
-<Italic>0</Italic>
-<Underline>0</Underline>
-<StrikeOut>0</StrikeOut>
-<AntiAlias>1</AntiAlias>
-</FontData>
-<FontData>
-<FontName>Arial</FontName>
-<CharacterSet>0</CharacterSet>
-<Height>-13</Height>
-<Weight>700</Weight>
-<Italic>0</Italic>
-<Underline>0</Underline>
-<StrikeOut>0</StrikeOut>
-<AntiAlias>1</AntiAlias>
-</FontData>
-<FontData>
-<FontName>Arial</FontName>
-<CharacterSet>0</CharacterSet>
-<Height>-24</Height>
-<Weight>700</Weight>
-<Italic>0</Italic>
-<Underline>0</Underline>
-<StrikeOut>0</StrikeOut>
-<AntiAlias>1</AntiAlias>
-</FontData>
-<FontData>
-<FontName>Arial</FontName>
-<CharacterSet>0</CharacterSet>
-<Height>-13</Height>
-<Weight>400</Weight>
-<Italic>0</Italic>
-<Underline>0</Underline>
-<StrikeOut>0</StrikeOut>
-<AntiAlias>1</AntiAlias>
-</FontData>
-<FontData>
-<FontName>Arial</FontName>
-<CharacterSet>0</CharacterSet>
-<Height>-13</Height>
-<Weight>400</Weight>
-<Italic>0</Italic>
-<Underline>0</Underline>
-<StrikeOut>0</StrikeOut>
-<AntiAlias>1</AntiAlias>
-</FontData>
-</Fonts>
-<CAOff>
-<TP>0</TP>
-<L>15</L>
-<T>15</T>
-<R>15</R>
-<B>15</B>
-</CAOff>
-<CAOff>
-<TP>1</TP>
-<L>15</L>
-<T>15</T>
-<R>15</R>
-<B>15</B>
-</CAOff>
-<CAOff>
-<TP>2</TP>
-<L>15</L>
-<T>15</T>
-<R>15</R>
-<B>15</B>
-</CAOff>
-<TBTXTX>10</TBTXTX>
-<TBTXTY>10</TBTXTY>
-<ScreenW>497</ScreenW>
-<ScreenH>362</ScreenH>
-</StyleData>
-<NameVariable>%AppShortcutFolderName%</NameVariable>
-<Events>
-<Event>
-<Name>On Preload</Name>
-<Args/>
-<Script>-- These actions are performed before the screen is shown.
-
--- select the appropriate user profile for the shortcuts
--- (per user or all users) based on _UsePerUserFolders
-
--- We only want to offer all user vs. per user on Windows NT 4.0/2000/XP+
-local bHideUserProfileOptions = false;
-local tblOS = System.GetOSVersionInfo();
-if(tblOS)then
-	if(tblOS.PlatformId == "1")then
-		bHideUserProfileOptions = true;
-	end
-end
-
-if(bHideUserProfileOptions)then
-	DlgRadioButton.SetProperties(CTRL_RADIOBTN_PERUSER,{Visible = false});
-	DlgRadioButton.SetProperties(CTRL_RADIOBTN_ALLUSERS,{Visible = false});
-	-- Always use per user folders on Windows 95/98/ME
-	_UsePerUserFolders = true;
-else
-	DlgRadioButton.SetProperties(CTRL_RADIOBTN_PERUSER,{Checked = _UsePerUserFolders});
-	DlgRadioButton.SetProperties(CTRL_RADIOBTN_ALLUSERS,{Checked = not _UsePerUserFolders});
-end
-
--- from _SUF70_Global_Functions.lua:
--- fill the combo box with the existing shortcut folder names
-g_FillComboBoxWithShortcutFolders(CTRL_COMBOBOX_SHORTCUTFOLDERS);
-</Script>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Back</Name>
-<Args/>
-<Script>-- These actions are performed when the Back button is clicked.
-
--- go back to the previous screen
-Screen.Back();
-</Script>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Next</Name>
-<Args/>
-<Script>-- These actions are performed when the Next button is clicked.
-
--- get the text from the combo box
-strShortcutFolder = DlgComboBox.GetProperties(CTRL_COMBOBOX_SHORTCUTFOLDERS).Text;
-
--- if the shortcut folder path is empty, display a message
--- if it isn't empty, check for invalid characters and advance to the next screen
-if String.Length(strShortcutFolder) == 0 then
-
-	-- the field is empty...
-	-- come on user, don't be shy :)
-	local strTitle = SetupData.GetLocalizedString("MSG_INVALID_ENTRY");
-	local strPrompt = SetupData.GetLocalizedString("ERR_FIELD_CANNOT_BE_EMPTY");
-	Dialog.Message(strTitle, strPrompt, MB_OK, MB_ICONEXCLAMATION);
-
-else
-	-- the field's not empty...
-	-- make sure the shortcut folder path contains only valid characters for a relative path
-	if g_ContainsValidRelativePathChars(strShortcutFolder) then
-
-		-- advance to the next screen
-		Screen.Next();
-
-	else
-		-- the shortcut folder contains invalid characters
-		-- tell the user to smarten up :)
-		local strTitle = SetupData.GetLocalizedString("MSG_INVALID_ENTRY");
-		local strPrompt = SetupData.GetLocalizedString("ERR_INVALID_CHARACTERS") .. "\r\n/ * ? \" &lt; &gt; | :";
-		Dialog.Message(strTitle, strPrompt, MB_OK, MB_ICONEXCLAMATION);
-	end
-end
-</Script>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Cancel</Name>
-<Args/>
-<Script>-- These actions are performed when the Cancel button is clicked.
-
--- from _SUF70_Global_Functions.lua:
--- ask user if they're sure they want to exit
-if g_ConfirmSetupAbort() then
-	Application.Exit(EXIT_REASON_USER_ABORTED);
-end
-</Script>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Help</Name>
-<Args/>
-<Script>-- These actions are performed when the Help button is clicked.
-</Script>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Ctrl Message</Name>
-<Args>number e_CtrlID, number e_MsgID, table e_Details</Args>
-<Script>-- These actions are triggered by the controls on the screen.
-
-if (e_MsgID == MSGID_CLICKED) then
-
-	-- something was clicked...was it one of the radio buttons?
-	if (e_CtrlID == CTRL_RADIOBTN_PERUSER) then
-
-		-- the user selected the 'per-user' option on the screen...
-	
-		-- turn the option on in the setup
-		_UsePerUserFolders = true;
-
-		-- update the list of shortcut folders in the combo box
-		g_FillComboBoxWithShortcutFolders(CTRL_COMBOBOX_SHORTCUTFOLDERS);
-
-	elseif (e_CtrlID == CTRL_RADIOBTN_ALLUSERS) then
-
-		-- the user selected the 'all-users' option on the screen...
-
-		-- turn the option off in the setup
-		_UsePerUserFolders = false;
-
-		-- update the list of shortcut folders in the combo box
-		g_FillComboBoxWithShortcutFolders(CTRL_COMBOBOX_SHORTCUTFOLDERS);
-	end
-end
-</Script>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-</Events>
-<Controls>
-<Control>
-<Type>1</Type>
-<ID>103</ID>
-<Visible>0</Visible>
-<Enabled>0</Enabled>
-<TabOrder>75</TabOrder>
-<FTButton>1</FTButton>
-</Control>
-<Control>
-<Type>1</Type>
-<ID>101</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>76</TabOrder>
-<FTButton>1</FTButton>
-</Control>
-<Control>
-<Type>1</Type>
-<ID>100</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>-10</TabOrder>
-<FTButton>1</FTButton>
-</Control>
-<Control>
-<Type>1</Type>
-<ID>102</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>-9</TabOrder>
-<FTButton>1</FTButton>
-</Control>
-<Control>
-<Type>2</Type>
-<ID>203</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>0</TabOrder>
-<IsHeading>0</IsHeading>
-</Control>
-<Control>
-<Type>2</Type>
-<ID>211</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>1</TabOrder>
-<IsHeading>0</IsHeading>
-</Control>
-<Control>
-<Type>4</Type>
-<ID>501</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>2</TabOrder>
-<Sorted>0</Sorted>
-<ShowShortcutFolders>1</ShowShortcutFolders>
-<PerUser>1</PerUser>
-<Variable/>
-<Lines>4</Lines>
-<ComboType>1</ComboType>
-</Control>
-<Control>
-<Type>5</Type>
-<ID>600</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>35</TabOrder>
-<Group>1</Group>
-<StartID>600</StartID>
-<EndID>601</EndID>
-</Control>
-<Control>
-<Type>5</Type>
-<ID>601</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
-<TabOrder>40</TabOrder>
-<Group>0</Group>
-<StartID>600</StartID>
-<EndID>601</EndID>
-</Control>
-</Controls>
-<Languages>
-<SUF70Messages>
-<Language>
-<Name>English</Name>
-<Default>1</Default>
-<Primary>9</Primary>
-<Secondary>
-<ID>1</ID>
-<ID>2</ID>
-<ID>3</ID>
-<ID>4</ID>
-<ID>5</ID>
-<ID>6</ID>
-<ID>7</ID>
-<ID>8</ID>
-<ID>9</ID>
-<ID>10</ID>
-<ID>11</ID>
-<ID>12</ID>
-<ID>13</ID>
-</Secondary>
-</Language>
-<Messages>
-<IDS_WINDOW_TITLE>%ProductName% Setup</IDS_WINDOW_TITLE>
-<IDS_HEADER_TEXT>Shortcut Folder</IDS_HEADER_TEXT>
-<IDS_SUBHEADER_TEXT>Where would you like the shortcuts to be installed?</IDS_SUBHEADER_TEXT>
-<IDS_CTRL_BUTTON_NEXT>&amp;Next &gt;</IDS_CTRL_BUTTON_NEXT>
-<IDS_CTRL_BUTTON_BACK>&lt; &amp;Back</IDS_CTRL_BUTTON_BACK>
-<IDS_CTRL_BUTTON_CANCEL>&amp;Cancel</IDS_CTRL_BUTTON_CANCEL>
-<IDS_CTRL_BUTTON_HELP>&amp;Help</IDS_CTRL_BUTTON_HELP>
-<IDS_CTRL_STATICTEXT_TOPINSTRUCTIONS>The shortcut icons will be created in the folder indicated below. If you don't want to use the default folder, you can either type a new name, or select an existing folder from the list.</IDS_CTRL_STATICTEXT_TOPINSTRUCTIONS>
-<IDS_CTRL_STATICTEXT_LABEL_01>Shortcut Folder:</IDS_CTRL_STATICTEXT_LABEL_01>
-<IDS_CTRL_RADIOBTN_PERUSER>Install shortcuts for current user only</IDS_CTRL_RADIOBTN_PERUSER>
-<IDS_CTRL_RADIOBTN_ALLUSERS>Make shortcuts available to all users</IDS_CTRL_RADIOBTN_ALLUSERS>
-<IDS_CTRL_COMBOBOX_SHORTCUTFOLDERS>%AppShortcutFolderName%</IDS_CTRL_COMBOBOX_SHORTCUTFOLDERS>
-</Messages>
-</SUF70Messages>
-</Languages>
-</Screen>
-<Screen>
 <Type>100</Type>
 <Name>Ready to Install</Name>
 <BannerStyle>2</BannerStyle>
@@ -1216,7 +870,10 @@ end
 <Name>On Preload</Name>
 <Args/>
 <Script>-- These actions are performed before the screen is shown.
-</Script>
+
+if (String.CompareNoCase(SessionVar.Get("%COMMAND_TYPE%"), "UPGRADE")) then
+	Screen.Next();
+end</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1671,10 +1328,10 @@ end
 </DuringInstScreenData>
 <AfterInstallingScreens>
 <Screen>
-<Type>100</Type>
-<Name>Finished Install</Name>
-<BannerStyle>1</BannerStyle>
-<TemplateName>Finished Install</TemplateName>
+<Type>150</Type>
+<Name>Check Boxes</Name>
+<BannerStyle>2</BannerStyle>
+<TemplateName>Check Boxes</TemplateName>
 <OverrideProjTheme>0</OverrideProjTheme>
 <StyleData>
 <CstClrs>0</CstClrs>
@@ -1778,6 +1435,10 @@ end
 <ScreenW>497</ScreenW>
 <ScreenH>362</ScreenH>
 </StyleData>
+<NumCheckBoxes>1</NumCheckBoxes>
+<Check0>0</Check0>
+<Cols>1</Cols>
+<Distribute>0</Distribute>
 <Events>
 <Event>
 <Name>On Preload</Name>
@@ -1793,8 +1454,14 @@ end
 <Script>-- These actions are performed when the Back button is clicked.
 
 -- go back to the previous screen
-Screen.Back();
-</Script>
+--Screen.Back();
+--result = Dialog.Message("Notice", "Your message here.", MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
+
+if (DlgCheckBox.GetProperties(CTRL_CHECK_BOX_01).Checked) then
+	result = File.Run(SessionVar.Expand("%AppFolder%\\HNDecision.exe"), "", "", SW_SHOWNORMAL, false);
+end
+
+Screen.Next();</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1802,6 +1469,8 @@ Screen.Back();
 <Name>On Next</Name>
 <Args/>
 <Script>-- These actions are performed when the Next button is clicked.
+-- Tip: this is where you could add actions to validate the
+--      user's input before proceeding
 
 -- advance to the next screen
 Screen.Next();
@@ -1853,29 +1522,29 @@ end
 <Type>1</Type>
 <ID>101</ID>
 <Visible>1</Visible>
-<Enabled>0</Enabled>
+<Enabled>1</Enabled>
 <TabOrder>76</TabOrder>
 <FTButton>1</FTButton>
 </Control>
 <Control>
 <Type>1</Type>
 <ID>100</ID>
-<Visible>1</Visible>
-<Enabled>1</Enabled>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
 <TabOrder>-10</TabOrder>
 <FTButton>1</FTButton>
 </Control>
 <Control>
 <Type>1</Type>
 <ID>102</ID>
-<Visible>1</Visible>
+<Visible>0</Visible>
 <Enabled>0</Enabled>
 <TabOrder>-9</TabOrder>
 <FTButton>1</FTButton>
 </Control>
 <Control>
 <Type>2</Type>
-<ID>200</ID>
+<ID>203</ID>
 <Visible>1</Visible>
 <Enabled>1</Enabled>
 <TabOrder>0</TabOrder>
@@ -1883,11 +1552,299 @@ end
 </Control>
 <Control>
 <Type>2</Type>
-<ID>300</ID>
+<ID>204</ID>
+<Visible>1</Visible>
+<Enabled>1</Enabled>
+<TabOrder>33</TabOrder>
+<IsHeading>0</IsHeading>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1300</ID>
 <Visible>1</Visible>
 <Enabled>1</Enabled>
 <TabOrder>1</TabOrder>
-<IsHeading>1</IsHeading>
+<Checked>1</Checked>
+<Variable>check01</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1301</ID>
+<Visible>1</Visible>
+<Enabled>1</Enabled>
+<TabOrder>2</TabOrder>
+<Checked>0</Checked>
+<Variable>check02</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1302</ID>
+<Visible>1</Visible>
+<Enabled>1</Enabled>
+<TabOrder>3</TabOrder>
+<Checked>0</Checked>
+<Variable>check03</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1303</ID>
+<Visible>1</Visible>
+<Enabled>1</Enabled>
+<TabOrder>4</TabOrder>
+<Checked>0</Checked>
+<Variable>check04</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1304</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>5</TabOrder>
+<Checked>0</Checked>
+<Variable>check05</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1305</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>6</TabOrder>
+<Checked>0</Checked>
+<Variable>check06</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1306</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>7</TabOrder>
+<Checked>0</Checked>
+<Variable>check07</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1307</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>8</TabOrder>
+<Checked>0</Checked>
+<Variable>check08</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1308</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>9</TabOrder>
+<Checked>0</Checked>
+<Variable>check09</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1309</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>10</TabOrder>
+<Checked>0</Checked>
+<Variable>check10</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1310</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>11</TabOrder>
+<Checked>0</Checked>
+<Variable>check11</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1311</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>12</TabOrder>
+<Checked>0</Checked>
+<Variable>check12</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1312</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>13</TabOrder>
+<Checked>0</Checked>
+<Variable>check13</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1313</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>14</TabOrder>
+<Checked>0</Checked>
+<Variable>check14</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1314</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>15</TabOrder>
+<Checked>0</Checked>
+<Variable>check15</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1315</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>16</TabOrder>
+<Checked>0</Checked>
+<Variable>check16</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1316</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>17</TabOrder>
+<Checked>0</Checked>
+<Variable>check17</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1317</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>18</TabOrder>
+<Checked>0</Checked>
+<Variable>check18</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1318</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>19</TabOrder>
+<Checked>0</Checked>
+<Variable>check19</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1319</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>20</TabOrder>
+<Checked>0</Checked>
+<Variable>check20</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1320</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>21</TabOrder>
+<Checked>0</Checked>
+<Variable>check21</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1321</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>22</TabOrder>
+<Checked>0</Checked>
+<Variable>check22</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1322</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>23</TabOrder>
+<Checked>0</Checked>
+<Variable>check23</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1323</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>24</TabOrder>
+<Checked>0</Checked>
+<Variable>check24</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1324</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>25</TabOrder>
+<Checked>0</Checked>
+<Variable>check25</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1325</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>26</TabOrder>
+<Checked>0</Checked>
+<Variable>check26</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1326</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>27</TabOrder>
+<Checked>0</Checked>
+<Variable>check27</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1327</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>28</TabOrder>
+<Checked>0</Checked>
+<Variable>check28</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1328</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>29</TabOrder>
+<Checked>0</Checked>
+<Variable>check29</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1329</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>30</TabOrder>
+<Checked>0</Checked>
+<Variable>check30</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1330</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>31</TabOrder>
+<Checked>0</Checked>
+<Variable>check31</Variable>
+</Control>
+<Control>
+<Type>10</Type>
+<ID>1331</ID>
+<Visible>0</Visible>
+<Enabled>0</Enabled>
+<TabOrder>32</TabOrder>
+<Checked>0</Checked>
+<Variable>check32</Variable>
 </Control>
 </Controls>
 <Languages>
@@ -1914,19 +1871,16 @@ end
 </Language>
 <Messages>
 <IDS_WINDOW_TITLE>%ProductName% Setup</IDS_WINDOW_TITLE>
-<IDS_HEADER_TEXT>Installation Finished</IDS_HEADER_TEXT>
-<IDS_SUBHEADER_TEXT>The installation has completed successfully.</IDS_SUBHEADER_TEXT>
-<IDS_CTRL_BUTTON_NEXT>&amp;Finish</IDS_CTRL_BUTTON_NEXT>
-<IDS_CTRL_BUTTON_BACK>&lt; &amp;Back</IDS_CTRL_BUTTON_BACK>
+<IDS_HEADER_TEXT/>
+<IDS_SUBHEADER_TEXT/>
+<IDS_CTRL_BUTTON_NEXT>&amp;Next &gt;</IDS_CTRL_BUTTON_NEXT>
+<IDS_CTRL_BUTTON_BACK>&amp;Finish</IDS_CTRL_BUTTON_BACK>
 <IDS_CTRL_BUTTON_CANCEL>&amp;Cancel</IDS_CTRL_BUTTON_CANCEL>
 <IDS_CTRL_BUTTON_HELP>&amp;Help</IDS_CTRL_BUTTON_HELP>
-<IDS_CTRL_STATICTEXT_BODY>The %ProductName% %ProductVer% installation is complete.
-
-Thank you for choosing %ProductName%!
-
-Please click Finish to exit this installer.
-</IDS_CTRL_STATICTEXT_BODY>
-<IDS_CTRL_HEADINGTEXT_BODY>Installation Successful</IDS_CTRL_HEADINGTEXT_BODY>
+<IDS_CTRL_STATICTEXT_TOPINSTRUCTIONS>完成安装</IDS_CTRL_STATICTEXT_TOPINSTRUCTIONS>
+<IDS_CTRL_STATICTEXT_BOTTOMINSTRUCTIONS>
+</IDS_CTRL_STATICTEXT_BOTTOMINSTRUCTIONS>
+<IDS_CTRL_CHECK_BOX_01>是否运行软件</IDS_CTRL_CHECK_BOX_01>
 </Messages>
 </SUF70Messages>
 </Languages>
@@ -3058,13 +3012,29 @@ g_HandleSystemReboot();
 <Event>
 <Name>On Startup</Name>
 <Args/>
-<Script>result = System.Is64BitOS();
--- An if statement that compares two numbers
-if (false == result) then
-	-- Do something here
-	result = Dialog.Message("Notice", "检测到您的系统是不是64位，请使用相应安装包，本次安装将退出！", MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
-	Application.Exit(0);
+<Script>-- Create a global variable and assign a boolean value to it
+is_from_upgrade = false;
+
+for i, arg in pairs(_CommandLineArgs) do
+	if (String.CompareNoCase(arg, "UPGRADE") == 0) then
+		is_from_upgrade = true;
+		--Dialog.Message("Notice", "------------UPGRADE", MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
+		break;
+	end
+	--Dialog.Message("Notice", arg, MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
 end
+--result = System.Is64BitOS();
+-- An if statement that compares two numbers
+--if (false == result) then
+	-- Do something here
+--	result = Dialog.Message("Notice", "检测到您的系统是不是64位，请使用相应安装包，本次安装将退出！", MB_OK, MB_ICONINFORMATION, MB_DEFBUTTON1);
+--	Application.Exit(0);
+--end
+
+if (is_from_upgrade) then
+	SessionVar.Set("%COMMAND_TYPE%", "UPGRADE");
+end
+
 </Script>
 <BookMarks count="0">
 </BookMarks>
@@ -3072,7 +3042,11 @@ end
 <Event>
 <Name>On Pre Install</Name>
 <Args/>
-<Script/>
+<Script>_appfolder = SessionVar.Expand("%AppFolder%");
+_isExist = Folder.DoesExist(_appfolder);
+if (_isExist == true) then
+	Folder.DeleteTree(_appfolder, nil);
+end</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -3142,7 +3116,7 @@ g_HandleSystemReboot();
 </SessionVar>
 <SessionVar>
 <Name>%ProductVer%</Name>
-<Value>v0.9.1</Value>
+<Value>v0.9.5</Value>
 <Type>1</Type>
 </SessionVar>
 <SessionVar>
@@ -3167,17 +3141,27 @@ g_HandleSystemReboot();
 </SessionVar>
 <SessionVar>
 <Name>%AppFolder%</Name>
-<Value>%ProgramFilesFolder%\%NameEn%</Value>
+<Value>%ProgramFilesFolder%\%ProductName_en%</Value>
 <Type>2</Type>
 </SessionVar>
 <SessionVar>
 <Name>%AppShortcutFolderName%</Name>
-<Value>%NameEn%</Value>
+<Value>%ProductName_en%</Value>
 <Type>2</Type>
 </SessionVar>
 <SessionVar>
-<Name>%NameEn%</Name>
+<Name>%ProductName_en%</Name>
 <Value>HNDecision</Value>
+<Type>10</Type>
+</SessionVar>
+<SessionVar>
+<Name>%Reg_path%</Name>
+<Value>Software\\BPA\\%ProductName_en%</Value>
+<Type>10</Type>
+</SessionVar>
+<SessionVar>
+<Name>%Reg_val_name%</Name>
+<Value>base_path %ProductName_en%</Value>
 <Type>10</Type>
 </SessionVar>
 </SUF7SessionVars>
@@ -3190,7 +3174,7 @@ g_HandleSystemReboot();
 <PostBuildProg/>
 <PostBuildCmdLine/>
 <PostBuildWait>0</PostBuildWait>
-<Filename>HNDecision_64_v0.9.1.exe</Filename>
+<Filename>HNDecision_v0.9.5_test.exe</Filename>
 <OutputFolder>E:\build_setup\hn_pc\</OutputFolder>
 <SegmentSizeMode>0</SegmentSizeMode>
 <CustomSegSize>100</CustomSegSize>

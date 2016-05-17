@@ -491,4 +491,44 @@ $(function(){
 			line.draw();
 		}
 	});
+
+	// 检查自动升级
+	(function() {
+		var style = 'width:100%;position:absolute; left:0; top:50%;text-align:center;padding: 10px 0;color:white;background-color:rgba(0,0,0,0.5)';
+		var $update_version = $('<div style="'+style+'"></div>').appendTo($('body'));
+		$update_version.hide();
+
+		var Upgrade = require('upgrade');
+		var App = require('nw.gui').App;
+		var manifest = App.manifest;
+		// manifest = {
+		// 	version: 'v0.0.1',
+		// 	manifestUrl: 'http://10.14.85.116/projects/upgrade_test/package.json'
+		// }
+		var upgrader = new Upgrade(manifest, function() {
+			console.log.apply(console, arguments);
+		});
+		upgrader.check(function(newVersion) {
+			if (confirm('发现新版本'+newVersion+'，是否下载？')) {
+				upgrader.download({
+					onprocess: function(downloaded, total) {
+						var info = Math.floor(Math.min(downloaded/total, 1)*100)+'%';
+						// console.log(info, downloaded, total);
+						$update_version.html('正在下载安装包:' + info).show();
+					},
+					onfinish: function(src) {
+						require('nw.gui').Window.get().hide();
+						require('nw.gui').Shell.openItem(src);
+						App.quit();
+						// console.log('download', src);
+						// upgrader.install();
+						// // window.close();
+						// setTimeout(function() {
+							// App.quit();
+						// }, 100);
+					}
+				});
+			}
+		});
+	})();
 });

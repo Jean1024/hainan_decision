@@ -1,4 +1,7 @@
 !function(U){
+	try {
+		global.require.extensions['.gts'] = global.require.extensions['.js']
+	} catch(e) {}
 	!function(){
 		var fn_error = function(e){
 			console.log('sysErr',e.stack);

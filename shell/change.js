@@ -79,9 +79,9 @@ function _repalce_content(dir){
 	_replace(path.join(dir, 'j/esl.gts'), function(content){
 		return content.replace(/\.js/g, '.gts');
 	});
-	_replace(path.join(dir, 'index.gt'), function(content){
-		return content.replace(/\.html(?!\()/g, '.gt').replace(/<!--util_update-->/, '<script type="text/javascript" src="./util_update.js"></script>');
-	});
+	// _replace(path.join(dir, 'index.gt'), function(content){
+	// 	return content.replace(/\.html(?!\()/g, '.gt').replace(/<!--util_update-->/, '<script type="text/javascript" src="./updater/util_update.js"></script>');
+	// });
 	_replace(path.join(dir, 'center/setting.gt'), function(content){
 		return content.replace(/\.html(?!\()/g, '.gt');
 	});

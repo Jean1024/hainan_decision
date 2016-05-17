@@ -12,7 +12,6 @@
 		copyPath = gui.App.argv[0];
 		execPath = gui.App.argv[1];
 	}
-
 	//download new version of app in tmp
 	//unpack
 	//run updater
@@ -26,7 +25,10 @@
 	var fs = require('fs');
 	var k = 0;
 	var d = false;
-	var updater = require('../updater.js');
+
+	var dir_assets = path.dirname(location.href).replace('file:///', '');
+	
+	var updater = require(path.join(dir_assets, 'updater/updater.js'));
 	var upd = new updater(pkg);
 	var newVersionCheckIntervalId = null;
 	var tryingForNewVersion = false;
@@ -35,7 +37,8 @@
 
 	// Util.update = function(){
 		if (!copyPath) {
-			request.get(url.resolve(pkg.manifestUrl, '/version/' + pkg.version));
+			var _url = url.resolve(pkg.manifestUrl, '/version/' + pkg.version);
+			request.get(_url);
 			// $update_version.html('当前版本：' + pkg.version);
 			function check() {
 				if (!d && !tryingForNewVersion) {
@@ -84,7 +87,7 @@
 			
 			newVersion.on('data', function(chunk) {
 				loaded += chunk.length;
-				$update_version.show().html("正在下载安装包: " + Math.floor(loaded / newVersion['content-length'] * 100) + '%');
+				$update_version.show().html("正在下载安装包: " + Math.floor(Math.min(loaded / newVersion['content-length'], 1) * 100) + '%');
 			})
 		}else{
 			$update_version.hide();
