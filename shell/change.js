@@ -58,6 +58,9 @@ function _repalce_content(dir){
 	_replace(path.join(dir, 'package.json'), function(content){
 		return content.replace('index.html', 'index.gt');
 	});
+	_replace(path.join(dir, 'index.gt'), function(content){
+		return content.replace(/\.html/g, '.gt');
+	});
 	_replace(path.join(dir, 'center/index.gts'), function(content){
 		return content.replace(/index\.html/g, 'index.gt');
 	});
@@ -65,7 +68,7 @@ function _repalce_content(dir){
 		return content.replace(/item\.html/g, 'item.gt');
 	});
 	_replace(path.join(dir, 'j/util.gts'), function(content){
-		return content.replace(/\.html(?!\()/g, '.gt');
+		return content.replace(/\.html(?!\()/g, '.gt').replace(/toolbar:[^,]+/, 'toolbar:false');
 	});
 	_replace(path.join(dir, 'j/p_item.gts'), function(content){
 		return content.replace(/view\.html/g, 'view.gt');

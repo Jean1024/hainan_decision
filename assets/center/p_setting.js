@@ -66,7 +66,7 @@
 		'feedback': function(p, callback){
 			p.uid = userInfo.uid;
 			U.getHost(function(host) {
-				request.get(hsot + '/decision-admin/feedback/send', p, function(e, data){
+				request.get(host + '/decision-admin/feedback/send', p, function(e, data){
 					var return_data = {};
 					if(e){
 						return_data.e = e;

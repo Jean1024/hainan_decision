@@ -545,6 +545,7 @@
 				var _current_title;
 
 				var cache_typhoon = {};
+				var _is_inited = false;
 				return function(typhoon_index, isReplay) {
 					if(!isReplay && currentTyphoonIndex == typhoon_index){
 						return;
@@ -555,7 +556,6 @@
 						Loading.hide();
 
 						// var cname = data[2];
-
 						drawPoints(points);
 					}
 					var code = typhoon.code;
@@ -572,7 +572,7 @@
 								var items = [];
 								$.each(points, function(i, v) {
 									var time = new Date(v[2]);
-									time.setHours(time.getHours());
+									// time.setHours(time.getHours());
 									var obj = {
 										time: time,
 										lat: v[5],
@@ -628,9 +628,16 @@
 									obj.forecast = forecast;
 									items.push(obj);
 								});
-								items = items.concat(items[items.length - 1].forecast);
+								var p_last = items[items.length - 1];
+
+								items = items.concat(p_last.forecast);
 								cache_typhoon[key] = items;
-								cb(items);
+								// 24小时更新的自动显示
+								if (_is_inited || new Date().getTime() - p_last.time.getTime() < 1000*60*60*24) {
+									cb(items);
+								}
+
+								_is_inited = true;
 							}
 						});
 					}
