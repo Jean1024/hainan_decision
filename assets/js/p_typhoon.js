@@ -114,7 +114,7 @@
 						$.each(typhoonList, function(i, v) {
 							list.push({
 								is_active: v[7] != 'stop',
-								index: v[3],
+								index: v[4],
 								code: v[0],
 								cnName: v[2],
 								enName: v[1],
@@ -174,7 +174,7 @@
 					var typhoon = typhoonList[i];
 					typhoon.i = i;
 
-					var text = title = typhoon.cnName + '(第'+typhoon.index+'号台风'+typhoon.enName+')';
+					var text = title = (typhoon.cnName||'') + '(第'+typhoon.index+'号台风'+typhoon.enName+')';
 					$typhoon_list_ul.append($('<li>').html(text));
 
 					if (!activeTyphoon && typhoon.is_active) {
@@ -572,7 +572,7 @@
 								var items = [];
 								$.each(points, function(i, v) {
 									var time = new Date(v[2]);
-									time.setHours(time.getHours() + 8);
+									time.setHours(time.getHours());
 									var obj = {
 										time: time,
 										lat: v[5],
