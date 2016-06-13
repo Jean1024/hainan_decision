@@ -7,7 +7,7 @@
   "manifestUrl": "http://hnjc.tianqi.cn:8080/pc/package.json",
   "packages": {
     "win": {
-      "url": "http://hnjc.tianqi.cn:8080/pc/HNDecision_v0.9.6.exe"
+      "url": "http://hnjc.tianqi.cn:8080/pc/download/HNDecision_v0.9.6.exe"
     }
   },
   "window": {
