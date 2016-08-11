@@ -41,7 +41,7 @@ $(function(){
 		return result;
 	}
 	function init(cb) {
-		var url = U.getEncodeUrl('http://webapi.weather.com.cn/data/?areaid='+ geoinfo.id + '&type=all');
+		var url = U.getEncodeUrl('http://hfapi.tianqi.cn/data/?areaid='+ geoinfo.id + '&type=all');
 		Loading.show();
 		getJson(url, function(result) {
 			result = _format(result);

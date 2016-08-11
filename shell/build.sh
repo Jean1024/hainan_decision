@@ -1,3 +1,5 @@
+#!/bin/bash
+
 SHELLPATH=$(cd `dirname $0`; pwd)
 PROJECT_PATH=$(cd $SHELLPATH; cd ..; pwd)
 TARGET_PATH=$PROJECT_PATH/target

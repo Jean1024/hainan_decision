@@ -178,6 +178,7 @@
 		var cache = {};
 		/*option = {no_cache: false,onerror: null,format: null}*/
 		U.getJson = function(url, callback,option) {
+			console.log('url = '+url);
 			var cache_name = encodeURIComponent(url);
 			var cacheVal = cache[cache_name];
 			try{
@@ -544,7 +545,8 @@
 		});
 		return window.nwDispatcher? (function(){
 			var gui = nwDispatcher.requireNwGui();
-			var title = gui.App.manifest.window.title;
+			var win_conf = gui.App.manifest.window;
+			var title = win_conf.title;
 			var WindowGui = gui.Window;
 			var win_current = WindowGui.get();
 			var _win_sub;
@@ -559,7 +561,7 @@
 					_win_sub.window.location.href = url;
 				}else{
 					_win_sub = WindowGui.open(url, {
-						"toolbar": false,
+						"toolbar": win_conf.toolbar,
 						"title": title ,
 						"icon": "./center/img/logo.png",
 						"min_width": 320,
