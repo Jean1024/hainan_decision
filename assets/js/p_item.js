@@ -202,7 +202,7 @@ $(function(){
 			}else{
 				img = textIndex+level;
 			}
-			var org = _dealCity(data.w1+data.w2+data.w3);
+			var org = _dealCity(data.w1+(data.w2||data.w11 || '')+data.w3);
 			var result = {
 				'type': 'alarm',
 				org: org,
@@ -414,7 +414,7 @@ $(function(){
 						var obj = {};
 
 						$.each(data.w, function(i, v){
-							var name = v.w2;
+							var name = v.w2 || v.w11;
 							(obj[name] || (obj[name] = [])).push(_getAlarmInfo(v));
 							// v = _getAlarmInfo(v);
 							// dataList.push(v);
