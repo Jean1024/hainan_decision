@@ -18,7 +18,8 @@
 					dealError: true,//是否自动处理错误
 				}, option);
 
-				if (option.unique) {
+				var isUseUnique = option.unique;
+				if (isUseUnique) {
 					uniqueUrl = url;
 				}
 				var val = _cache[url];
@@ -36,7 +37,7 @@
 							} catch(e){}
 						}
 						_cache[url] = data;
-						if (uniqueUrl == url) {
+						if (!isUseUnique || uniqueUrl == url) {
 							Loading.hide();
 							cb && cb(null, data);
 						} else {
@@ -51,10 +52,10 @@
 					});
 				}
 			}
-			fn.text = function(url, cb) {
-				return fn(url, {
+			fn.text = function(url, cb, options) {
+				return fn(url, $.extend({
 					type: 'text'
-				}, cb);
+				}, options), cb);
 			}
 			return fn;
 		})();
@@ -136,7 +137,7 @@
 							var val = cache[i];
 							if(val.length > 1){
 								val.sort(function(a, b){
-									return a.index - b.index;
+									return a.index.localeCompare(b.index);
 								});
 								var flag_active = false;
 								var code_list = [];
@@ -155,7 +156,7 @@
 						}
 
 						list_new.sort(function(a, b){
-							return a.index - b.index;
+							return a.index.localeCompare(b.index);
 						});
 						cache_typhoon[URL_LIST] = list_new;
 						_getList(list_new);
@@ -167,22 +168,25 @@
 
 			loadTyphoons(function(list) {
 				typhoonList = list;
-				var activeTyphoon;
+				var activeTyphoons = [];
 				var now = new Date().getTime()
 				var totalNum = typhoonList.length;
 				for(var i = totalNum-1; i>=0;i--){
 					var typhoon = typhoonList[i];
 					typhoon.i = i;
 
-					var text = title = (typhoon.cnName||'') + '(第'+typhoon.index+'号台风'+typhoon.enName+')';
+					var text = (typhoon.cnName||'') + '(第'+typhoon.index+'号台风'+typhoon.enName+')';
+					typhoon.title = text;
 					$typhoon_list_ul.append($('<li>').html(text));
 
-					if (!activeTyphoon && typhoon.is_active) {
-						activeTyphoon = typhoon;
+					if (typhoon.is_active) {
+						activeTyphoons.push(typhoon);
 					}
 				}
-				if (activeTyphoon) {
-					loadTyphoonDetail(activeTyphoon.i);
+				if (activeTyphoons.length > 0) {
+					$.each(activeTyphoons, function(i, t) {
+						loadTyphoonDetail(t.i, false, true);
+					});
 				}
 			});
 
@@ -373,13 +377,6 @@
 					var sPoint = points[index];
 					// var circle = new BMap.Circle(point,2000);
 
-					// var myIcon = new BMap.Icon('img/a.png', new BMap.Size(10, 10),{imageOffset: new BMap.Size(3, 3)});
-					// // var marker1 = new BMap.Marker(point,{icon:myIcon});  // 创建标注
-					// var html = '<p>'+point.time+'<br/>经度：'+sPoint.attr('jd')+'<br/>纬度：'+sPoint.attr('wd')+'<br/>气压：'+sPoint.attr('qy')+'百帕<br/>最大风速：'+sPoint.attr('fs')+'米/秒<br/>7级风半径：'+sPoint.attr('b7')+'公里<br/>10级风半径：'+sPoint.attr('b10')+'公里</p>';
-					// var infoWindow = new infoWin(html);
-					// marker1.addEventListener('click', function(){
-					// 	infoWindow.show(point);
-					// });
 					map.addOverlay(new SOverlay(point, sPoint, title));              // 将标注添加到地图中
 					if(sPoint.isForcast){
 						var lng = sPoint.lng,
@@ -479,7 +476,7 @@
 				}
 				var typhoonIcon = new BMap.Icon("./img/typhoon/move.png", new BMap.Size(28, 28));
 
-				function drawPoints(points, isReplay) {
+				function drawPoints(points, isReplay, title) {
 					function getBDPoint(index) {
 						var point = points[index];
 					    var bdPoint = new BMap.Point(point.lng, point.lat);
@@ -502,17 +499,26 @@
 					var _lastPoint = points[_lastSKPointIndex];
 					lastShiKuangPointTime = _lastPoint[1];
 
-					initMap(getBDPoint(_lastSKPointIndex));
-					var firstPoint = getBDPoint(0);
-					if(!typhoonMark){
-						typhoonMark = new BMap.Marker(firstPoint, {icon: typhoonIcon});
-						typhoonMark.setTop(true);
-						map.addOverlay(typhoonMark);
-						setTimeout(function(){
-							$('.BMap_Marker.BMap_noprint').remove();//减少对可点区域的遮挡
-							$('img[src="./img/typhoon/move.png"]').addClass('rotate').parent().parent().append('<span class="typhoon_name">'+title+'</span>');
-						}, 200);
+					var lastPoint = getBDPoint(_lastSKPointIndex);
+					for (var i = _lastSKPointIndex; i>=0; i--) {
+						var p = getBDPoint(i);
+						if (!p.isForcast) {
+							lastPoint = p;
+							break;
+						}
 					}
+					
+					initMap(lastPoint);
+					var mark = new BMap.Label('<img src="./img/typhoon/move.png" class="rotate"/><span class="typhoon_name">'+title+'</span>', {
+						position: lastPoint,
+						offset: new BMap.Size(-14, -14)
+					});
+					mark.setStyle({
+						border: 'none',
+						'background': 'none'
+					});
+					mark.setZIndex(9999);
+					map.addOverlay(mark);
 					var currentIndex = 0;
 					if(isReplay){
 						var runDelay = Math.min(5000/numOfPoints,500);
@@ -546,7 +552,7 @@
 
 				var cache_typhoon = {};
 				var _is_inited = false;
-				return function(typhoon_index, isReplay) {
+				return function(typhoon_index, isReplay, isFromInit) {
 					if(!isReplay && currentTyphoonIndex == typhoon_index){
 						return;
 					}
@@ -556,7 +562,7 @@
 						Loading.hide();
 
 						// var cname = data[2];
-						drawPoints(points);
+						drawPoints(points, isReplay, typhoon.title);
 					}
 					var code = typhoon.code;
 					var key = 'typhoon_'+code;
@@ -633,12 +639,14 @@
 								items = items.concat(p_last.forecast);
 								cache_typhoon[key] = items;
 								// 24小时更新的自动显示
-								if (_is_inited || new Date().getTime() - p_last.time.getTime() < 1000*60*60*24) {
+								if (isFromInit || _is_inited || new Date().getTime() - p_last.time.getTime() < 1000*60*60*24) {
 									cb(items);
 								}
 
 								_is_inited = true;
 							}
+						}, {
+							unique: !isFromInit
 						});
 					}
 				}
@@ -682,10 +690,8 @@
 			})
 
 			var runTT;
-			var typhoonMark;
 			function reset(){
 				$('.t_title').children().remove();
-				typhoonMark = null;
 				clearTimeout(runTT);
 				map && map.clearOverlays();
 			}
