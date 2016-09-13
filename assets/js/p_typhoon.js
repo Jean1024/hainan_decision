@@ -517,7 +517,7 @@
 						border: 'none',
 						'background': 'none'
 					});
-					mark.setZIndex(9999);
+					mark.setZIndex(910);//放在点击点的下方
 					map.addOverlay(mark);
 					var currentIndex = 0;
 					if(isReplay){
