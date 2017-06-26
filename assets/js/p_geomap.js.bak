@@ -1,0 +1,1312 @@
+/*简单播放器*/
+var win = nwDispatcher.requireNwGui().Window.get();
+	win.showDevTools();
+(function(global){
+	var Store = Util.Store;
+	var $container;
+	var progressWidth;
+	$(function(){
+		$container = $('.container');
+		progressWidth = $container.width() - 55;
+	})
+	var delay = 1000;
+	var isShowMenu = Store.get('play');
+
+	var isShowedNotice = isShowMenu;//是否已经显示过提示
+	var Player = function(_totalNum,callback,tuli){
+		var self = this;
+		self.cIndex = -1;
+		self.tIndex = _totalNum;
+		var width = progressWidth / _totalNum - 5;
+		self.pWidth = width;
+		var $html = '<div class="fix_layer bottom_layer nav_animate">';
+					if(tuli){
+						$html += '<div class="tuli_layer"><img src="'+tuli+'"/></div>';
+					}
+					$html +='<span class="btn_player">';
+					if(!isShowedNotice){
+						isShowedNotice = true;
+						$html += '<div class="notice" id="n_play"><i>点击这里播放</i><div><div></div></div></div>';
+					}
+					$html += '</span>';
+						$html +='<div class="progress">';
+						$html += '<div class="handle" style="left:'+(width*_totalNum)+'px"><i></i></div>';
+						for(var i = 0;i<_totalNum;i++){
+							$html += '<span data-index='+i+' style="width:'+width+'px" class="on"></span>'
+						}
+			$html +=			'</div>'+
+							'</div>';
+		$html = $($html).appendTo($container);
+		self.playerTT;
+		var $btn_play = $html.find('.btn_player').click(function(){
+			Store.set('play',true);
+			var $this = $(this);
+			$('#n_play').hide();
+			if($this.hasClass('pause')){
+				self.stop();
+				$this.removeClass('pause');
+			}else{
+				$this.addClass('pause');
+				self.play(0);
+			}
+		});
+		var $btns = self.progressBtns = $html.find('.progress span').click(function(){
+			self.stop();
+			self.play($(this).data('index'),true);
+		});
+		var $handle = self.handle = $html.find('.progress .handle');
+		self.playerHTML = $html;
+		self.callback = callback || function(toIndex,fn){fn()};
+	}
+	var prop = Player.prototype;
+	prop.play = function(index,isFromProgress){
+		var self = this;
+		var callback = self.callback;
+		var cIndex = self.cIndex;
+		var tIndex = self.tIndex;
+		var toIndex = index != null? index:cIndex+1<tIndex?cIndex+1:-1;
+		if(toIndex < 0){
+			self.stop();
+			// callback(0);
+		}else{
+			var $span = self.progressBtns.removeClass('on');
+			self.playerHTML.find('.progress .time').show();
+			$span.filter(':lt('+toIndex+'),:eq('+toIndex+')').addClass('on');
+			self.handle.css({left: self.pWidth * (toIndex+1) + 2});
+			self.cIndex = toIndex;
+			callback(toIndex,function(){
+				if(!isFromProgress){//当点击进度条上的按钮时不继续播放
+					self.playerTT = setTimeout(function(){;
+						self.play();
+					},delay);
+				}
+			});
+		}
+	}
+	prop.stop = function(){
+		var self = this;
+		self.cIndex = -1;
+		// self.playerHTML.find('.progress .time').hide();
+		// self.progressBtns.removeClass('on');
+		self.playerHTML.find('.btn_player').removeClass('pause');
+		// self.handle.css({left: 0});
+		clearTimeout(this.playerTT);
+	}
+	prop.hide = function(){
+		this.stop();
+		this.playerHTML.remove();
+	}
+	var relativeWidth;//时间提示参考最外层容器的宽度
+	prop.showText = function(text){
+		var self = this;
+		var $html = self.playerHTML;
+		var $time = $html.find('.progress .time');
+		if($time.length == 0){
+			$time = $('<div class="time"><i></i><div></div></div>').appendTo($html.find('.progress'));
+		}
+		if(text){
+			try{
+				$time.find('i').text(text);
+				var toItem = $html.find('span.on').last();
+
+				var toItemW = toItem.width();
+				var timeW = $time.width();
+				var toItemLeft = toItem.position().left + toItemW - timeW/2;
+				var toLeft = toItemLeft;// - (timeW - toItemW)/2;
+				var sorrowLeft = timeW / 2 - 10;
+				if(!relativeWidth){
+					relativeWidth = $html.find('.progress').width()+10;
+				}
+				if(toLeft + timeW > relativeWidth){
+					var fixedLeft = relativeWidth - timeW;
+					sorrowLeft += toLeft - fixedLeft;
+					toLeft = fixedLeft;
+				}else if(toLeft < 0){
+					sorrowLeft += toLeft;
+					toLeft = 0;
+				}
+
+				$time.find('div').css({
+					left: sorrowLeft
+				});
+				$time.css({
+					left:  toLeft
+				}).show();
+			}catch(e){}
+		}else{
+			$time.hide();
+		}
+	}
+	global.Player = Player;
+})(this);
+$(function(){
+	var U = Util;
+	var Nav = U.Nav;
+	var getJson = U.getJson;
+	var Store = U.Store;
+	var Loading = U.Loading;
+	var $win = $(window),
+		$doc = $(document);
+	var _w_width = $win.width();
+	var $map_container = $('#map_container');
+	var $operator = $('#operator');
+	var _middle_left = (_w_width-$operator.width())/2;
+	$operator.css('left',_middle_left);//水平居中
+	var _oldStyle = {
+		left: _middle_left,
+		top: parseFloat($operator.css('top')),
+		width: $operator.width(),
+		height: $operator.height(),
+		'transform-origin': '50% 50%',
+		'transform': 'scale(1)'
+	}
+	var gm;
+	function resetMap(){
+		gm && gm.resize();
+		$doc.trigger('map_resize');
+	}
+	var isShowNav = false;
+	$doc.on('nav_toggle',function(){
+		isShowNav = Nav.isShow();
+	});
+	var resetBackground;
+	var resetToOldOffset;
+	var _is_operate = false;
+	// 初始化缩放事件
+	var GLOBAL_CAN_SCALE = true;// 是否可缩放
+	!function(){
+		var data_pinch = {
+			origin: {
+				x: 0,
+				y: 0
+			},
+			middle: {
+				x: 0,
+				y: 0
+			},
+			move: {
+				x: 0,
+				y: 0,
+				offset: null
+			},
+			size: {
+				width: 0,
+				height: 0
+			}
+		}
+
+
+	    resetToOldOffset = function(callback){
+	    	var _o_width = _oldStyle.width,
+	    		_o_height = _oldStyle.height;
+	    	data_pinch.size = {
+    			width: _o_width,
+    			height: _o_height
+    		}
+    		//缩放时会用到原始尺寸
+	    	_oldOffset = {
+				left: _oldStyle.left,
+				top: _oldStyle.top
+			}
+	    	$operator.css(_oldStyle);
+	    	resetMap();
+	    	callback && callback();
+	    }
+
+		var _oldOffset = $operator.position();
+		var _width_operator = $operator.width();
+		/*
+		ios移动设备对canvas的最大的尺寸有限制
+		thx for http://stackoverflow.com/questions/6081483/maximum-size-of-a-canvas-element
+		iPod Touch 16GB = 1448x1448
+		iPad Mini       = 2290x2289
+		iPhone 3        = 1448x1448
+		iPhone 5        = 2290x2289
+		*/
+		var MAX_WIDTH = $.browser.safari ? 2285 : _width_operator * 4,
+			MIN_WIDTH = Math.min($win.width(),_width_operator/2);
+		var _operate_tt;
+		var _isPinched = false;
+		var _resizeFn;
+		var _isMoving = false;
+	    resetBackground = (function(){
+	    	var size_data = {};
+	    	// {"xin_jiang":{"w":6795.146734439438,"h":6795.146734439438,"l":-2943.6683086741596,"t":-2313.423411248769},"xi_zang":{"w":7514.949667826937,"h":7514.949667826937,"l":-3437.010625680976,"t":-2282.952603870369},"nei_meng_gu":{"w":5407.087123025369,"h":5407.087123025369,"l":-2972.080837513267,"t":-1923.6518929381639},"qing_hai":{"w":11442.163179916313,"h":11442.163179916313,"l":-5850.088658885705,"t":-3742.5109006826665},"si_chuan":{"w":13964.808503776176,"h":13964.808503776176,"l":-7688.000268766632,"t":-4188.131668772007},"hei_long_jiang":{"w":11224.883449631669,"h":11224.883449631669,"l":-7491.722569076891,"t":-4322.662727645879},"gan_su":{"w":9535.077656184056,"h":9535.077656184056,"l":-5014.878594542354,"t":-3166.0362925671516},"yun_nan":{"w":18097.197241475402,"h":18097.197241475402,"l":-9978.604576643103,"t":-4990.316255093868},"guang_xi":{"w":20622.688231791995,"h":20622.688231791995,"l":-12073.87918237744,"t":-5660.03314149632},"hu_nan":{"w":28605.407949790766,"h":28605.407949790766,"l":-17352.08192028186,"t":-8381.510129927321},"shan_xi_1":{"w":27285.497304299108,"h":27285.497304299108,"l":-16104.190204453153,"t":-8942.209249404843},"guang_dong":{"w":20887.498854734014,"h":20887.498854734014,"l":-12758.429427520468,"t":-5663.573604358297},"ji_lin":{"w":16270.872851014052,"h":16270.872851014052,"l":-10901.628198035492,"t":-6062.31792987546},"he_bei":{"w":24294.979582294272,"h":24294.979582294272,"l":-15292.781764339157,"t":-8480.87001246883},"hu_bei":{"w":20385.35133721309,"h":20385.35133721309,"l":-12330.607572091798,"t":-6412.658601974756},"gui_zhou":{"w":26470.458505272807,"h":26470.458505272807,"l":-15383.358092618064,"t":-7750.257527128227},"shan_dong":{"w":19706.02002503129,"h":19706.02002503129,"l":-12531.708044146091,"t":-6234.461031},"jiang_xi":{"w":32245.881050889508,"h":32245.881050889508,"l":-20325.398179561427,"t":-9427.326851468753},"he_nan":{"w":24979.021681649956,"h":24979.021681649956,"l":-15346.248545743018,"t":-8148.604874765647},"liao_ning":{"w":22449.605236627594,"h":22449.605236627594,"l":-14721.877221534123,"t":-8122.3541780683845},"shan_xi_2":{"w":36193.97427264489,"h":36193.97427264489,"l":-22205.100842872693,"t":-12369.163280469946},"an_hui":{"w":32843.08990539602,"h":32843.08990539602,"l":-20900.156086049603,"t":-10388.169549735574},"fu_jian":{"w":31670.003250777085,"h":31670.003250777085,"l":-20303.913691866925,"t":-9108.697047887994},"zhe_jiang":{"w":31670.003250777085,"h":31670.003250777085,"l":-20645.435157154723,"t":-9648.295678498123},"jiang_su":{"w":27711.393599999996,"h":27711.393599999996,"l":-17837.74112,"t":-8956.286399999999},"chong_qing":{"w":31670.64671461666,"h":31670.64671461666,"l":-18665.027185176194,"t":-9832.910520541283},"ning_xia":{"w":46672.4321815678,"h":46672.4321815678,"l":-27284.846038684973,"t":-16101.109946703406},"hai_nan":{"w":59118.06007509407,"h":59118.06007509407,"l":-35810.09511889875,"t":-15422.102628285409},"tai_wan":{"w":80614.70262722389,"h":80614.70262722389,"l":-53351.89015308237,"t":-22542.514480761285},"bei_jing":{"w":77109.3687855557,"h":77109.3687855557,"l":-49269.20197872894,"t":-28197.808063319466},"tian_jin":{"w":118240.6045664877,"h":118240.6045664877,"l":-76315.1542137605,"t":-42703.368353182326},"shang_hai":{"w":147792.347586992,"h":147792.347586992,"l":-98448.44344363356,"t":-47670.62434815601},"xiang_gang":{"w":197062.69152971,"h":197062.69152971,"l":-124383.64323641009,"t":-55317.66940581563},"ao_men":{"w":2365350.364188193,"h":2365350.364188193,"l":-1489792.3566009288,"t":-663534.1502276256}}
+	    	var d = size_data.china = {
+	    		"w": 2526,
+	    		"h": 2526,
+	    		"l": -1094,
+	    		"t": -660
+	    	}
+	    	var b_width = d.w,b_height = d.h,b_left = d.l,b_top = d.t;
+	    	var currentLeft,currentTop,currentWidth;
+	    	var w_per,
+	    		b_left_per,
+	    		b_top_per;
+
+	    	currentLeft = b_left+_oldOffset.left,
+	    	currentTop = b_top+_oldOffset.top,
+	    	currentWidth = b_width;
+	    	w_per = b_width/_width_operator,
+	    	b_left_per = b_left/b_width;
+	    	b_top_per = b_top/b_height;
+
+	    	var is_show_map = false;
+	    	var method = {
+	    		r: function(id,is_not_use_old_data){
+	    			_width_operator = $operator.width();
+	    			if(id){
+	    				$map_container.removeClass('map');
+	    				is_show_map = false;
+	    			}else{
+	    				$map_container.addClass('map');
+	    				is_show_map = true;
+			    		this.c();
+	    			}
+	    		},
+	    		c: function(zoom){
+	    			if(!is_show_map){
+	    				return;
+	    			}
+		    		zoom = zoom || 1;
+	    			currentWidth = w_per * _width_operator * zoom;
+		    		var _offset = $operator.position();
+		    		currentLeft = currentWidth*b_left_per+_offset.left,
+	    			currentTop = currentWidth*b_top_per+_offset.top;
+		    		var css = {
+		    			'background-size': currentWidth+'px',
+			    		'backgroundPosition': currentLeft+'px '+currentTop+'px'
+			    	};
+		    		$map_container.css(css);
+		    	}
+	    	}
+	    	// method.r();
+
+	    	return method;
+	    })();
+	    var SUPPORTS_TOUCH = 'ontouchstart' in window;
+	    if(!SUPPORTS_TOUCH){ //是pc的话绑定缩放功能
+	    	var zoom_step = 1.2;
+			$operator.on('mousewheel', function(e){
+				e.stopImmediatePropagation();
+			})
+	    	$map_container.on('mousewheel', function(e){
+				e.stopImmediatePropagation();
+	    		var e_o = e.originalEvent;
+	    		var pinchZoom = e_o.wheelDelta > 0? zoom_step: 1/zoom_step;
+	    		$operator.css({
+					transform: 'scale('+pinchZoom+')',
+					'transform-origin': '50% 50%'
+					// 'transform-origin': e_o.layerX+'px '+e_o.layerY+'px'
+				});
+				resetBackground.c(pinchZoom);
+				_getResizeFn(pinchZoom)();
+				_isPinched = true;
+	    	});
+	    }
+	    function _getResizeFn(zoom){
+	    	return function(){
+				var _oldWidth = $operator.width(),
+					_oldHeight = $operator.height(),
+					_newWidth = _oldWidth * zoom,
+					_newHeight = _oldHeight * zoom;
+				if(_newWidth > MAX_WIDTH){
+					_newHeight = _oldHeight * MAX_WIDTH / _oldWidth;
+					_newWidth = MAX_WIDTH;
+				}else if(_newWidth < MIN_WIDTH){
+					_newHeight = _oldHeight * MIN_WIDTH / _oldWidth;
+					_newWidth = MIN_WIDTH;
+				}
+
+				var _oldLeft = _oldOffset.left,
+					_oldTop = _oldOffset.top,
+					_origin = data_pinch.origin,
+					_newLeft = _oldLeft - (_newWidth - _oldWidth) * _origin.x/_oldWidth,
+					_newTop = _oldTop - (_newHeight - _oldHeight) * _origin.y/_oldHeight;
+				$operator.css({
+					transform: 'scale(1)',
+					width: _newWidth,
+					height: _newHeight,
+					left: _newLeft,
+					top: _newTop
+				});
+				data_pinch.size = {
+					width: _newWidth,
+					height: _newHeight
+				}
+				_width_operator = $operator.width();
+				resetOrigin();
+				resetMap();
+			}
+	    }
+		var pinchStatus = function(e, phase, direction, distance , duration , fingerCount, pinchZoom){
+			if(!SUPPORTS_TOUCH){//兼容pc
+				fingerCount = 1;
+			}
+			if(!GLOBAL_CAN_SCALE && fingerCount == 2){
+				return;
+			}
+			//当菜单打开时不可操作
+			if(isShowNav){
+				return;
+			}
+			if(phase == 'start'){
+				_oldOffset = $operator.position();
+			}
+			if(phase == 'move'){
+				_is_operate = true;
+			}
+			if(fingerCount == 2){// 缩放
+				var fn = _getResizeFn();
+				_resizeFn = function(){
+					fn();
+					_resizeFn = null;
+				};
+				if(phase == 'end'){
+					_resizeFn();
+					_isPinched = true;
+				}else if(phase == 'move'){
+					/*一个手指的缩放变成两个手指*/
+					if(_isMoving){
+						resetOrigin();
+						_isMoving = false;
+					}
+					var _toWidth = $operator.width() * pinchZoom;
+					if(_toWidth > MAX_WIDTH || _toWidth < MIN_WIDTH){
+						return;
+					}
+					$operator.css({
+						transform: 'scale('+pinchZoom+')'
+					});
+					resetBackground.c(pinchZoom);
+				}
+			}else if(fingerCount == 1){// 移动
+				var touchEvent = SUPPORTS_TOUCH? e.targetTouches[0]: e; //兼容pc
+				var _moveData = data_pinch.move;
+				if(phase == 'start'){
+					_moveData.x = touchEvent.pageX;
+					_moveData.y = touchEvent.pageY;
+					_moveData.offset = $operator.position();
+				}else if(phase == 'move'){
+					/*两个手指的缩放变成一个手指*/
+					if(_resizeFn){
+						_resizeFn();
+						_moveData.offset = $operator.position();
+					}
+					_isMoving = true;
+					var _offset = _moveData.offset;
+					var _xStep = touchEvent.pageX - _moveData.x,
+						_yStep = touchEvent.pageY - _moveData.y;
+					var _newLeft = _offset.left + _xStep,
+						_newTop = _offset.top + _yStep;
+					var _width = data_pinch.size.width,
+						_height = data_pinch.size.height;
+					var _xM = data_pinch.middle.x,
+						_yM = data_pinch.middle.y;
+
+					// 拖拽时边界不可超过中心点
+					if(_xM < _newLeft || _xM > _newLeft + _width || _yM < _newTop || _yM > _newTop + _height){
+						return;
+					}
+
+					$operator.css({
+						left:_newLeft,
+						top: _newTop
+					});
+					resetBackground.c();
+				}else if(phase == 'end'){
+					_isMoving = false;
+					resetOrigin();
+				}
+			}
+			if(phase == 'end'){
+				_is_operate = false;
+			}
+		};
+		/*https://github.com/mattbryson/TouchSwipe-Jquery-Plugin*/
+		$map_container.swipe({
+			pinchStatus: pinchStatus,
+			pinchThreshold:0,
+			triggerOnTouchEnd: true,
+			triggerOnTouchLeave: true,
+			fingers: 2,
+			fallbackToMouseEvents: true,
+			tap: function(event, target){/*在$map_container tap事件取代了click事件*/
+				var $target = $(target);
+				if($target.attr("id") == 'btn_back_china' ||
+					$target.is('.layer_weather') || $target.closest('.layer_weather').length > 0 ||
+					$target.is('.data_time') || $target.closest('.data_time').length > 0
+				){
+					$target.click();
+				}
+			}
+		});
+
+
+		data_pinch.middle = {
+			x: $map_container.width() / 2,
+			y: $map_container.height() / 2
+		}
+		data_pinch.size = {
+			width: $operator.width(),
+			height: $operator.height()
+		}
+		// 重置transform-origin
+		var resetOrigin = function(){
+			var _p = $operator.position();
+			var _middle = data_pinch.middle;
+			var _origin = data_pinch.origin = {
+				x:_middle.x  - _p.left,
+				y:_middle.y - _p.top
+			}
+			$operator.css({
+				'transform-origin': _origin.x+'px '+_origin.y+'px'
+			});
+		}
+		resetOrigin();
+		var _origin = data_pinch.origin;
+		_oldStyle['transform-origin'] = _origin.x+'px '+_origin.y+'px';
+		/*
+		2014-05-23发现在三星note 2/3 都出现了播放时上一个时次的数据影像还在
+		！！暂时对所有移动设备进行强制重绘处理
+		*/
+		var isSpecialSet = /Nexus/.test(navigator.userAgent);//目前只发现Nexus有重绘bug
+		$doc.on('resizePinch',function(e,isForce){
+			// if(!isSpecialSet){
+			// 	return;
+			// }
+			//手动重置，修复部分mobile上出现的重影现象
+			if(!_isPinched || isForce){
+				pinchStatus(null,'start');
+				pinchStatus(null,'end','in',null,0,2,1);
+			}
+		});
+	}();
+	// 初始化数据
+	!function(){
+		var header_title = $('.fix_layer:first h1');
+		var $table_pm = $('#table_pm');
+		var $container = $('#container');
+		var player;
+		var isInitMap = false;
+		var global_jsonid;
+		/*清除map相关数据*/
+		var clearMap = function(){
+			if(isInitMap && gm){
+				gm.zr.clear();
+				gm.zr.un();//清除已经绑定的事件
+
+				isInitMap = false;
+				global_jsonid = null;
+			}
+			$operator.html('');
+			$('#n_back').remove();
+			$('#btn_back_china').remove();
+			U.canBack(false);
+		}
+		/*根据数据得到一个渲染函数*/
+		var renderImg = function(img_items){
+			return function(toIndex,nextFn){
+				Loading.show();
+				$operator.html($('<img>').on('load',function(){
+					Loading.hide();
+					nextFn && nextFn();
+				}).attr('src',img_items[toIndex]['i']));
+				return img_items[toIndex]['n']
+			}
+		}
+		/*初始化播放器*/
+		var initPlayer = function(items_arr,renderFn,tuli){
+			var len = items_arr.length;
+			var fn = function(toIndex,nextFn){
+				var text = renderFn(toIndex,nextFn);
+				player && player.showText(text||'');
+			}
+			if(len > 1){
+				player = new Player(len,fn,tuli);
+			}
+			// renderFn(items_arr.length-1);//初始化第一个数据
+			fn(items_arr.length-1);
+		}
+		/*配色方案*/
+		var COLOR = {
+			'jiangshui': function(val){
+				val = parseFloat(val);
+				if(val >= 0 && val < 1){
+					return 'rgba(46,173,6,1)';
+				}else if(val >= 1 && val < 10){
+					return 'rgba(0,0,0,1)';
+				}else if(val >= 10 && val < 25){
+					return 'rgba(9,1,236,1)';
+				}else if(val >= 25 && val < 50){
+					return 'rgba(200,4,200,1)';
+				}else if(val >= 50){
+					return 'rgba(197,7,36,1)';
+				}
+			},
+			'wendu': function(val){
+				val = parseFloat(val);
+				if(val < -30){
+					return 'rgba(32,24,133,1)';
+				}else if(val >= -30 && val < -20){
+					return 'rgba(17,74,217,1)';
+				}else if(val >= -20 && val < -10){
+					return 'rgba(77,180,247,1)';
+				}else if(val >= -10 && val < 0){
+					return 'rgba(209,248,243,1)';
+				}else if(val >= 0 && val < 10){
+					return 'rgba(249,242,187,1)';
+				}else if(val >= 10 && val < 20){
+					return 'rgba(249,222,69,1)';
+				}else if(val >= 20 && val < 30){
+					return 'rgba(255,168,0,1)';
+				}else if(val >= 30 && val < 40){
+					return 'rgba(255,109,0,1)';
+				}else if(val >= 40 && val < 50){
+					return 'rgba(230,0,0,1)';
+				}else if(val >= 50){
+					return 'rgba(158 ,0,1,1)';
+				}
+
+			},
+			'bianwen': function(val){
+				val = parseFloat(val);
+				return val > 0?'rgba(255,0,0,1)':val == 0?'rgba(0,0,0,1)':'rgba(0,0,255,1)'
+			},
+			'radar': function(){
+				return '#f0f';
+			},
+			'shidu': function(val){
+				// return '#000';
+				val = parseFloat(val);
+				if(val >= 0 && val < 10){
+					return 'rgba(255,96,0,1)';
+				}else if(val >= 10 && val < 30){
+					return 'rgba(254,165,26,1)';
+				}else if(val >= 30 && val < 50){
+					return 'rgba(255,252,159,1)';
+				}else if(val >= 50){
+					return '#D6E6DA';
+				}
+			}
+		};
+		var fnObj = {
+			/*解析风力风向数据*/
+			'parseWind': function(data){
+				var features = [];
+				$.each(data.features,function(i,v){
+					var properties = v.properties;
+					var speed = properties.speed;
+					if(speed == 0){
+						return;
+					}
+					var imgName = '';
+					if(speed >= 1 && speed <=2){
+						imgName = '1_2';
+					}else if(speed >= 3 && speed <=4){
+						imgName = '3_4';
+					}else if(speed >= 5 && speed <=6){
+						imgName = '5_6';
+					}else if(speed >= 7 && speed <=8){
+						imgName = '7_8';
+					}else if(speed >8){
+						imgName = '8_';
+					}
+
+					properties.rotation = -properties.rotation;//画图为逆时针画，而风数据里为顺时针
+					properties.image = './img/geomap/wind_icon/'+imgName+'.gif';
+					properties.width = 11;
+					properties.height = 13;
+					features.push(v);
+				});
+				data.features = features;
+				return data;
+			},
+			/*解析气压场数据*/
+			'parseQYC': function(data){
+				$.each(data.features,function(i,v){
+					var properties = v.properties;
+					var value = properties.value;
+					properties.value = 1000 + parseInt(value);
+				});
+				return data;
+			},
+			/*单站雷达点击事件*/
+			'randarClick': function(e){
+				var id = e.target.id;
+				initData("http://data.weather.com.cn/cnweather/provdata/pmsc/cmadecision/radar/jc_radar_"+id.toLowerCase()+"_jb.html","单站雷达 - "+e.target.style.title);
+			},
+			'parseRandar': function(data){
+				var features = [];
+				$.each(data.features,function(i,v){
+					var properties = v.properties;
+					properties.rotation = 0;//画图为逆时针画，而风数据里为顺时针
+					properties.image = './img/geomap/icon_randar.png';
+					properties.width = 40;
+					properties.height = 40;
+					features.push(v);
+					v.geometry.type = 'PointImage';
+				});
+				data.features = features;
+				return data;
+			}
+		}
+		var tt_geo_bg;
+		$doc.on('map_resize',function(){
+			clearTimeout(tt_geo_bg);
+			_afterInitGm();
+		});
+		function _refreshBg() {
+			var left_up = gm.makePoint([107.95,20.62]),
+				right_down = gm.makePoint([111.876809,17.576628]);
+
+			if ($operator.find('.bg_img').length == 0) {
+				$operator.append('<img class="bg_img" src="./img/geomap/hainan.jpg">'); 
+			}
+
+			$operator.find('.bg_img').css({
+				left: left_up[0],
+				top: left_up[1],
+				width: right_down[0] - left_up[0],
+				height: right_down[1] - left_up[1]
+			});
+		}
+		function _afterInitGm() {
+			tt_geo_bg = setTimeout(_refreshBg, 400)
+		}
+		/*解析json类型数据*/
+		var parseJson = (function(){
+			require_web.config({
+		        paths:{
+		            zrender:'./js/zrender' ,
+					GeoMap:'./js/GeoMap' ,
+					"zrender/tool/util":'./js/zrender'
+		        }
+		    });
+			var data,items,no_cache;
+			return function (_data,_items,_no_cache,cb){
+				data = _data;
+				items = _items;
+				no_cache = _no_cache;
+				try{
+					/*对配置文件里的点击事件进行处理（尤其是单站雷达）*/
+					var click = data.config.weatherStyle.onclick;
+					if(typeof click == 'string'){
+						// json文件里不允许定义函数
+						data.config.weatherStyle.onclick = fnObj[click];
+					}
+				}catch(e){}
+				var conf = $.extend(true,{
+					container: 'operator',
+					mapStyle: {
+						clickable: false,
+						style: {
+							strokeColor: 'rgba(0,0,0,0)',
+							color: 'rgba(0,0,0,0)'
+						}
+					}
+				},data.config);
+				var GeoMap;
+				var geomap_config = DEFAULT_CONFIG.geomap || {};
+				if(geomap_config.is_forbid_scale){
+					GLOBAL_CAN_SCALE = false;
+				}
+				var _province_id = geomap_config.province_id;
+				var isRresized = false;
+				var initProvince = function(provinceId,iscanback,callback){
+					global_jsonid = provinceId;
+					resetBackground.r(global_jsonid);
+					getJson('./data/map/'+provinceId+'.geo.json',function(json){
+						var fn_run = function(){
+							resetBackground.r(global_jsonid);
+							gm.clear();
+							gm.load(json,{showName: geomap_config.show_name !== false?true:false});
+							isInitMap && gm.refreshWeather(provinceId);
+							isInitMap && $doc.trigger('resizePinch',true);//手动重置缩放
+							if(iscanback){
+								var isShowBack = Store.get('back');
+								var $n_back = $('#n_back');
+								if(isShowBack){
+									$n_back.remove();
+								}else{
+									$n_back = $('<div class="notice" id="n_back"><i>点击返回全国地图</i><div><div></div></div></div>').appendTo($map_container);
+									$n_back.show();
+								}
+								var back = function(){
+									Store.set('back',true);
+									$n_back.remove();//删除提示
+
+									$btn_back_china.remove();
+									U.canBack(false);
+									initChina(callback);
+								}
+								var $btn_back_china = $('<div id="btn_back_china">返回</div>').appendTo($map_container).click(back);
+								U.canBack(true);
+							}
+							callback && callback();
+						}
+						if(!isInitMap){
+							gm = GeoMap.init(conf);
+							_afterInitGm();
+							fn_run();
+							isInitMap = true;
+						}else{
+							resetToOldOffset(fn_run);
+						}
+					});
+				}
+				var initChina = function(callback){
+					getJson('./data/map/china.geo.json',function(mapData){
+						var fn_run = function(){
+							gm.clear();
+							gm.load(mapData,{showName:false});
+							global_jsonid = null;
+							gm.render();
+							isInitMap && gm.refreshWeather();
+							isInitMap && $doc.trigger('resizePinch',true);//手动重置缩放
+							resetBackground.r(global_jsonid);console.log('china');
+							gm.zr.on("click",function(e){
+				 				//菜单打开时不可操作
+				 				if(isShowNav){
+									return;
+								}
+								if(global_jsonid || _is_operate){//防止多次点击
+									return;
+								}
+								var target = e.target;
+								if(target){
+									/*暂时以此来区分单站雷达点击*/
+									if(target.pshapeId && target.pshapeId != target.id){
+										return;
+									}
+									var jsonid = target.id.replace('text','');
+									if(isNaN(jsonid)){
+										initProvince(jsonid,true,callback);
+									}
+								}
+							 });
+							callback && callback();
+						}
+						if(!isInitMap){
+							gm = GeoMap.init(conf);
+							_afterInitGm();
+							fn_run();
+							isInitMap = true;
+						}else{
+							resetToOldOffset(fn_run);
+						}
+					});
+				}
+				return function(toIndex,nextFn){
+					Loading.show();
+					var fn = cb || function(){
+						var colorType = COLOR[data.color];
+						var parseFn = fnObj[data.fnname];
+						getJson(items[toIndex]['src'],function(pointData){
+							if(colorType){
+								$.each(pointData.features,function(i,v){
+									v.properties.color = colorType(v.properties.value);
+								});
+							}
+							if($.isFunction(parseFn)){
+								pointData = parseFn(pointData);
+							}
+				 			gm.loadWeather(pointData,global_jsonid);
+							gm.refresh();
+
+							/*暂时用此方案修复播放时前一个时效的数据重影*/
+							// if(++fnNum >= 2){
+								isInitMap && $doc.trigger('resizePinch',true);//手动重置缩放
+							// }
+
+							if(!isRresized){
+								resetBackground.r(global_jsonid);
+							}
+							isRresized = true;
+							Loading.hide();
+							nextFn && nextFn();
+						},{
+							no_cache: no_cache
+						});
+					}
+					if(!isInitMap){
+						require_web(['GeoMap'],function(_GeoMap) {
+							GeoMap = _GeoMap;
+							if(_province_id){
+								initProvince(_province_id,geomap_config.is_can_back,fn);
+							}else{
+								initChina(fn);
+							}
+						});
+					}else{
+						conf.showName = !!global_jsonid; //强制对地区名进行处理，点击进各省时显示地区名
+						gm.updateCfg(conf);
+						if(!global_jsonid){
+							$map_container.addClass('map');
+						}
+						fn();
+					}
+					var item = items[toIndex];
+					return item && item['text']
+				}
+			}
+		})();
+		/*地图叠加天气预报数据*/
+		var parseJsonForecast = (function(){
+			var Parse = U.Parse;
+			var currentData;
+			var REG_TIME = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/;
+			var today = new Date();
+			function getDate(date,addDate){
+				var todayDate = new Date(date);
+				if(addDate > 0){
+		            todayDate.setDate(todayDate.getDate()+addDate);
+		        }
+		        return [todayDate.getFullYear(),todayDate.getMonth()+1,todayDate.getDate()].join('-');
+			}
+			function forecastWeatherText(day_code,night_code){
+				var day_text = Parse.weatherText(day_code);
+				var night_text = Parse.weatherText(night_code);
+				var show_text = day_text;
+				if(day_text != night_text){
+					show_text += '转'+night_text;
+				}
+				return show_text.replace(/^无?转|转无?$/,'');
+			}
+			// 绑定刷新按钮
+			$map_container.delegate('.data_time', 'click', function(){
+				var $btn_refresh = $(this).find('.btn_refresh');
+				if($btn_refresh.hasClass('refreshing')){
+					return;
+				}
+				$btn_refresh.addClass('refreshing');
+				$('div[data-c_id]').each(function(){
+					load7Forecast($(this), true);
+				});
+			});
+			var _fn_refresh = (function(){
+				var num_refreshing = 0;
+				var time_min = 1000;
+				var time_start;
+				return {
+					add: function(){
+						if(num_refreshing == 0){
+							time_start = new Date();
+						}
+						num_refreshing++;
+					},
+					rm: function(){
+						setTimeout(function(){
+							if(--num_refreshing == 0){
+								setTimeout(function(){
+									$('.btn_refresh').removeClass('refreshing');
+								}, Math.max(time_min, new Date() - time_start));
+							}
+						}, 10);
+					}
+				}
+			})();
+			var global_time_release;// 显示的发布时间
+			function load7Forecast($div, is_fromrefresh){
+				is_fromrefresh && _fn_refresh.add();
+				var city_id = $div.data('c_id');
+				U.initData('forcast7d_'+city_id,'http://hfapi.tianqi.cn/data/?areaid='+ city_id + '&type=forecast7d',function(data){
+
+					is_fromrefresh && _fn_refresh.rm();
+					if(data){
+						var m = REG_TIME.exec(data.f0);
+              if(m){
+              	today = [m[1],m[2],m[3]].join('-');
+              }
+              console.log(data)
+              var time = data.f.f0;
+              if(time){
+								var time_old = $div.data('time');
+								if(time_old){
+									if(time <= time_old){
+										return;
+									}
+									$div.find('img').remove();
+								}
+							$div.data('time', time);
+							var time_release = time.substr(0, 4)+'年'+time.substr(4, 2)+'月'+time.substr(6, 2)+'日'+time.substr(8, 2)+'时';
+							if(!global_time_release){
+								$('<div class="data_time"><span>'+time_release+'</span><span>发布的市县未来24小时预报</span><span class="btn_refresh"></span></div>').appendTo($map_container);
+								global_time_release = time_release;
+							}else if(time_release.localeCompare(global_time_release) > 0){
+								$('.data_time').find('span:first').text(time_release);
+								global_time_release = time_release;
+							}
+						}
+						data = data.f.f1;
+						var firstData = data[0]
+						var fa = firstData.fa,
+							fb = firstData.fb;
+						var src = '';
+						if(fa){
+							src = Parse.weatherIcon('12:00',fa);
+						}else{
+							src = Parse.weatherIcon('23:00',fb);
+						}
+						if(src){
+							var html = '<img src="'+Parse.weatherIcon(fa?'12:00':'23:00',fa||fb)+'"/>';
+						}
+						$div.append(html).click(function(e){
+							e.stopPropagation();
+							currentData = data;
+							showForecast();
+						});
+					}
+				});
+			}
+			function showForecast(){
+				U.canBack(true,'dialog');
+				$yb_container.removeClass('trend');
+				var Hours = today.getHours();
+                var isNight = Hours >= 18 || Hours <= 6;
+                var maxTemp = [],
+                	minTemp = [],
+                	labels_top = [],
+                	labels_bottom = [];
+                var html = '';
+				$.each(currentData,function(i,v){
+					var fa = v.fa; //白天天气现象编号
+                    var fb = v.fb; //晚上天气现象编号
+                    var fc = v.fc; //白天天气温度
+                    var fd = v.fd; //晚上天气温度
+                    var fe = v.fe;
+                    var ff = v.ff;
+                    var fg = v.fg;
+                    var fh = v.fh;
+                    // var fi = v.fi;
+                    /*晚上发布后当天白天数据为空*/
+                    var week = Parse.week(today,i);
+                    var date = getDate(today,i);
+                    /*对当天没有白天数据时进行处理*/
+                    if(!isNaN(fc) && fc != ''){
+                    	maxTemp.push(fc);
+	                    minTemp.push(fd);
+	                    labels_top.push(week+'<img src="'+Parse.weatherIcon('12:00',fa)+'"/>');
+	                    labels_bottom.push('<img src="'+Parse.weatherIcon('23:00',fb)+'"/>'+date.substring(5));
+                    }
+
+                   html += '<li>'+
+							'<div class="yb_top">'+date+' '+week+'</div>'+
+							'<div class="clear yb_c">'+
+								'<div class="fl">'+
+									(fa?'<img class="w_img" src="'+Parse.weatherIcon('12:00',fa)+'"/><span>'+(fc?fc+'℃':'')+'</span>':'')+
+								'</div>'+
+								'<div class="fl">'+
+									'<img class="w_img" src="'+Parse.weatherIcon('23:00',fb)+'">'+
+									'<span>'+fd+'℃</span>'+
+								'</div>'+
+								'<div class="fl yb_text">'+
+									'<div>'+forecastWeatherText(fa,fb)+'</div>'+
+									'<div>'+Parse.windDirec(isNight?ff:fe)+' '+Parse.windLevel(isNight?fh:fg)+'</div>'+
+								'</div>'+
+							'</div>'+
+						'</li>';
+				});
+				$yb_date.html(html);
+				$dialog_forcast.addClass('show');
+				if(typeof iChart == 'undefined'){
+					$.getScript('./js/ichart.js',function(){
+						showTrend(maxTemp,minTemp,labels_top,labels_bottom);
+					});
+				}else{
+					showTrend(maxTemp,minTemp,labels_top,labels_bottom);
+				}
+			}
+			function showTrend(max,min,labels_top,labels_bottom){
+				var data = [{
+		         		name : '最高温',
+		         		value: max,
+		         		color:'#FF7E00',
+		         		line_width: 2
+		         	},{
+		         		name : '最低温',
+		         		value: min,
+		         		color: '#0d8ecf',
+		         		line_width: 2
+		         	}
+		        ];
+		        var html = '';
+		        var len = labels_top.length;
+		        $.each(labels_top,function(i,v){
+		        	html += '<div class="fl" style="width:'+(1/len*100)+'%">'+v+'</div>';
+		        });
+		        $('#chart_top').html(html);
+		        html = '';
+		        var len = labels_bottom.length;
+		        $.each(labels_bottom,function(i,v){
+		        	html += '<div class="fl" style="width:'+(1/len*100)+'%">'+v+'</div>';
+		        });
+		        $('#chart_bottom').html(html);
+		        var line = new iChart.LineBasic2D({
+					render : 'chart_content',
+					data: data,
+					align:'center',
+					width : $('#chart_content').width(),
+					height : $('#chart_content').height(),
+					// fit:true,
+					border: null,
+					sub_option : {
+						smooth:true,
+						listeners : {
+							parseText : function(r, t) {
+								return t +'℃';
+							}
+						}
+					},
+					background_color: 'rgba(0,0,0,0)',
+					coordinate:{
+						width: '90%',
+						height: 240,
+						striped: true,
+						axis:{
+							width: 0
+						},
+						scale2grid:false,
+						offsetx: -3,
+						grid_color : '#ffffff',
+						scale:[{
+							position:'left',
+							start_scale: Math.min.apply(Math,min),
+							end_scale: Math.max.apply(Math,max),
+							scale_enable: false,
+							listeners: {
+								parseText : function(text) {
+									return {text:''}
+								}
+							}
+						}
+						]
+					}
+				});
+				//开始画图
+				line.draw();
+			}
+			$(document).on('before_nav_click',function(){
+				if($dialog_forcast){
+					$btn_quit.click();
+				}
+			});
+			var tpl_dialog_forcast = '<div class="dialog dialog_forcast">'+
+										'<div class="dialog_nav_top">'+
+											'<div class="btn_quit fl"></div>'+
+											'<div class="btn_forcast_nav fl">'+
+												'<span class="btn_forecast">预 报</span>'+
+												'<span class="btn_trend">趋 势</span>'+
+											'</div>'+
+										'</div>'+
+										'<div class="yb_container">'+
+											'<ul class="yb_date fl">'+
+											'</ul>'+
+											'<div class="fl" id="forcast_chart">'+
+												'<div id="chart_top"></div>'+
+												'<div id="chart_content"></div>'+
+												'<div id="chart_bottom"></div>'+
+											'</div>'+
+										'</div>'+
+									'</div>';
+			var $dialog_forcast,$yb_container,$yb_date,$btn_quit;
+			return function(data,items,no_cache){
+				// data.list.push({
+				// 	city_id: '101310217',
+				// 	name: '三沙',
+				// 	geo: [112.293524, 16.923996]
+				// });
+				var _nextFn;
+				var fn = parseJson(data,items,no_cache,function(){
+					gm.refresh();
+					Loading.hide();
+					_nextFn && _nextFn();
+				});
+				var $layer_weather = $('.layer_weather');
+				var resizeTT;
+				$doc.off('map_resize');
+				// 地图大小改变时重置天气元素位置
+				$doc.on('map_resize',function(){
+					$layer_weather.hide();
+					clearTimeout(resizeTT);
+
+					resizeTT = setTimeout(function(){
+						_refreshBg();
+						$layer_weather.each(function(i,v){
+							var $v = $(v);
+							var pos = gm.makePoint($v.data('geo'));
+							$v.css({
+								left: pos[0],
+								top: pos[1]
+							});
+							setTimeout(function(){
+								$v.fadeIn();
+							},10);
+						});
+					},10);
+				});
+				if(!$dialog_forcast){
+					$dialog_forcast = $(tpl_dialog_forcast).appendTo($('.container'));
+					$yb_container = $('.yb_container');
+
+					$yb_date = $('.yb_date').height($dialog_forcast.height() - $dialog_forcast.find('.dialog_nav_top').height());
+				}
+				$('.btn_forecast').click(function(){
+					$yb_container.removeClass('trend');
+				});
+				$('.btn_trend').click(function(){
+					$dialog_forcast.addClass('show');
+					$yb_container.addClass('trend');
+				});
+				$btn_quit = $('.btn_quit').click(function(){
+					$(this).parent().parent().removeClass('show');
+					// hide();
+					U.canBack(false,'dialog');
+				});
+				return function(toIndex,nextFn){
+					_nextFn = function(){
+						gm.weatherShowid = global_jsonid;
+						var $container = $(gm.container);
+						console.log(data.list)
+						$.each(data.list,function(i,v){
+							console.log(i)
+							var city_id = v.city_id;
+							var pos = gm.makePoint(v.geo);
+							console.log(pos)
+							var $div = $('<div class="layer_weather" style="left:'+pos[0]+'px;top:'+pos[1]+'px"></div>');
+							$div.data('geo',v.geo);
+							var $c_div = $('<div data-c_id="'+city_id+'">'+v.name+'</div>');
+							$div.append($c_div);
+							$container.append($div);
+							load7Forecast($c_div);
+						});
+						$layer_weather = $('.layer_weather');
+						nextFn && nextFn();
+					};
+					fn(toIndex);
+				}
+			}
+		})();
+		/*解析img_json类型数据*/
+		var parseImgJson = function(data,no_cache){
+			clearMap();
+			var url = data.url;
+			if(url){
+				Loading.show();
+				getJson(url,function(imgData){
+					Loading.hide();
+					renderFn = renderImg(imgData);
+					initPlayer(imgData,renderFn);
+				},{
+					format: function(d){
+						return d;
+					},
+					no_cache: no_cache
+				});
+			}
+		}
+		window.initData = function(data,no_cache){
+			if(typeof data == 'string'){
+				getJson(data,function(d){
+					initData(d,no_cache);
+				},{
+					format: function(d){
+						var type = d.type;
+						/*对数据进行倒序处理*/
+						if('multipleimg' == type){
+							d.imgs.reverse();
+						}else if('json'){
+							d.items.reverse();
+						}
+						return d;
+					},
+					no_cache: no_cache
+				});
+				return;
+			}
+			if(player){
+				player.hide();
+				player = null;
+			}
+
+			var type = data.type;
+			var items = data.items || data.imgs;
+			var renderFn;
+
+			// 不同容器的显示
+			$map_container.show().removeClass('map');
+			$container.hide();
+			$table_pm.hide();
+
+			GLOBAL_CAN_SCALE = true;
+			switch(type){
+				case 'multipleimg':
+					clearMap();
+					renderFn = renderImg(items,no_cache);
+					break;
+				case 'img_json':
+					return parseImgJson(data,no_cache);
+					break;
+				case 'json':
+					renderFn = parseJson(data,items,no_cache);
+					break;
+				case 'json_forecast':
+					renderFn = parseJsonForecast(data,items,no_cache);
+					break;
+				case 'weburl':
+					window.location.href='wisp://pUrl.wi?url='+data.url;
+					return;
+					break;
+			}
+			if(renderFn){
+				initPlayer(items,renderFn);
+			}
+		}
+	}();
+	!function(){
+		var lastRequestTime = 0;
+		/*绑定头部导航点击触发事件*/
+		var _current_data_url;
+		var init_tt;
+		var nav_animate_time = 401;
+		$doc.on('init_data',function(e,data){
+			Loading.show();
+			clearTimeout(init_tt);
+			/*延时处理占大cpu资源方法，防止出现菜单动画卡*/
+			init_tt = setTimeout(function(){
+				var url = data.d_url;
+				/*相同数据不进行渲染*/
+				if(_current_data_url != url){
+					_current_data_url = url;
+					lastRequestTime = new Date().getTime();
+					initData(data.d_url);
+				}
+			},nav_animate_time);
+		}).on('restart',function(){
+			if(_current_data_url && new Date().getTime() - lastRequestTime > 1000 * 60){
+				initData(_current_data_url,true);
+			}
+		});
+	}();
+
+	/*初始化头部及左侧导航*/
+	Nav.Top.init(function($html){
+		$('.container').prepend($html);
+	});
+
+	//初始化菜单后得到菜单状态
+	isShowNav = Nav.isShow();
+	$doc.on('back',function(){
+		if(isShowNav){
+			Nav.toggle(true);
+		}else if($('.dialog_forcast').is('.show')){
+			$('.btn_quit').click();
+		}else{
+			$('#btn_back_china').click();
+		}
+	});
+
+	// window.onload = function(){
+	// 	initData({type: 'json_forecast',items: [{src: 'http://10.14.85.116/android/ChinaWeatherDecision_assets/test/data/hainan_forecast.html'}]})
+	// }
+})

@@ -1,0 +1,121 @@
+.pitEg{
+	background: url('../img/tflj/台风图例.png') no-repeat center center;
+	background-size:100%;
+}
+/*============== 台风路径独立样式 =====================*/
+.menu,#wrapper>ul>li,#wrapper2>ul>li,.masg{
+	font-size:0.75rem;  /*30px*/
+}
+.menu{
+	width:5.25rem;
+	height:4.0rem;
+	background:url('../img/tflj/台风1.png') no-repeat center 0.5rem;
+	background-color: rgba(7,27,49,0.8);
+	background-size:1.775rem 2.075rem;
+	position: absolute;
+	left:2rem;
+	top:6.0rem;
+	z-index: 10000;
+	text-align:center;
+	line-height:6rem;
+}
+.menu.act{
+	background-color:#266ab5;
+}
+.con-btn .play-btn{
+	background:url('../img/tflj/暂停.png') no-repeat;
+	background-size:100%;
+}
+#wrapper,#wrapper2{
+	position:absolute;
+	left:7.25rem;
+	top:6.0rem;
+	max-height:22.5rem;
+	overflow: hidden;
+	background-color: rgba(7,27,49,0.8);
+	z-index:10000;
+}
+#wrapper>ul{
+	width:5rem;
+	/*width:0;*/
+	overflow:hidden;
+}
+#wrapper2>ul{
+	/*width:10rem;*/
+	width:0;
+	overflow:hidden;
+}
+#wrapper>ul>li,#wrapper2>ul>li{
+	width:100%;
+	height:2.25rem;
+	text-align:center;
+	line-height:2.25rem;
+	overflow: hidden;
+}
+#wrapper2{
+	left:12.25rem;
+	background-color: rgba(7,27,49,0.95);
+}
+#wrapper2>ul>li>span{
+	width:0.95rem;
+	height:0.95rem;
+	box-sizing:border-box;
+	border:1px solid #085bb3;
+	margin:0.65rem 0.6rem;
+}
+#wrapper2>ul>li>span.menuAct{
+	background: url('../img/tflj/menu-act.png') no-repeat center center;
+	background-size:0.4rem 0.4rem;
+}
+#wrapper>ul>li.menuAct{
+	background: #266ab5;
+	z-index:1;
+	box-shadow:1px 2px 4px #000;
+}
+.masg{
+	width:15.0rem;
+	padding:0.5rem 1rem;
+	background-color: rgba(7,27,49,0.8);
+	border:1px solid #48b8f1;
+	box-sizing:border-box;
+	position:absolute;
+	z-index:10000;
+	line-height:1.5rem;
+	display:none;
+}
+.masg-text>p.color{
+	color:#9a9a9a;
+}
+
+.iScrollIndicator{
+	background:rgba(39,110,186,0.3) !important;
+	border:none !important;
+}
+#curve{
+	width:60.0rem;
+	height:25.0rem;
+	background-color:rgba(7,27,49,0.8);
+	position:absolute;
+	right:-61rem;
+	padding:0.5rem 1rem;
+	/*right:18.5rem;*/
+	top:50%;
+	margin-top:-13rem;
+	z-index: 100000;
+	box-sizing:border-box;
+	border:1px solid #fff;
+}
+#curveCont{
+	width:100%;
+	height:100%;
+}
+.trigon{
+	position:absolute;
+	right:-14px;
+	top: 0;
+	width:0;
+	height:0;
+	border-top:14px solid transparent;
+    border-bottom: 14px solid transparent;
+    border-left: 14px solid #fff;
+}

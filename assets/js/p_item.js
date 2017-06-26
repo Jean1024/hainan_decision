@@ -1,5 +1,5 @@
-// var win = nwDispatcher.requireNwGui().Window.get();
-// win.showDevTools();
+var win = nwDispatcher.requireNwGui().Window.get();
+win.showDevTools();
 (function(global){
 	var Store = Util.Store;
 	var $container;
@@ -264,6 +264,7 @@ $(function(){
     function initNavSort(url, b, title){
     	Loading.show();
 		getJson(url, function(data){
+			alert(JSON.stringify(data))
 			if(data){
 				var sortArr = [];
 				$.each(data.l, function(i, v){
@@ -518,9 +519,13 @@ $(function(){
 		}
 	})();
 	$('.content').delegate('select', 'change', function() {
-		var url = $(this).data('url');
+		// 修改url ---邱
+		var url = $(this).data('url').split('=')[0]+'=';
 		if (url) {
-			initContent(url+'/'+$(this).val());
+			initContent(url+$(this).val());
+			// 删除url斜杠 ---邱
+			console.log(url)
+			console.log(url+$(this).val())
 		}
 	}).delegate('.btn_table_new_detail', 'click', function() {
 		$(this).closest('.content').find('.table_detail').css('left', '0');
@@ -589,6 +594,7 @@ $(function(){
 			getJson(data_url,function(data){
 				_temp_content_url = data_url;
 				initContent(data,is_use_temp_list_url,is_use_temp_content_url);
+				console.log(data)
 			},{
 				/*格式化内容数据*/
 				format: initContentFormat,
@@ -731,7 +737,7 @@ $(function(){
 					html_time += '</select>';
 				}
 				var img = data.imgUrl;
-				html += '<div class="c_content_table '+type+'">'+(img ? '<img src="'+img+'"/>': '暂无图片')+'<br/><a class="btn btn_table_new_detail">详细信息&gt;&gt;</a><br/>'+html_time+'</div>';
+				html += '<div class="c_content_table '+type+'"><div id="titleTxt"></div><div id="allmap" style="position: relative;height:80%;">地图无法显示</div> <br/> <a class="btn btn_table_new_detail">详细信息&gt;&gt;</a><br/>'+html_time+'</div>';
 				var orderBy = data.orderBy;
 				var sort = data.sort;
 				html += '<div class="table_detail c_content_table '+type+'"><a class="btn_table_new_back btn">返回</a><br/><div class="data_time">'+(data.title||'')+'</div><table><tr>';
@@ -758,22 +764,31 @@ $(function(){
 					back_href = _getInvokeUrl('initList',_temp_list_url);
 					_fn = 'initList';
 					_data_url = _temp_list_url;
+					console.log(123)
 				}
 				if(is_use_temp_content_url && _temp_content_url){
 					back_href = _getInvokeUrl('initContent',_temp_content_url);
 					_fn = 'initContent';
 					_data_url = _temp_content_url;
+					console.log(456)
 				}
 				if(back_href){
+					console.log(798)
 					U.canBack(true);
 					$html.append('<a class="btn_back_list btn" href=\''+back_href+'\' data-fn="'+_fn+'" data-url="'+_data_url+'">返回</a>');
 				}else{
+					console.log(000)
 					U.canBack(false);
 				}
+				$content.html('') // --- 邱
 				$html.appendTo($content);
 				setTimeout(function(){
+					console.log(111)
 					$('.img').removeAttr('href');
 				}, 10)
+
+				console.log(data)
+				initMap('allmap',data)
 				// setTimeout(function(){
 				// 	$('img').on('click', function(){
 				// 		var $this = $(this);

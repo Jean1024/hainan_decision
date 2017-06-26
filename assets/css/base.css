@@ -1,0 +1,15 @@
+*{ margin:0; padding:0;}
+li{list-style:none;}
+html{background: #f3f3f3;}
+img,input{border:none;}
+a{ text-decoration:none;}
+a:focus,input,textarea{outline:none;}
+textarea{resize : none}
+h1,h2,h3,h4,h5,h6,strong,b,i{ font-weight:normal; font-style:normal}
+body{ font-family:"Microsoft YaHei";}
+.fl{ float:left;}
+.fr{ float:right;}
+.clear{ clear:both;}
+.oh{overflow: hidden;}
+.clearfix:after{ content:""; display:block; clear:both;}
+.clearfix{ zoom:1;}

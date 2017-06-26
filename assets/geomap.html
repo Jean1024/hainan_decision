@@ -8,6 +8,27 @@
     	<link rel="stylesheet" type="text/css" href="./css/p_geomap.css">
     	<link rel="stylesheet" type="text/css" href="./css/p_item_nav.css">
     	<link rel="stylesheet" type="text/css" href="./css/nav.css">
+
+      <link rel="stylesheet" href="css/base.css">
+      <link rel="stylesheet" href="css/minuteRain.css">
+      <script src="js/rem.js"></script>
+      <style type="text/css">
+      .titleTip {
+            padding: 0.75rem 1.0rem;
+            border-size: border-box;
+            -webkit-box-sizing: border-box;
+            border: 1px solid #e6ebf0;
+            position: absolute;
+            left: 2.0rem;
+            top: 60px;
+            background: rgba(5,40,71,0.9);
+            box-shadow: 2px 4px 16px rgba(0,0,0,0.2);
+            font-size: 1.25rem;
+            color: #fff;
+            z-index: 500;
+            display: none;
+        }
+      </style>
 	</head>
 	<body>
 		<div class="container" style="overflow-y:auto">
@@ -20,12 +41,15 @@
 		</div> 
 		<script type="text/javascript" src="./data/config.js"></script>
 		<script type="text/javascript" src="./js/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sCR3yMyHDKatEAF1opbKapOE5raaMegq"></script>
+    <script src="js/echarts.min.js"></script>
+    <script src="lib/fastclick.js"></script>
 		<script type="text/javascript" src="./js/iscroll.js"></script>
 		<script type="text/javascript" src="./js/jquery.touchSwipe.js"></script>
 		<script type="text/javascript" src="./js/util.js"></script>
 		<script type="text/javascript" src="./js/esl.js"></script>
 		<script type="text/javascript" src="./js/base64.js"></script>
 		<script type="text/javascript" src="./js/sha1.js"></script>
-		<script type="text/javascript" src="./js/p_geomap.js"></script>
+    <script type="text/javascript" src="./js/p_geomap.js"></script>
 	</body>
 </html>

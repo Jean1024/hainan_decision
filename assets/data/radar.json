@@ -1,0 +1,1189 @@
+[{
+    "lat": "39.9452",
+    "lon": "116.2906",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9000_JB",
+    "name": "\u5317\u4eac\u6d77\u6dc0"
+}, {
+    "lat": "31.0747",
+    "lon": "120.9577783",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9002_JB",
+    "name": "\u4e0a\u6d77\u9752\u6d66"
+}, {
+    "lat": "39.8088",
+    "lon": "116.47194",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9010_JB",
+    "name": "\u5317\u4eac\u5927\u5174"
+}, {
+    "lat": "45.5508",
+    "lon": "119.64472",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9020_JB",
+    "name": "\u970d\u6797\u683c\u52d2"
+}, {
+    "lat": "49.5667",
+    "lon": "117.4333",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9021_JB",
+    "name": "\u6ee1\u5dde\u91cc"
+}, {
+    "lat": "31.6097",
+    "lon": "110.34",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9060_JB",
+    "name": "\u795e\u519c\u67b6"
+}, {
+    "lat": "18.2280",
+    "lon": "109.59217",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9070_JB",
+    "name": "\u4e09\u4e9a"
+}, {
+    "lat": "16.8352",
+    "lon": "112.33969",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9071_JB",
+    "name": "\u897f\u6c99"
+}, {
+    "lat": "18.8000",
+    "lon": "110.41",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9073_JB",
+    "name": "\u4e07\u5b81"
+}, {
+    "lat": "44.4375",
+    "lon": "84.90176",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9080_JB",
+    "name": "\u594e\u5c6f"
+}, {
+    "lat": "39.8710",
+    "lon": "79.08569168",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9082_JB",
+    "name": "\u56fe\u6728\u8212\u514b"
+}, {
+    "lat": "44.8275",
+    "lon": "82.35",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9083_JB",
+    "name": "\u5854\u65af\u5c14\u6d77"
+}, {
+    "lat": "47.2680",
+    "lon": "132.62688",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9085_JB",
+    "name": "\u5efa\u4e09\u6c5f"
+}, {
+    "lat": "30.8014",
+    "lon": "108.6862917",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9090_JB",
+    "name": "\u4e07\u5dde"
+}, {
+    "lat": "29.5918",
+    "lon": "108.72726",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9091_JB",
+    "name": "\u9ed4\u6c5f"
+}, {
+    "lat": "29.2406",
+    "lon": "105.8331295",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9092_JB",
+    "name": "\u6c38\u5ddd"
+}, {
+    "lat": "23.0041",
+    "lon": "113.35532",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9200_JB",
+    "name": "\u5e7f\u5dde"
+}, {
+    "lat": "39.0439",
+    "lon": "117.71837",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9220_JB",
+    "name": "\u5858\u6cbd"
+}, {
+    "lat": "29.5226",
+    "lon": "106.48917",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9230_JB",
+    "name": "\u91cd\u5e86"
+}, {
+    "lat": "41.9232",
+    "lon": "123.64914",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9240_JB",
+    "name": "\u6c88\u9633"
+}, {
+    "lat": "32.1916",
+    "lon": "118.69694",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9250_JB",
+    "name": "\u5357\u4eac"
+}, {
+    "lat": "30.5168",
+    "lon": "114.37801",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9270_JB",
+    "name": "\u6b66\u6c49"
+}, {
+    "lat": "30.6633",
+    "lon": "104.01603",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9280_JB",
+    "name": "\u6210\u90fd"
+}, {
+    "lat": "34.4446",
+    "lon": "108.9721472",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9290_JB",
+    "name": "\u897f\u5b89"
+}, {
+    "lat": "36.5998",
+    "lon": "114.506246",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9310_JB",
+    "name": "\u90af\u90f8"
+}, {
+    "lat": "38.3512",
+    "lon": "114.7118",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9311_JB",
+    "name": "\u77f3\u5bb6\u5e84"
+}, {
+    "lat": "41.1557",
+    "lon": "114.6936043",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9313_JB",
+    "name": "\u5f20\u5317"
+}, {
+    "lat": "40.9741",
+    "lon": "117.9195393",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9314_JB",
+    "name": "\u627f\u5fb7"
+}, {
+    "lat": "38.2796",
+    "lon": "116.805478",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9317_JB",
+    "name": "\u6ca7\u5dde"
+}, {
+    "lat": "39.8808",
+    "lon": "118.88088",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9335_JB",
+    "name": "\u79e6\u7687\u5c9b"
+}, {
+    "lat": "37.7351",
+    "lon": "112.57937",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9351_JB",
+    "name": "\u592a\u539f"
+}, {
+    "lat": "40.0721",
+    "lon": "113.39027",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9352_JB",
+    "name": "\u5927\u540c"
+}, {
+    "lat": "36.2239",
+    "lon": "113.05432",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9355_JB",
+    "name": "\u957f\u6cbb"
+}, {
+    "lat": "36.0623",
+    "lon": "111.4944096",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9357_JB",
+    "name": "\u4e34\u6c7e"
+}, {
+    "lat": "37.5363",
+    "lon": "111.15735",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9358_JB",
+    "name": "\u5415\u6881"
+}, {
+    "lat": "34.4128",
+    "lon": "115.6321714",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9370_JB",
+    "name": "\u5546\u4e18"
+}, {
+    "lat": "34.7045",
+    "lon": "113.69742",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9371_JB",
+    "name": "\u90d1\u5dde"
+}, {
+    "lat": "33.7708",
+    "lon": "113.1167",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9375_JB",
+    "name": "\u5e73\u9876\u5c71"
+}, {
+    "lat": "32.0816",
+    "lon": "114.0801",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9376_JB",
+    "name": "\u4fe1\u9633"
+}, {
+    "lat": "33.0207",
+    "lon": "112.49316",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9377_JB",
+    "name": "\u5357\u9633"
+}, {
+    "lat": "34.5621",
+    "lon": "112.44921",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9379_JB",
+    "name": "\u6d1b\u9633"
+}, {
+    "lat": "35.7759",
+    "lon": "114.94439",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9393_JB",
+    "name": "\u6fee\u9633"
+}, {
+    "lat": "33.0095",
+    "lon": "114.01955",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9396_JB",
+    "name": "\u9a7b\u9a6c\u5e97"
+}, {
+    "lat": "34.6788",
+    "lon": "111.12972",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9398_JB",
+    "name": "\u4e09\u95e8\u5ce1"
+}, {
+    "lat": "38.9079",
+    "lon": "121.64804",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9411_JB",
+    "name": "\u5927\u8fde"
+}, {
+    "lat": "39.8756",
+    "lon": "124.156922",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9415_JB",
+    "name": "\u4e39\u4e1c"
+}, {
+    "lat": "40.6735",
+    "lon": "122.27259",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9417_JB",
+    "name": "\u8425\u53e3"
+}, {
+    "lat": "41.5354",
+    "lon": "120.50007",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9421_JB",
+    "name": "\u671d\u9633"
+}, {
+    "lat": "43.8994",
+    "lon": "125.24654",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9431_JB",
+    "name": "\u957f\u6625"
+}, {
+    "lat": "43.8628",
+    "lon": "126.54194",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9432_JB",
+    "name": "\u5409\u6797\u5e02"
+}, {
+    "lat": "42.8403",
+    "lon": "129.4676",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9433_JB",
+    "name": "\u5ef6\u5409"
+}, {
+    "lat": "45.6146",
+    "lon": "122.79619",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9436_JB",
+    "name": "\u767d\u57ce"
+}, {
+    "lat": "42.8996",
+    "lon": "125.1505405",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9437_JB",
+    "name": "\u8fbd\u6e90"
+}, {
+    "lat": "45.1545",
+    "lon": "124.86667",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9438_JB",
+    "name": "\u677e\u539f"
+}, {
+    "lat": "41.9713",
+    "lon": "126.19794",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9439_JB",
+    "name": "\u767d\u5c71"
+}, {
+    "lat": "45.7240",
+    "lon": "126.72821",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9451_JB",
+    "name": "\u54c8\u5c14\u6ee8"
+}, {
+    "lat": "47.3666",
+    "lon": "123.93456",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9452_JB",
+    "name": "\u9f50\u9f50\u54c8\u5c14"
+}, {
+    "lat": "44.5914",
+    "lon": "129.599513",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9453_JB",
+    "name": "\u7261\u4e39\u6c5f"
+}, {
+    "lat": "46.7962",
+    "lon": "130.31807",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9454_JB",
+    "name": "\u4f73\u6728\u65af"
+}, {
+    "lat": "50.1789",
+    "lon": "127.31917",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9456_JB",
+    "name": "\u9ed1\u6cb3"
+}, {
+    "lat": "50.4086",
+    "lon": "124.117955",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9457_JB",
+    "name": "\u52a0\u683c\u8fbe\u5947"
+}, {
+    "lat": "47.6999",
+    "lon": "128.91442",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9458_JB",
+    "name": "\u4f0a\u6625"
+}, {
+    "lat": "49.2041",
+    "lon": "119.75278",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9470_JB",
+    "name": "\u6d77\u62c9\u5c14"
+}, {
+    "lat": "40.9820",
+    "lon": "111.7",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9471_JB",
+    "name": "\u547c\u548c\u6d69\u7279"
+}, {
+    "lat": "43.6201",
+    "lon": "122.26041",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9475_JB",
+    "name": "\u901a\u8fbd"
+}, {
+    "lat": "42.2326",
+    "lon": "118.96642",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9476_JB",
+    "name": "\u8d64\u5cf0"
+}, {
+    "lat": "39.8135",
+    "lon": "110.04092",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9477_JB",
+    "name": "\u9102\u5c14\u591a\u65af"
+}, {
+    "lat": "40.7349",
+    "lon": "107.3690732",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9478_JB",
+    "name": "\u4e34\u6cb3"
+}, {
+    "lat": "32.0761",
+    "lon": "120.97548",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9513_JB",
+    "name": "\u5357\u901a"
+}, {
+    "lat": "33.4304",
+    "lon": "120.19962",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9515_JB",
+    "name": "\u76d0\u57ce"
+}, {
+    "lat": "34.2930",
+    "lon": "117.15197",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9516_JB",
+    "name": "\u5f90\u5dde"
+}, {
+    "lat": "33.2428",
+    "lon": "118.82583",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9517_JB",
+    "name": "\u6dee\u5b89"
+}, {
+    "lat": "34.6505",
+    "lon": "119.29562",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9518_JB",
+    "name": "\u8fde\u4e91\u6e2f"
+}, {
+    "lat": "31.9004",
+    "lon": "119.78022",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9519_JB",
+    "name": "\u5e38\u5dde"
+}, {
+    "lat": "32.5579",
+    "lon": "119.99403",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9523_JB",
+    "name": "\u6cf0\u5dde"
+}, {
+    "lat": "36.8034",
+    "lon": "116.78172",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9531_JB",
+    "name": "\u9f50\u6cb3"
+}, {
+    "lat": "35.9889",
+    "lon": "120.23041",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9532_JB",
+    "name": "\u9752\u5c9b"
+}, {
+    "lat": "37.4989",
+    "lon": "121.3890711",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9535_JB",
+    "name": "\u70df\u53f0"
+}, {
+    "lat": "36.6467",
+    "lon": "118.99306",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9536_JB",
+    "name": "\u6f4d\u574a"
+}, {
+    "lat": "36.2560",
+    "lon": "117.10587",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9538_JB",
+    "name": "\u6cf0\u5c71"
+}, {
+    "lat": "35.0510",
+    "lon": "118.34875",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9539_JB",
+    "name": "\u4e34\u6c82"
+}, {
+    "lat": "37.3667",
+    "lon": "118.00139",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9543_JB",
+    "name": "\u6ee8\u5dde"
+}, {
+    "lat": "31.8659",
+    "lon": "117.23978",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9551_JB",
+    "name": "\u5408\u80a5"
+}, {
+    "lat": "32.9179",
+    "lon": "117.44471",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9552_JB",
+    "name": "\u868c\u57e0"
+}, {
+    "lat": "31.7009",
+    "lon": "118.51559",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9555_JB",
+    "name": "\u9a6c\u978d\u5c71"
+}, {
+    "lat": "30.6169",
+    "lon": "116.79083",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9556_JB",
+    "name": "\u5b89\u5e86"
+}, {
+    "lat": "32.8788",
+    "lon": "115.74138",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9558_JB",
+    "name": "\u961c\u9633"
+}, {
+    "lat": "30.1342",
+    "lon": "118.16455",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9559_JB",
+    "name": "\u9ec4\u5c71"
+}, {
+    "lat": "30.9526",
+    "lon": "118.03375",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9562_JB",
+    "name": "\u94dc\u9675"
+}, {
+    "lat": "30.9333",
+    "lon": "118.75",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9563_JB",
+    "name": "\u5ba3\u57ce"
+}, {
+    "lat": "29.0858",
+    "lon": "118.7025",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9570_JB",
+    "name": "\u8862\u5dde"
+}, {
+    "lat": "30.2734",
+    "lon": "120.33745",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9571_JB",
+    "name": "\u676d\u5dde"
+}, {
+    "lat": "30.8422",
+    "lon": "120.205791",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9572_JB",
+    "name": "\u6e56\u5dde"
+}, {
+    "lat": "30.0696",
+    "lon": "121.50943",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9574_JB",
+    "name": "\u5b81\u6ce2"
+}, {
+    "lat": "28.6180",
+    "lon": "121.5223434",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9576_JB",
+    "name": "\u53f0\u5dde"
+}, {
+    "lat": "27.8955",
+    "lon": "120.7457557",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9577_JB",
+    "name": "\u6e29\u5dde"
+}, {
+    "lat": "29.2183",
+    "lon": "119.645",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9579_JB",
+    "name": "\u91d1\u534e"
+}, {
+    "lat": "30.0691",
+    "lon": "122.10878",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9580_JB",
+    "name": "\u821f\u5c71"
+}, {
+    "lat": "25.9915",
+    "lon": "119.54058",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9591_JB",
+    "name": "\u798f\u5dde"
+}, {
+    "lat": "24.4850",
+    "lon": "118.08",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9592_JB",
+    "name": "\u53a6\u95e8"
+}, {
+    "lat": "26.5643",
+    "lon": "119.67824",
+    "type": "CCJ",
+    "id": "JC_RADAR_AZ9593_JB",
+    "name": "\u5b81\u5fb7"
+}, {
+    "lat": "24.8970",
+    "lon": "118.50485",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9595_JB",
+    "name": "\u6cc9\u5dde"
+}, {
+    "lat": "25.0646",
+    "lon": "117.18643",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9597_JB",
+    "name": "\u9f99\u5ca9"
+}, {
+    "lat": "27.0087",
+    "lon": "117.0805682",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9598_JB",
+    "name": "\u4e09\u660e"
+}, {
+    "lat": "27.3494",
+    "lon": "118.10197",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9599_JB",
+    "name": "\u5efa\u9633"
+}, {
+    "lat": "37.1456",
+    "lon": "122.3725",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9631_JB",
+    "name": "\u8363\u6210"
+}, {
+    "lat": "22.8183",
+    "lon": "115.35611",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9660_JB",
+    "name": "\u6c55\u5c3e"
+}, {
+    "lat": "24.4893",
+    "lon": "98.34455562",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9692_JB",
+    "name": "\u5fb7\u5b8f"
+}, {
+    "lat": "32.0279",
+    "lon": "112.16602",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9710_JB",
+    "name": "\u8944\u6a0a"
+}, {
+    "lat": "30.3521",
+    "lon": "112.148",
+    "type": "CC ",
+    "id": "JC_RADAR_AZ9716_JB",
+    "name": "\u8346\u5dde"
+}, {
+    "lat": "30.7021",
+    "lon": "111.2965",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9717_JB",
+    "name": "\u5b9c\u660c"
+}, {
+    "lat": "30.2863",
+    "lon": "109.25896",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9718_JB",
+    "name": "\u6069\u65bd"
+}, {
+    "lat": "32.5994",
+    "lon": "110.7435215",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9719_JB",
+    "name": "\u5341\u5830"
+}, {
+    "lat": "31.7170",
+    "lon": "113.38739",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9722_JB",
+    "name": "\u968f\u5dde"
+}, {
+    "lat": "29.2997",
+    "lon": "113.10308",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9730_JB",
+    "name": "\u5cb3\u9633"
+}, {
+    "lat": "28.4594",
+    "lon": "113.01456",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9731_JB",
+    "name": "\u957f\u6c99"
+}, {
+    "lat": "26.9446",
+    "lon": "112.58068",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9734_JB",
+    "name": "\u8861\u9633"
+}, {
+    "lat": "25.7353",
+    "lon": "112.97694",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9735_JB",
+    "name": "\u90f4\u5dde"
+}, {
+    "lat": "29.1755",
+    "lon": "111.70536",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9736_JB",
+    "name": "\u5e38\u5fb7"
+}, {
+    "lat": "27.2074",
+    "lon": "111.44596",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9739_JB",
+    "name": "\u90b5\u9633"
+}, {
+    "lat": "29.1311",
+    "lon": "110.4697",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9744_JB",
+    "name": "\u5f20\u5bb6\u754c"
+}, {
+    "lat": "27.5658",
+    "lon": "110.00304",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9745_JB",
+    "name": "\u6000\u5316"
+}, {
+    "lat": "26.2253",
+    "lon": "111.61664",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9746_JB",
+    "name": "\u6c38\u5dde"
+}, {
+    "lat": "24.7914",
+    "lon": "113.5662568",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9751_JB",
+    "name": "\u97f6\u5173"
+}, {
+    "lat": "24.2560",
+    "lon": "115.97486",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9753_JB",
+    "name": "\u6885\u5dde"
+}, {
+    "lat": "23.2823",
+    "lon": "116.7417856",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9754_JB",
+    "name": "\u6c55\u5934"
+}, {
+    "lat": "22.5419",
+    "lon": "114.00568",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9755_JB",
+    "name": "\u6df1\u5733"
+}, {
+    "lat": "22.9281",
+    "lon": "112.56333",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9758_JB",
+    "name": "\u8087\u5e86"
+}, {
+    "lat": "21.0122",
+    "lon": "110.52583",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9759_JB",
+    "name": "\u6e5b\u6c5f"
+}, {
+    "lat": "23.6900",
+    "lon": "114.60694",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9762_JB",
+    "name": "\u6cb3\u6e90"
+}, {
+    "lat": "24.7325",
+    "lon": "112.4016",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9763_JB",
+    "name": "\u8fde\u5dde"
+}, {
+    "lat": "21.5332",
+    "lon": "108.26539",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9770_JB",
+    "name": "\u9632\u57ce\u6e2f"
+}, {
+    "lat": "22.8036",
+    "lon": "108.40418",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9771_JB",
+    "name": "\u5357\u5b81"
+}, {
+    "lat": "24.3571",
+    "lon": "109.45636",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9772_JB",
+    "name": "\u67f3\u5dde"
+}, {
+    "lat": "240.8000",
+    "lon": "  110.3030432   25.323137",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9773_JB",
+    "name": "\u6842\u6797"
+}, {
+    "lat": "23.4795",
+    "lon": "111.3045129",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9774_JB",
+    "name": "\u68a7\u5dde"
+}, {
+    "lat": "22.6467",
+    "lon": "110.2211",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9775_JB",
+    "name": "\u7389\u6797"
+}, {
+    "lat": "23.9040",
+    "lon": "106.6032094",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9776_JB",
+    "name": "\u767e\u8272"
+}, {
+    "lat": "24.9889",
+    "lon": "107.50778",
+    "type": "SB",
+    "id": "JC_RADAR_AZ9778_JB",
+    "name": "\u6cb3\u6c60"
+}, {
+    "lat": "21.4547",
+    "lon": "109.05191",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9779_JB",
+    "name": "\u5317\u6d77"
+}, {
+    "lat": "28.5890",
+    "lon": "115.90149",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9791_JB",
+    "name": "\u5357\u660c"
+}, {
+    "lat": "29.5350",
+    "lon": "115.95457",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9792_JB",
+    "name": "\u4e5d\u6c5f"
+}, {
+    "lat": "28.4429",
+    "lon": "117.9777215",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9793_JB",
+    "name": "\u4e0a\u9976"
+}, {
+    "lat": "27.8936",
+    "lon": "116.2625",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9794_JB",
+    "name": "\u629a\u5dde"
+}, {
+    "lat": "27.0427",
+    "lon": "114.9140486",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9796_JB",
+    "name": "\u5409\u5b89"
+}, {
+    "lat": "25.8794",
+    "lon": "114.9698315",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9797_JB",
+    "name": "\u8d63\u5dde"
+}, {
+    "lat": "29.3628",
+    "lon": "117.21806",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9798_JB",
+    "name": "\u666f\u5fb7\u9547"
+}, {
+    "lat": "31.4529",
+    "lon": "104.76511",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9816_JB",
+    "name": "\u7ef5\u9633"
+}, {
+    "lat": "30.8219",
+    "lon": "106.07794",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9817_JB",
+    "name": "\u5357\u5145"
+}, {
+    "lat": "31.1652",
+    "lon": "107.53358",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9818_JB",
+    "name": "\u8fbe\u5dde"
+}, {
+    "lat": "28.8204",
+    "lon": "104.5782065",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9831_JB",
+    "name": "\u5b9c\u5bbe"
+}, {
+    "lat": "29.4069",
+    "lon": "103.82389",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9833_JB",
+    "name": "\u4e50\u5c71"
+}, {
+    "lat": "27.8799",
+    "lon": "102.41062",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9834_JB",
+    "name": "\u897f\u660c"
+}, {
+    "lat": "30.1431",
+    "lon": "101.7383",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9836_JB",
+    "name": "\u7518\u5b5c"
+}, {
+    "lat": "31.9253",
+    "lon": "102.2",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9837_JB",
+    "name": "\u963f\u575d"
+}, {
+    "lat": "32.3969",
+    "lon": "105.81049",
+    "type": "SC",
+    "id": "JC_RADAR_AZ9839_JB",
+    "name": "\u5e7f\u5143"
+}, {
+    "lat": "26.5890",
+    "lon": "106.72801",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9851_JB",
+    "name": "\u8d35\u9633"
+}, {
+    "lat": "27.6827",
+    "lon": "106.9128",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9852_JB",
+    "name": "\u9075\u4e49"
+}, {
+    "lat": "26.3231",
+    "lon": "107.51493",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9854_JB",
+    "name": "\u90fd\u5300"
+}, {
+    "lat": "26.9650",
+    "lon": "108.68823",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9855_JB",
+    "name": "\u9ed4\u4e1c\u5357"
+}, {
+    "lat": "27.8222",
+    "lon": "109.21806",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9856_JB",
+    "name": "\u94dc\u4ec1"
+}, {
+    "lat": "27.3012",
+    "lon": "105.30177",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9857_JB",
+    "name": "\u6bd5\u8282"
+}, {
+    "lat": "25.0883",
+    "lon": "104.89714",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9859_JB",
+    "name": "\u5174\u4e49"
+}, {
+    "lat": "27.3524",
+    "lon": "103.71983",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9870_JB",
+    "name": "\u662d\u901a"
+}, {
+    "lat": "25.0516",
+    "lon": "102.57825",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9871_JB",
+    "name": "\u6606\u660e"
+}, {
+    "lat": "25.6084",
+    "lon": "100.39778",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9872_JB",
+    "name": "\u5927\u7406"
+}, {
+    "lat": "23.4768",
+    "lon": "104.2502",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9876_JB",
+    "name": "\u6587\u5c71"
+}, {
+    "lat": "22.8249",
+    "lon": "101.02004",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9879_JB",
+    "name": "\u666e\u6d31"
+}, {
+    "lat": "26.7278",
+    "lon": "100.04278",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9888_JB",
+    "name": "\u4e3d\u6c5f"
+}, {
+    "lat": "29.6598",
+    "lon": "91.13399",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9891_JB",
+    "name": "\u62c9\u8428"
+}, {
+    "lat": "29.2472",
+    "lon": "88.89144",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9892_JB",
+    "name": "\u65e5\u5580\u5219"
+}, {
+    "lat": "29.6326",
+    "lon": "94.39582",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9894_JB",
+    "name": "\u6797\u829d"
+}, {
+    "lat": "31.4806",
+    "lon": "92.06053",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9896_JB",
+    "name": "\u90a3\u66f2"
+}, {
+    "lat": "19.9964",
+    "lon": "110.24594",
+    "type": "SA",
+    "id": "JC_RADAR_AZ9898_JB",
+    "name": "\u6d77\u53e3"
+}, {
+    "lat": "37.0270",
+    "lon": "79.8322468",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9903_JB",
+    "name": "\u548c\u7530"
+}, {
+    "lat": "36.6095",
+    "lon": "109.48814",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9911_JB",
+    "name": "\u5ef6\u5b89"
+}, {
+    "lat": "38.2694",
+    "lon": "109.78018",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9912_JB",
+    "name": "\u6986\u6797"
+}, {
+    "lat": "33.8840",
+    "lon": "109.941584",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9914_JB",
+    "name": "\u5546\u6d1b"
+}, {
+    "lat": "32.6931",
+    "lon": "109.04314",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9915_JB",
+    "name": "\u5b89\u5eb7"
+}, {
+    "lat": "33.1299",
+    "lon": "107.04774",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9916_JB",
+    "name": "\u6c49\u4e2d"
+}, {
+    "lat": "34.5375",
+    "lon": "107.24123",
+    "type": "CB",
+    "id": "JC_RADAR_AZ9917_JB",
+    "name": "\u5b9d\u9e21"
+}, {
+    "lat": "36.0089",
+    "lon": "103.8522",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9931_JB",
+    "name": "\u5170\u5dde"
+}, {
+    "lat": "35.7220",
+    "lon": "107.62379",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9934_JB",
+    "name": "\u897f\u5cf0"
+}, {
+    "lat": "39.0880",
+    "lon": "100.277",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9936_JB",
+    "name": "\u5f20\u6396"
+}, {
+    "lat": "34.6023",
+    "lon": "105.63746",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9938_JB",
+    "name": "\u5929\u6c34"
+}, {
+    "lat": "34.9248",
+    "lon": "102.892599",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9941_JB",
+    "name": "\u7518\u5357"
+}, {
+    "lat": "38.4794",
+    "lon": "106.21444",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9951_JB",
+    "name": "\u94f6\u5ddd"
+}, {
+    "lat": "38.0000",
+    "lon": "106.2",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9953_JB",
+    "name": "\u5434\u5fe0"
+}, {
+    "lat": "35.6633",
+    "lon": "106.20205",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9954_JB",
+    "name": "\u56fa\u539f"
+}, {
+    "lat": "36.9502",
+    "lon": "100.90579",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9970_JB",
+    "name": "\u6d77\u5317"
+}, {
+    "lat": "36.5996",
+    "lon": "101.77813",
+    "type": "CD",
+    "id": "JC_RADAR_AZ9971_JB",
+    "name": "\u897f\u5b81"
+}, {
+    "lat": "45.4699",
+    "lon": "84.96379",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9990_JB",
+    "name": "\u514b\u62c9\u739b\u4f9d"
+}, {
+    "lat": "43.9162",
+    "lon": "87.39273",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9991_JB",
+    "name": "\u4e4c\u9c81\u6728\u9f50"
+}, {
+    "lat": "44.2867",
+    "lon": "85.97528",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9993_JB",
+    "name": "\u77f3\u6cb3\u5b50"
+}, {
+    "lat": "41.7599",
+    "lon": "86.20338",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9996_JB",
+    "name": "\u5e93\u5c14\u52d2"
+}, {
+    "lat": "41.1635",
+    "lon": "80.23486",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9997_JB",
+    "name": "\u963f\u514b\u82cf"
+}, {
+    "lat": "39.4597",
+    "lon": "76.02754",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9998_JB",
+    "name": "\u5580\u4ec0"
+}, {
+    "lat": "43.9420",
+    "lon": "81.32531",
+    "type": "CC",
+    "id": "JC_RADAR_AZ9999_JB",
+    "name": "\u4f0a\u5b81"
+}]

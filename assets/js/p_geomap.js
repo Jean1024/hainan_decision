@@ -1,6 +1,6 @@
 /*简单播放器*/
-// var win = nwDispatcher.requireNwGui().Window.get();
-// 	win.showDevTools();
+var win = nwDispatcher.requireNwGui().Window.get();
+	win.showDevTools();
 (function(global){
 	var Store = Util.Store;
 	var $container;
@@ -910,7 +910,7 @@ $(function(){
 			function load7Forecast($div, is_fromrefresh){
 				is_fromrefresh && _fn_refresh.add();
 				var city_id = $div.data('c_id');
-				U.initData('forcast7d_'+city_id,'http://webapi.weather.com.cn/data/?areaid='+ city_id + '&type=forecast7d',function(data){
+				U.initData('forcast7d_'+city_id,'http://hfapi.tianqi.cn/data/?areaid='+ city_id + '&type=forecast7d',function(data){
 					is_fromrefresh && _fn_refresh.rm();
 					if(data){
 						var m = REG_TIME.exec(data.f0);

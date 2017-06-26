@@ -20,9 +20,14 @@
     "min_width": 320,
     "min_height": 600,
     "max_width": 600,
-    "max_height": 800,
+    "max_height": 800,                     
     "toolbar": true,
     "as_desktop": true,
     "show": false
+  },
+  "devDependencies": {
+    "express": "^4.15.3",
+    "crypto":"^3.10.10",
+    "http-proxy-middleware": "^0.17.4"
   }
 }

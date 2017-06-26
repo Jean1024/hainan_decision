@@ -6,60 +6,99 @@
     <meta name="format-detection" content="telephone=no" />
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/reset.css" />
-    <link rel="stylesheet" type="text/css" href="css/p_typhoon.css" />
     <link rel="stylesheet" type="text/css" href="css/p_item_nav.css" />
     <link rel="stylesheet" type="text/css" href="css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="css/base.css" />
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/loading.css">
+    <link rel="stylesheet" type="text/css" href="css/typhoon.css">
 </head>
 <body>
-    <!-- <div class="wind_radiu">
-        <div class="radiu radiu_en"></div>
-        <div class="radiu radiu_es"></div>
-        <div class="radiu radiu_wn"></div>
-        <div class="radiu radiu_ws"></div>
-        <div class="line line_up"></div>
-        <div class="line line_down"></div>
-        <div class="line line_left"></div>
-        <div class="line line_right"></div>
-    </div> -->
     <div class="map nav_animate" id="map_container">
-        <div class="info">
-            <div><span></span><div class="btn fr"></div></div>
-            <ul></ul>
+     <div class="loading_tip">
+          <div class="wrapper right">
+              <div class="circleProgress rightcircle"></div>
+          </div>
+          <div class="wrapper left">
+              <div class="circleProgress leftcircle"></div>
+          </div>
+          <div class="text">
+            <div class="loader_text">
+              <span>L</span>
+              <span class="span2">o</span>
+              <span class="span3">a</span>
+              <span class="span4">d</span>
+              <span class="span5">i</span>
+              <span class="span6">n</span>
+              <span class="span2">g</span>
+              <span class="span3">.</span>
+              <span class="span4">.</span>
+              <span class="span5">.</span>
+            </div>
+          </div>
+      </div>
+      
+      <div class="monitor">
+        <div class="head" style="display: none;">
+            <div id="home"><span style="background:url('img/monitor/首页.png') no-repeat;background-size:100%;"></span></div>
+            <h1>台风路径</h1>
         </div>
-        <ul class="t_title">
-        </ul>
-        <div class="tool_bar">
-            <div class="btn_legend fr">
-                图例
-                <ul>
-                    <li><span class="circle rddy"></span>热带低压</li>
-                    <li><span class="circle rdfb"></span>热带风暴</li>
-                    <li><span class="circle qrdfb"></span>强热带风暴</li>
-                    <li><span class="circle tf"></span>台风</li>
-                    <li><span class="circle qtf"></span>强台风</li>
-                    <li><span class="circle cqtf"></span>超强台风</li>
-                    <li><span class="circle yxqy"></span>影响区域</li>
-                    <li><span class="circle wind7"></span>7级风圈</li>
-                    <li><span class="circle wind10"></span>10级风圈</li>
-                    <li class="arrow"></li>
-                </ul>
+        <div class="content" style="margin-top: 50px;">
+          <div class="map" id="map"></div>
+          <h2>宝霞 Bopha（2016-03-31）</h2>
+          <div class="menu act">历史台风</div>
+          <div id="wrapper">
+            <ul>
+            </ul>
+          </div>
+          <div id="wrapper2">
+            <ul>
+            </ul>
+          </div>
+          <div class="masg">
+            <span class="close"></span>
+            <div class="masg-text">
+              <!-- <p>宝霞 Bopha</p>
+              <p class="color">2012-03-31</p>
+              <p>中心气压：</p>
+              <p>最大风速：</p>
+              <p>未来移向：</p>
+              <p>7级风圈半径：</p>
+              <p>10级风圈半径：</p> -->
             </div>
-            <div class="typhoon_list fr">
-                台风列表
-                <div>
-                    <ul></ul>
-                </div>
-            </div>
-            <div class="btn_reset fr">
-                回放
-            </div>
+          </div>
+          <div id="curve">
+            <span class="close"></span>
+            <div id="curveCont"></div>
+          </div>
+          <div class="pitEg"></div>
+          <div class="con-btn">
+            <ul>
+              <!-- <li class="play-btn"></li> -->
+              <li class="lock-btn"></li>
+              <li class="set-btn"></li>
+            </ul>
+          </div>
         </div>
+        <div class="shade-layer"></div>
+        <div class="paint">
+            <canvas id="paintCanvas"></canvas>
+        </div>
+      </div>
     </div>
     <script type="text/javascript" src="./data/config.js"></script>
     <script type="text/javascript" src="./js/jquery-1.8.2.js"></script>
+  <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sCR3yMyHDKatEAF1opbKapOE5raaMegq"></script> -->
     <script type="text/javascript" src="./js/iscroll.js"></script>
     <script type="text/javascript" src="./js/util.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=E8MDMS4BVFEMeAxVP3YddQ6X"></script>
-    <script type="text/javascript" src="./js/p_typhoon.js"></script>
+    <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=E8MDMS4BVFEMeAxVP3YddQ6X"></script> -->
+
+      <script src="js/TMap.js"></script>
+      <script src="js/fastclick.js"></script>
+      <script src="js/paint.js"></script>
+      <script src="js/common.js"></script>
+      <script src="js/echarts.min.js"></script>
+      <script src="js/typhoon.js"></script> 
+
 </body>
 </html>

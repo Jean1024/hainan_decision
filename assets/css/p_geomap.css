@@ -381,3 +381,10 @@
 	position: absolute;
 	z-index: -1;
 }
+// #bgImg{
+// 	position: absolute;
+// 	z-index: -1;
+// }
+.tdt-control-copyright.tdt-control{
+	display:none;
+}

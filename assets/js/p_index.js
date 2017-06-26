@@ -8,8 +8,8 @@ $(function(){
 	var Loading = U.Loading;
 
 	var geoinfo;
-	// var win = nwDispatcher.requireNwGui().Window.get();
-	// win.showDevTools();
+	var win = nwDispatcher.requireNwGui().Window.get();
+	win.showDevTools();
 
 	var DATA_GLOBAL;
 	// 格式化返回的数据
@@ -270,6 +270,33 @@ $(function(){
 	})();
 	// 初始化大图标
 	U.getAppInfo(function(appinfo){
+	  appinfo[4]['child'] = [
+      {
+        color: "#000",
+        columnType: "json_map",
+        dataUrl: "http://59.50.130.88:8888/data/cityinfo/hainan_forecast.html",
+        icon: "",
+        id: "655",
+        listUrl: "",
+        orderBy: "6",
+        parent_id: "607",
+        style: "1",
+        title: "市县预报"
+      },
+      {
+        color: "#000",
+        columnType: "document",
+        dataUrl: "http://www.baidu.com",
+        icon: "",
+        id: "656",
+        listUrl: "",
+        orderBy: "6",
+        parent_id: "607",
+        style: "1",
+        title: "分钟级降水"
+      }
+    ]
+		console.log(appinfo)
 		var $sort_list = $('.sort_list');
 		var html = '';
 		$.each(appinfo,function(i,v){
