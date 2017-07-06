@@ -787,7 +787,11 @@ $(function(){
 					$('.img').removeAttr('href');
 				}, 10)
 
-				console.log(data)
+				if ($('#allmap')) {
+					$('.fix_layer').hide()
+				}else{
+					$('.fix_layer').show()
+				}
 				initMap('allmap',data)
 				// setTimeout(function(){
 				// 	$('img').on('click', function(){

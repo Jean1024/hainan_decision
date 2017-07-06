@@ -23,15 +23,20 @@ $(function(){
 	//设置显示地图的中心点和级别 
 	map.centerAndZoom(new T.LngLat(105, 38), zoom); 
 	//允许鼠标滚轮缩放地图 
-	map.enableScrollWheelZoom(); 
+	map.enableScrollWheelZoom();
+
 
 	//监听缩放拖拽状态
 	map.addEventListener("movestart",hideTip);
 
 	map.setMinZoom(4);
     map.setMaxZoom(12);
-    var imageURL = "https://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}"; 
-	//创建自定义图层对象 
+    var imageURL = "https://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}";
+    // var imageURL = "http://t0.tianditu.cn/img_w/wmts?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}" +
+    // "SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles" +
+    // "&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}";
+
+    //创建自定义图层对象
 	var lay = new T.TileLayer(imageURL,{minZoom:4,maxZoom:12}); 
 	//将图层增加到地图上 
 	map.addLayer(lay); 
