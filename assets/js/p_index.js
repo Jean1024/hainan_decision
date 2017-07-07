@@ -9,7 +9,7 @@ $(function(){
 
 	var geoinfo;
 	var win = nwDispatcher.requireNwGui().Window.get();
-	win.showDevTools();
+	// win.showDevTools();
 
 	var DATA_GLOBAL;
 	// 格式化返回的数据

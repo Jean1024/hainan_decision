@@ -1,6 +1,6 @@
 /*简单播放器*/
 var win = nwDispatcher.requireNwGui().Window.get();
-	win.showDevTools();
+	// win.showDevTools();
 (function(global){
 	var Store = Util.Store;
 	var $container;
@@ -2271,10 +2271,6 @@ $(function () {
 	// 隐藏雷达
 	$('#radarStand').hide()
 	// 图例样式调整
-	$('.rainLevel').css({
-		'width':'393px',
-		'height': '44px'
-	})
 	$('[data-sid="656"]').click(function(){
 		$('.content.nav_animate').hide()
 		$('.minute_rain').show()

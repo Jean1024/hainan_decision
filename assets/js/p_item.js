@@ -1,5 +1,5 @@
 var win = nwDispatcher.requireNwGui().Window.get();
-win.showDevTools();
+// win.showDevTools();
 (function(global){
 	var Store = Util.Store;
 	var $container;

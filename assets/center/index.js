@@ -24,7 +24,7 @@
 	var login_info = Store.get('login_info');
 
 	var win = nwDispatcher.requireNwGui().Window.get();
-	win.showDevTools();
+	// win.showDevTools();
 	win.show();
 	var $logining = $('.logining');
 	var $btn_login = $('#btn_login').click(function(){

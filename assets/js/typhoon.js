@@ -1,5 +1,5 @@
 var win = nwDispatcher.requireNwGui().Window.get();
-win.showDevTools();
+// win.showDevTools();
 var Nav = Util.Nav;
 /*初始化头部及左侧导航*/
 Nav.Top.init(function($nav){
@@ -17,11 +17,11 @@ $(document).on('back',function(){
 $(function(){
 	//地图
 	var map; 
-    var zoom = 5; 
+    var zoom = 8; 
     //初始化地图对象 
 	map = new T.Map("map"); 
 	//设置显示地图的中心点和级别 
-	map.centerAndZoom(new T.LngLat(105, 38), zoom); 
+	map.centerAndZoom(new T.LngLat(109.2, 18.9), zoom); 
 	//允许鼠标滚轮缩放地图 
 	map.enableScrollWheelZoom();
 
@@ -292,10 +292,14 @@ $(function(){
 							}
 							aLunar = [];
 						}
+						toggle_menu()
 					}else{//添加台风
 						$('.loading_tip').show();
 						$(this).children('span').addClass('menuAct')
 						addTyphoon(num);
+						console.log(111)
+						toggle_menu()
+						console.log(222)
 					}
 					return false;
 				})
@@ -696,3 +700,29 @@ $(function(){
 	}
 })
 
+function toggle_menu() {
+		
+		if( $('.menu').hasClass('act') ){
+			//菜单收回
+			$('#wrapper2 ul').stop().animate({'width':'0'},function(){
+				$('#wrapper ul').stop().animate({'width':'0'});
+			});
+			$('.menu').removeClass('act');
+		}else{
+			//菜单展开
+			$('#wrapper ul').stop().animate({'width':'5rem'},function(){
+				// getTypgoonName( $('#wrapper ul li.menuAct').text() );
+				$('#wrapper2 ul').stop().animate({'width':'14rem'});
+			});
+
+			if( !$('#wrapper ul li').hasClass('menuAct') ){
+				$('#wrapper ul li').eq(0).addClass('menuAct');
+				hideTip()
+				getTypgoonName( $('#wrapper ul li').eq(0).text() );
+			}
+
+			$('.menu').addClass('act');
+		}
+
+		return false;
+}
