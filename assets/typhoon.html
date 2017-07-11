@@ -12,8 +12,10 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" type="text/css" href="css/loading.css">
     <link rel="stylesheet" type="text/css" href="css/typhoon.css">
+    <link rel="stylesheet" href="./wind-field/lib/leaflet-1.0.3.css"/>
 </head>
 <body>
+    <div class="wind_file">风场</div>
     <div class="map nav_animate" id="map_container">
      <div class="loading_tip">
           <div class="wrapper right">
@@ -99,6 +101,13 @@
       <script src="js/common.js"></script>
       <script src="js/echarts.min.js"></script>
       <script src="js/typhoon.js"></script> 
+      <!-- // 风场 -->
+      <script src="./wind-field/lib/leaflet-1.0.3.js"></script>
+      <script src="./wind-field/lib/L.CanvasLayer.js"></script>
+      <script src="./wind-field/lib/d3.min.js"></script>
+      <script src="./wind-field/lib/marchingsquares-isobands.min.js"></script>
 
+      <script src="./wind-field/overlay.js"></script>
+      <script src="./wind-field/wind.js"></script>
 </body>
 </html>
