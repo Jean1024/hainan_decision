@@ -1,40 +1,5 @@
-	var leafletMap
-var win = nwDispatcher.requireNwGui().Window.get();
-win.showDevTools();
-var Nav = Util.Nav;
-/*初始化头部及左侧导航*/
-Nav.Top.init(function($nav){
-	$nav.prependTo($('body'));
-});
-
-
-$('.btn_nav').click(function(){
-	Nav.toggle();
-
-});
-$(document).on('back',function(){
-	Nav.toggle(true);
-});
-showTyphoon()
-$('.wind_file').click(function () {
-	if ($(this).hasClass('hasBg')) {
-		console.log(123)
-		$(this).removeClass('hasBg')
-		$('#map2').show()
-		showWindFiled()
-		$('.loading_tip').fadeOut();
-	}else{
-		$('#map2').hide()
-		$('.loading_tip').fadeOut();
-		$(this).addClass('hasBg')
-		// $('#map').siblings().show()
-		// showTyphoon()
-
-	}
-})
-function showTyphoon(){
-
-
+  var leafletMap
+$(function () {
   var zoom = 5
   leafletMap = L.map('map',{
       worldCopyJump: true,
@@ -240,8 +205,7 @@ function showTyphoon(){
         $('.loading_tip').fadeOut();
         $('#wrapper2 ul').html('');
         leafletMap.eachLayer(function (layer) {
-        	// console.log(layer)
-            if (layer._url || layer._canvas ) {
+            if (layer._leaflet_id == 26 || layer._canvas ) {
 
             } else { leafletMap.removeLayer(layer); }
           })
@@ -306,12 +270,6 @@ function showTyphoon(){
               $(this).children('span').addClass('menuAct')
               addTyphoon(num);
             }
-
-            $('#wrapper2 ul').stop().animate({ 'width': '0' }, function () {
-			        $('#wrapper ul').stop().animate({ 'width': '0' });
-			      });
-			      $('.menu').removeClass('act');
-
             return false;
           })
 
@@ -750,34 +708,4 @@ function showTyphoon(){
     var myChart = echarts.init($('#curveCont').get(0));
     myChart.setOption(option);
   }
-
-}
-
-function toggle_menu() {
-		
-		if( $('.menu').hasClass('act') ){
-			//菜单收回
-			$('#wrapper2 ul').stop().animate({'width':'0'},function(){
-				$('#wrapper ul').stop().animate({'width':'0'});
-			});
-			$('.menu').removeClass('act');
-		}else{
-			//菜单展开
-			$('#wrapper ul').stop().animate({'width':'5rem'},function(){
-				// getTypgoonName( $('#wrapper ul li.menuAct').text() );
-				$('#wrapper2 ul').stop().animate({'width':'14rem'});
-			});
-
-			if( !$('#wrapper ul li').hasClass('menuAct') ){
-				$('#wrapper ul li').eq(0).addClass('menuAct');
-				hideTip()
-				getTypgoonName( $('#wrapper ul li').eq(0).text() );
-			}
-
-			$('.menu').addClass('act');
-		}
-
-		return false;
-}
-
-
+})

@@ -119,16 +119,63 @@
     border-bottom: 14px solid transparent;
     border-left: 14px solid #fff;
 }
-.wind_file{
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
-	text-align: center;
-	background: yellow;
+.anim-tooltip{
+	// background: transparent;
+ //  background-color: transparent; 
+ //  border: 0px solid #fff; 
+ //  white-space: normal; 
+ //  box-shadow: 0 0 0 0 transparent; 
+ //  color: red;
+}
+.anim-tooltip24{
+	background: transparent;
+  background-color: transparent; 
+  border: 0px solid #fff; 
+  white-space: normal; 
+  box-shadow: 0 0 0 0 transparent; 
+  color: red;
+}
+.anim-tooltip48{
+	background: transparent;
+  background-color: transparent; 
+  border: 0px solid #fff; 
+  white-space: normal; 
+  box-shadow: 0 0 0 0 transparent; 
+  color: green;
+}
+.leaflet-tooltip {
+}
+@keyframes rotation{
+	from {transform: rotate(0deg);}
+	to {transform: rotate(360deg);}
+}
+
+.Rotation{
+	// transform: rotate(80deg);
+	// animation: rotation 3s linear infinite;
+	// -moz-animation: rotation 3s linear infinite;
+	// -webkit-animation: rotation 3s linear infinite;
+	// -o-animation: rotation 3s linear infinite;
+}
+.leaflet-left {
+    display: none;
+}
+.con-btn{
+	display:none;
+}
+.switch_fc{
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
 	position: absolute;
+	background-color: #fff;
 	top: 70px;
 	right: 20px;
-	z-index: 200;
-	cursor: pointer;
-	border-radius: 25px;
+	z-index:998;
+}
+.switch_fc.on{
+	background: url('../img/iv_typhoon_fc_on.png') no-repeat center/contain;
+}
+.switch_fc.off{
+	background: url('../img/iv_typhoon_fc_off.png') no-repeat center/contain;
 }

@@ -6,17 +6,22 @@
     <meta name="format-detection" content="telephone=no" />
     <title></title>
     <link rel="stylesheet" type="text/css" href="css/reset.css" />
+    <link rel="stylesheet" type="text/css" href="css/loading.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+   integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
+   crossorigin=""/>
     <link rel="stylesheet" type="text/css" href="css/p_item_nav.css" />
     <link rel="stylesheet" type="text/css" href="css/nav.css" />
     <link rel="stylesheet" type="text/css" href="css/base.css" />
     <link rel="stylesheet" type="text/css" href="css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/loading.css">
     <link rel="stylesheet" type="text/css" href="css/typhoon.css">
-    <link rel="stylesheet" href="./wind-field/lib/leaflet-1.0.3.css"/>
 </head>
 <body>
-    <div class="wind_file">风场</div>
-    <div class="map nav_animate" id="map_container">
+
+    <div id="map2"></div>
+    <div class="map nav_animate" id="map_container" style="position: relative;">
+  <!-- 风场开关 -->
+      <div class="switch_fc off"></div>
      <div class="loading_tip">
           <div class="wrapper right">
               <div class="circleProgress rightcircle"></div>
@@ -47,8 +52,8 @@
         </div>
         <div class="content" style="margin-top: 50px;">
           <div class="map" id="map"></div>
-          <h2>宝霞 Bopha（2016-03-31）</h2>
-          <div class="menu act">历史台风</div>
+          <h2 class="fengChang">宝霞 Bopha（2016-03-31）</h2>
+          <div class="menu act fengChang">历史台风</div>
           <div id="wrapper">
             <ul>
             </ul>
@@ -73,8 +78,8 @@
             <span class="close"></span>
             <div id="curveCont"></div>
           </div>
-          <div class="pitEg"></div>
-          <div class="con-btn">
+          <div class="pitEg fengChang"></div>
+          <div class="con-btn fengChang">
             <ul>
               <!-- <li class="play-btn"></li> -->
               <li class="lock-btn"></li>
@@ -90,24 +95,22 @@
     </div>
     <script type="text/javascript" src="./data/config.js"></script>
     <script type="text/javascript" src="./js/jquery-1.8.2.js"></script>
-  <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=sCR3yMyHDKatEAF1opbKapOE5raaMegq"></script> -->
+      <script src="./wind-field/lib/leaflet-1.0.3.js"></script>
     <script type="text/javascript" src="./js/iscroll.js"></script>
     <script type="text/javascript" src="./js/util.js"></script>
-    <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=E8MDMS4BVFEMeAxVP3YddQ6X"></script> -->
 
-      <script src="js/TMap.js"></script>
       <script src="js/fastclick.js"></script>
       <script src="js/paint.js"></script>
       <script src="js/common.js"></script>
       <script src="js/echarts.min.js"></script>
-      <script src="js/typhoon.js"></script> 
-      <!-- // 风场 -->
-      <script src="./wind-field/lib/leaflet-1.0.3.js"></script>
       <script src="./wind-field/lib/L.CanvasLayer.js"></script>
       <script src="./wind-field/lib/d3.min.js"></script>
       <script src="./wind-field/lib/marchingsquares-isobands.min.js"></script>
 
       <script src="./wind-field/overlay.js"></script>
       <script src="./wind-field/wind.js"></script>
+      <script src="js/typhoon.js"></script>   
+       <script src="./wind-field/index.js"></script>
+      <!-- // 风场 -->
 </body>
 </html>
